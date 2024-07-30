@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20.104" height="16.753" viewBox="0 0 20.104 16.753">
+  <defs>
+    <linearGradient id="linear-gradient" x1="-0.25" y1="0.5" x2="1.25" y2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#0b89d2"/>
+      <stop offset="1" stop-color="#046aa4"/>
+    </linearGradient>
+  </defs>
+  <g id="sort" transform="translate(0 -4)">
+    <g id="Group_1360" data-name="Group 1360" transform="translate(0 4)">
+      <g id="Group_1359" data-name="Group 1359" transform="translate(0 0)">
+        <path id="Path_28233" data-name="Path 28233" d="M0,4.838A.838.838,0,0,1,.838,4H19.266a.838.838,0,1,1,0,1.675H.838A.836.836,0,0,1,0,4.838ZM0,9.864a.836.836,0,0,1,.837-.838h15.08a.838.838,0,0,1,0,1.675H.837A.835.835,0,0,1,0,9.864ZM0,14.89a.836.836,0,0,1,.838-.838H12.564a.838.838,0,1,1,0,1.675H.838A.836.836,0,0,1,0,14.89Zm0,5.026a.839.839,0,0,1,.84-.838H9.212a.838.838,0,1,1,0,1.675H.84A.837.837,0,0,1,0,19.916Z" transform="translate(0 -4)" fill-rule="evenodd" fill="url(#linear-gradient)"/>
+      </g>
+    </g>
+  </g>
+</svg>

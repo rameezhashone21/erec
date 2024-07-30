@@ -1,0 +1,18 @@
+  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15.377" height="21" viewBox="0 0 15.377 21">
+                                            <defs>
+                                              <filter id="Vector" x="0" y="0" width="15.377" height="21" filterUnits="userSpaceOnUse">
+                                                <feOffset dy="1" input="SourceAlpha"/>
+                                                <feGaussianBlur stdDeviation="0.5" result="blur"/>
+                                                <feFlood flood-opacity="0.161"/>
+                                                <feComposite operator="in" in2="blur"/>
+                                                <feComposite in="SourceGraphic"/>
+                                              </filter>
+                                            </defs>
+                                            <g id="pin_1" data-name="pin 1" transform="translate(-1.311 0.5)">
+                                              <g id="Group">
+                                                <g transform="matrix(1, 0, 0, 1, 1.31, -0.5)" filter="url(#Vector)">
+                                                  <path id="Vector-2" data-name="Vector" d="M11.518,3.082A6.108,6.108,0,0,0,6.327,0c-.092,0-.185,0-.277,0A6.108,6.108,0,0,0,.86,3.082,6.266,6.266,0,0,0,.778,9.274l4.464,8.17.006.011a1.085,1.085,0,0,0,1.882,0l.006-.011L11.6,9.274A6.267,6.267,0,0,0,11.518,3.082ZM6.189,8.156A2.531,2.531,0,1,1,8.72,5.625,2.534,2.534,0,0,1,6.189,8.156Z" transform="translate(1.5 0.5)" fill="#007ba7"/>
+                                                </g>
+                                              </g>
+                                            </g>
+                                          </svg>

@@ -1,0 +1,9 @@
+<svg id="university" xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60">
+  <g id="university-2" data-name="university">
+    <rect id="Rectangle_224" data-name="Rectangle 224" width="60" height="60" rx="4" fill="#007ba7"/>
+  </g>
+  <g id="university-3" data-name="university" transform="translate(13.34 13.869)">
+    <path id="Path_3219" data-name="Path 3219" d="M212.519,69.3a2.992,2.992,0,1,0-2.992-2.992A3,3,0,0,0,212.519,69.3Zm0-4.031a1.039,1.039,0,1,1-1.04,1.039A1.041,1.041,0,0,1,212.519,65.273Zm0,0" transform="translate(-195.891 -59.2)" fill="#fff"/>
+    <path id="Path_3220" data-name="Path 3220" d="M33.321,13.187V7.678L16.661,0,0,7.678v5.509H3.289v9.856H1.562v3.726H0V33.26H33.321V26.769h-.846V23.043H29.967V13.187ZM1.952,11.234V8.928L16.661,2.149,31.369,8.928v2.306H1.952Zm11.5,11.809H9.632V13.187h3.825Zm1.952-9.856h2.438v9.856H15.409Zm4.39,0h3.825v9.856H19.8Zm-14.558,0H7.68v9.856H5.242ZM31.369,31.308H1.952V28.721H31.369ZM30.523,25v1.773H3.514V25Zm-2.508-1.952H25.577V13.187h2.438Zm0,0" fill="#fff"/>
+  </g>
+</svg>
