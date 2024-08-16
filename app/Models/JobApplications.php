@@ -76,6 +76,7 @@ class JobApplications extends Model
         // ]);
         // $data = $response->json();
         $data = Exam::where('id', $id)->first();
+        
         return $data;
     }
     public function qstSocre($user_id, $qst)

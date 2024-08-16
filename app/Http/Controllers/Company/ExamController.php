@@ -12,6 +12,11 @@ use ParagonIE\Sodium\Compat;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\UsersImport;
+use Maatwebsite\Excel\Concerns\FromArray;
+use Maatwebsite\Excel\Concerns\Exportable;
+
 
 class ExamController extends Controller
 {
@@ -22,18 +27,42 @@ class ExamController extends Controller
   {
     return view('companypanel.pages.exam.add');
   }
+  
+  /**
+   * Download the Sample Test Format File.
+   */
+  public function downloadCSV()
+  {
+        $filePath = public_path('app/public/sample_test.csv'); // Adjust the filename as needed
+        
+        return response()->download($filePath);
+  }
+  
 
   /**
    * Store a newly created resource in storage.
    */
   public function store(Request $request)
   {
-    // Validate data
-    $this->validate($request, [
-      'title'                     => 'required|string',
-      'exam_time'                 => ['required', Rule::in(['30', '45', '60', '70'])],
-      'question_showto_condidate' => 'required'
-    ]);
+        
+    if($request->file('csv_file'))
+    {
+        // Validate data
+        $this->validate($request, [
+          'title'                     => 'required|string',
+          'exam_time'                 => ['required', Rule::in(['30', '45', '60', '70'])],
+          'question_showto_condidate' => 'required',
+         'csv_file' => 'required|file|mimes:csv',
+        ]);
+    }
+    else{
+        // Validate data
+        $this->validate($request, [
+          'title'                     => 'required|string',
+          'exam_time'                 => ['required', Rule::in(['30', '45', '60', '70'])],
+          'question_showto_condidate' => 'required'
+        ]);
+    }
 
     // Get company details
     $company = Company::select('id')->where('user_id', Auth::id())->first();
@@ -53,7 +82,18 @@ class ExamController extends Controller
       'exam_completion_in_minutes' => $request->exam_time,
       'status'                     => 0
     ]);
+    
+    if($request->file('csv_file'))
+    {
+        $file = $request->file('csv_file');
 
+        // Getting the Exam Id to pass to UsersImport Class in order to save question with exam id 
+        $exam_id = $result->id;
+
+        Excel::import(new UsersImport($exam_id), $file);
+    }
+        
+        
     if ($result) {
       return redirect()->route('company.exam.listing')->with('success', 'Record created successfully.');
     } else {

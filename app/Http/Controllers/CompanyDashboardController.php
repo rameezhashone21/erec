@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use App\Mail\Hired;
 use App\Models\Company;
 use App\Models\Exam;
+use App\Models\ExamResult;
+use App\Models\ExamNotification;
 use App\Models\User;
 use App\Models\Posts;
 use App\Models\Skills;
@@ -25,6 +27,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use DB;
 use App\Http\Controllers\RecruiterDashboardController;
 
 class CompanyDashboardController extends Controller
@@ -286,8 +289,6 @@ class CompanyDashboardController extends Controller
 
             $this->attributes['slug'] = $slug;
 
-            // dd($data);
-
             if ($valid) {
                 $post = new Posts;
                 $post->class_id = $data['category'];
@@ -307,10 +308,9 @@ class CompanyDashboardController extends Controller
                 if ($request->has('test_attached') && $request->test_attached == 1) {
                     // Get exam id from slug
                     $exam = Exam::select('id')->where([
-                        'slug'       => $data['test_id'],
+                        'id'       => $data['test_id'],
                         'company_id' => auth()->user()->company->id
                     ])->first();
-
                     $post->test_attached = $data['test_attached'];
                     if ($request->has('test_id')) {
                         $post->test_id = $exam->id;
@@ -343,6 +343,9 @@ class CompanyDashboardController extends Controller
                 } elseif ($request->has('existingBanner')) {
                     $post->banner = $request->existingBanner;
                 }
+                else{
+                    $post->banner = "banner.png";
+                }
                 $post->slug = $slug;
                 $post->save();
                 foreach ($request->skill as $row) {
@@ -368,7 +371,7 @@ class CompanyDashboardController extends Controller
                     $user->decrement('posts_count');
                     $user->decrement('total_no_of_posts');
                 }
-                return redirect()->route('company.jobs')->withStatus("Job Post has been Created Successfully...");
+                return redirect()->route('company.jobs')->with('success', 'Job Post has been Created Successfully...');
             } else {
                 return redirect()->back()->withError($valid->errors()->first());
             }
@@ -386,7 +389,7 @@ class CompanyDashboardController extends Controller
             // Query the name field in status table
             $q->where('comp_id', '=', $value); // '=' is optional
         })->get();
-        // dd($jobApp->toArray());
+        //dd($jobApp->toArray());
         return view('companypanel.pages.jobs.jobApplications', compact('jobApp'));
     }
     public function editPost($id)
@@ -407,6 +410,168 @@ class CompanyDashboardController extends Controller
         $postSkills = PostSkill::where('post_id', $post->id)->get();
         return view('companypanel.pages.jobs.editPost', compact('post', 'skill', 'postSkills', 'recruiter', 'data', 'test_id'));
     }
+    
+    public function candidates_filter(Request $request)
+    {
+        if($request->grade)
+        // Get All Job Applications Against the job 
+        $all_job_applications = JobApplications::select('id')->where("post_id",$request->job_id)->get();
+        
+        if($request->grade == "All")
+        {
+            // Filtering Job Application for specific grade
+            $exam_results = ExamResult::whereIn('job_application_id',$all_job_applications)->get();
+        }
+        else{
+            // Filtering Job Application for specific grade
+            $exam_results = ExamResult::whereIn('job_application_id',$all_job_applications)->where('status', $request->grade)->get();
+        }
+        
+        
+        
+        $output = '';
+        foreach ($exam_results as $key => $row) {
+        // Increment key for display purposes
+        $key++;
+        
+
+        $user = User::where('new_user_id',$row->condidate_id)->first();
+                
+        $jobApplication = JobApplications::where("id",$row->job_application_id)->first();
+        
+        $candidate_doc_id = JobApplications::where("id",$row->job_application_id)->value('candidate_doc_Id');
+        
+        $candidate_doc = DB::table('candidates_doc')->where("id",$candidate_doc_id)->first();
+        
+        $candidate = DB::table('candidates_details')->where("user_id",$user->id)->first();
+        
+
+        $output .= '<tr>';
+        $output .= '<td>' . $key . '.</td>';
+        $output .= '<td>
+                      <a href="' . route('candidate.detail', $candidate->slug) . '" style="color: #000;">
+                        ' . $candidate->first_name . ' ' . $candidate->last_name . '
+                      </a>
+                    </td>';
+        $output .= '<td>';
+        
+        if ($candidate_doc != null) {
+            $output .= '<a href="' . asset('candidateDoc/doc/' . $candidate_doc->document) . '" target="_blank" class="text-decoration-underline d-flex text-dark">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="27.5" height="27.5" viewBox="0 0 27.5 27.5">
+                            <g id="document-pdf" transform="translate(-2.25 -2.25)">
+                              <path id="Path_3217" data-name="Path 3217" d="M32.893,19.964V18H27v9.821h1.964V23.893h2.946V21.929H28.964V19.964Z" transform="translate(-3.143 -2)" fill="#8b91a7" />
+                              <path id="Path_3218" data-name="Path 3218" d="M20.8,27.821H16.875V18H20.8a2.949,2.949,0,0,1,2.946,2.946v3.929A2.949,2.949,0,0,1,20.8,27.821Zm-1.964-1.964H20.8a.983.983,0,0,0,.982-.982V20.946a.983.983,0,0,0-.982-.982H18.839Z" transform="translate(-1.857 -2)" fill="#8b91a7" />
+                              <path id="Path_3219" data-name="Path 3219" d="M11.661,18H6.75v9.821H8.714V24.875h2.946a1.967,1.967,0,0,0,1.964-1.964V19.964A1.966,1.966,0,0,0,11.661,18ZM8.714,22.911V19.964h2.946v2.946Z" transform="translate(-0.571 -2)" fill="#8b91a7" />
+                              <path id="Path_3220" data-name="Path 3220" d="M21.893,14.036V10.107A.894.894,0,0,0,21.6,9.42L14.724,2.545a.893.893,0,0,0-.688-.3H4.214A1.97,1.97,0,0,0,2.25,4.214V27.786A1.964,1.964,0,0,0,4.214,29.75H19.929V27.786H4.214V4.214h7.857v5.893a1.97,1.97,0,0,0,1.964,1.964h5.893v1.964Zm-7.857-3.929v-5.5l5.5,5.5Z" transform="translate(0)" fill="#8b91a7" />
+                            </g>
+                          </svg>
+                          <span class="align-self-end ms-1">Click to view</span>
+                        </a>';
+        }
+        
+        $output .= '</td>';
+        $output .= '<td>';
+
+        if ($jobApplication->coverLetterFile != null) {
+            $output .= '<a href="' . asset('storage/' . $jobApplication->coverLetterFile) . '" target="_blank" class="text-decoration-underline d-flex text-dark mb-3">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="27.5" height="27.5" viewBox="0 0 27.5 27.5">
+                            <g id="document-pdf" transform="translate(-2.25 -2.25)">
+                              <path id="Path_3217" data-name="Path 3217" d="M32.893,19.964V18H27v9.821h1.964V23.893h2.946V21.929H28.964V19.964Z" transform="translate(-3.143 -2)" fill="#8b91a7" />
+                              <path id="Path_3218" data-name="Path 3218" d="M20.8,27.821H16.875V18H20.8a2.949,2.949,0,0,1,2.946,2.946v3.929A2.949,2.949,0,0,1,20.8,27.821Zm-1.964-1.964H20.8a.983.983,0,0,0,.982-.982V20.946a.983.983,0,0,0-.982-.982H18.839Z" transform="translate(-1.857 -2)" fill="#8b91a7" />
+                              <path id="Path_3219" data-name="Path 3219" d="M11.661,18H6.75v9.821H8.714V24.875h2.946a1.967,1.967,0,0,0,1.964-1.964V19.964A1.966,1.966,0,0,0,11.661,18ZM8.714,22.911V19.964h2.946v2.946Z" transform="translate(-0.571 -2)" fill="#8b91a7" />
+                              <path id="Path_3220" data-name="Path 3220" d="M21.893,14.036V10.107A.894.894,0,0,0,21.6,9.42L14.724,2.545a.893.893,0,0,0-.688-.3H4.214A1.97,1.97,0,0,0,2.25,4.214V27.786A1.964,1.964,0,0,0,4.214,29.75H19.929V27.786H4.214V4.214h7.857v5.893a1.97,1.97,0,0,0,1.964,1.964h5.893v1.964Zm-7.857-3.929v-5.5l5.5,5.5Z" transform="translate(0)" fill="#8b91a7" />
+                            </g>
+                          </svg>
+                          <span class="align-self-end ms-1">Click to view</span>
+                        </a>';
+        }
+
+        if ($jobApplication->coverLetter != null) {
+            $output .= '<button type="button" class="btn btn_viewall" data-bs-toggle="modal" data-bs-target="#staticBackdrop-' . $jobApplication->id . '">Click to view</button>
+                        <div class="modal fade" id="staticBackdrop-' . $jobApplication->id . '" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="staticBackdropLabel">Cover Letter</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ' . $jobApplication->coverLetter . '
+                                    </div>
+                                </div>
+                            </div>
+                        </div>';
+        }
+
+        if ($jobApplication->coverLetter == null && $jobApplication->coverLetterFile == null) {
+            $output .= 'No Record Found...';
+        }
+
+        $output .= '</td>';
+        $output .= '<td id="td_id' . $jobApplication->id . '">';
+        
+        if ($jobApplication->qst_id != '0') {
+            $output .= '<p>' . $jobApplication->qst($jobApplication->qst_id)['exam_title'] . '</p>';
+        }
+
+        $output .= '</td>';
+        $output .= '<td id="td_id' . $jobApplication->id . '">';
+        
+        if ($jobApplication->qst_id != '0') {
+            if ($row->perentage) {
+                $output .= $row->perentage . '%';
+            } else {
+                $output .= 'Not Attempted';
+            }
+        }
+        
+
+        $output .= '</td>';
+        $output .= '<td id="gradeTr-' . $row->id . '">';
+        
+        if ($row->status == "Average") {
+            $output .= '<p class="orange_badge status_badge">' . $row->grade . '</p>';
+        }if ($row->status == "Pass") {
+            $output .= '<p class="green_badge status_badge">' . $row->grade . '</p>';
+        }if ($row->status == "Fail") {
+            $output .= '<p class="red_badge status_badge">' . $row->grade . '</p>';
+        }
+
+        $output .= '</td>';
+        $output .= '<td id="hireTr-' . $row->id . '">';
+        
+        if ($jobApplication->status == 2) {
+            $output .= '<p class="btn btn_viewall text-center p-2">Hired</p>';
+        } else {
+            if ($jobApplication->status == 1) {
+                $output .= '<p onclick="hideCandidate(' . $jobApplication->id . ')" id="buttonHire(' . $jobApplication->id . ')" class="btn btn_viewall text-center p-2">Hire</p>';
+            } elseif ($jobApplication->status == 0) {
+                $output .= '<p onclick="shortCandidate(' . $jobApplication->id . ')" class="btn btn_viewall text-center p-2">Shortlist</p>';
+            }
+        }
+
+        $output .= '</td>';
+        $output .= '<td>';
+        
+        if ($row->notified == 0) {
+            $output .= '<form action="' . route('candidate.notify', ['id' => $row->id]) . '" method="post" style="width:100%; display:flex; align-items:center;">';
+            $output .= csrf_field();
+            $output .= '<button type="submit" class="btn_theme border-0 fs-12 py-2 d-inline-block w-100">Notify Candidate</button>';
+            $output .= '</form>';
+        } else {
+            $output .= 'Notified';
+        }
+
+        $output .= '</td>';
+        $output .= '</tr>';
+        
+
+    }
+
+    return response()->json($output);
+        
+    }
+    
     public function updateJob(Request $request)
     {
         // dd($request->all());
@@ -609,11 +774,23 @@ class CompanyDashboardController extends Controller
         $post = Posts::with('jobAppRecComp', 'skills', 'company')->find($id);
         return view('companypanel.pages.jobs.job_detail', compact('post'));
     }
-    public function jobApplicantsComp($id)
+    public function jobApplicantsCompBySlug($id)
     {
         $id = Posts::whereSlug($id)->first()->id;
         $post = Posts::with('jobAppRecComp', 'skills', 'company', 'jobAppRecComp.candidate')->findOrFail($id);
-        // dd($post->jobAppRecComp->toArray());
+        
+         //dd($post);
+        return view('companypanel.pages.jobs.job_applicants', compact('post'));
+    }
+    public function jobApplicantsCompById($id, $notification_id)
+    {
+        $post = Posts::with('jobAppRecComp', 'skills', 'company', 'jobAppRecComp.candidate')->findOrFail($id);
+        
+        $notificationUpdate = ExamNotification::find($notification_id);
+        $notificationUpdate->read = "1";
+        $notificationUpdate->save();
+        
+         //dd($post);
         return view('companypanel.pages.jobs.job_applicants', compact('post'));
     }
     public function jobshortlistedComp($id)
@@ -632,15 +809,158 @@ class CompanyDashboardController extends Controller
         $post = Posts::with('jobAppRecComp', 'skills', 'company')->find($id);
         return view('companypanel.pages.jobs.exam_results', compact('post'));
     }
-    public function mamrkerCandidate()
+    public function mamrkerCandidate(Request $request)
     {
-        $comp = auth()->user()->company->id;
-        $jobApp = JobApplications::with('candidateDocument', 'candidate', 'post')->whereHas('post', function ($q) use ($comp) {
-            // Query the name field in status table
-            $q->where('comp_id', '=', $comp); // '=' is optional
-        })->get();
-        // dd($jobApp->toArray());
+        $jobApp = JobApplications::with('post', 'candidate', 'candidate.jobApplications', 'candidate.jobApplications.post', 'candidate.user', 'candidate.user.candidatePro', 'candidate.user.candidateEdu', 'candidateDocument', 'postComp')->whereHas('post', function ($query) {
+            $query->where('comp_id', auth()->user()->company->id);
+        });
+
+        if ($request->has('post') && $request->post != null) {
+            $post = $request->post;
+            $jobApp = $jobApp->whereHas('post', function ($query) use ($post) {
+                $query->where('id', $post);
+            });
+        }
+        if ($request->has('gender') && $request->gender != null) {
+            $gender = $request->gender;
+            $jobApp = $jobApp->whereHas('candidate', function ($query) use ($gender) {
+                $query->where('gender', $gender);
+            });
+        }
+        if ($request->has('validity') && $request->validity != null) {
+            $validity = $request->validity;
+            $jobApp = $jobApp->whereHas('post', function ($query) use ($validity) {
+                $query->where('expiry_date', $validity);
+            });
+        }
+        if ($request->has('posted_date') && $request->posted_date != null) {
+            $posted_date = Carbon::parse($request->posted_date);
+            $jobApp = $jobApp->whereHas('post', function ($query) use ($posted_date) {
+                $query->where('created_at', '>=', $posted_date);
+            });
+            // dd($jobApp->get()->toArray());
+        }
+        if ($request->has('startDate') && $request->startDate != null && $request->has('endDate') && $request->endDate != null) {
+            $startDate = Carbon::createFromFormat('d/m/Y', $request->startDate);
+            $startDate = $startDate->format('Y-m-d');
+            $endDate = Carbon::createFromFormat('d/m/Y', $request->endDate);
+            $endDate = $endDate->format('Y-m-d');
+            $jobApp = $jobApp->whereHas('post', function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('created_at', [$startDate, $endDate]);
+            });
+            // dd($jobApp->get()->toArray());
+        }
+        if ($request->has('exp') && $request->exp != null) {
+            $exp = $request->exp;
+            $jobApp = $jobApp->whereHas('post', function ($query) use ($exp) {
+                $query->where('experience', $exp);
+            });
+        }
+        if ($request->has('qualification') && $request->qualification != null) {
+            $qualification = $request->qualification;
+            $jobApp = $jobApp->whereHas('post', function ($query) use ($qualification) {
+                $query->where('qualification', $qualification);
+            });
+        }
+        if ($request->has('category') && $request->category != null) {
+            $category = $request->category;
+            $jobApp = $jobApp->whereHas('post', function ($query) use ($category) {
+                $query->where('class_id', $category);
+            });
+        }
+        if ($request->has('search') && $request->search != null) {
+            $search = $request->search;
+            $search = explode(' ', $search);
+            $oldsearch = $search[0];
+            $jobApp = $jobApp->whereHas('candidate', function ($query) use ($oldsearch) {
+                $query->where('first_name', 'like', '%' . $oldsearch . '%')->orwhere('last_name', 'like', '%' . $oldsearch . '%');
+                // ->orWhere('first_name'.''.'last_name', 'like', '%' . $search . '%');
+            });
+
+            if (isset($search[1])) {
+                $newSearch = $search[1];
+                $jobApp = $jobApp->whereHas('candidate', function ($query) use ($newSearch) {
+                    $query->where('last_name', 'like', '%' . $newSearch . '%')->orwhere('first_name', 'like', '%' . $newSearch . '%');
+                    // ->orWhere('first_name'.''.'last_name', 'like', '%' . $search . '%');
+                });
+            }
+        }
+        // if ($request->has('percentage')) {
+        //     $data = $jobApp->where('qst_id','!=',0)->get();
+        //     $rangePercentage = (int)$request->percentage;
+        //     $ans_array = array();
+        //     foreach ($data as $key => $value) {
+        //         $sum = 0;
+        //         foreach ($value->qst_total_marks as $row) {
+        //             $sum = $sum + $row->value;
+        //         }
+        //     }
+        //     $filteredQuestions = $data->filter(function ($ans) use ($rangePercentage, $sum) {
+        //         if($ans->sec_qstSocre == null)
+        //         {
+        //             return false;
+        //         }
+        //         else
+        //         {
+        //             if ($ans->sec_qstSocre->mark != 0 || $ans->sec_qstSocre->mark != null) {
+        //                 $percentage = ($ans->sec_qstSocre->mark * 100 )/ $sum;
+        //             } else {
+        //                 return false;
+        //             }
+        //         }
+
+        //         return $percentage >= $rangePercentage;
+        //     });
+        //     $pluck_ids = $filteredQuestions->pluck('id')->toArray();
+        //     $jobApp = $jobApp->whereIn('id',$pluck_ids);
+        // }
+
+        if ($request->has('lat') && $request->lat != null && $request->has('lng') && $request->lng != null) {
+            $lat = $request->lat;
+            $lng = $request->lng;
+            if ($request->has('radius')) {
+                $radius = $request->radius;
+            } else {
+                $radius = 5;
+            }
+            $jobApp = $jobApp->whereHas('candidate', function ($query) use ($lat, $lng, $radius) {
+                $query->select(
+                    "candidates_details.id",
+                    DB::raw("6371 * acos(cos(radians(" . $lat . "))
+                * cos(radians(candidates_details.latitude))
+                * cos(radians(candidates_details.longitude) - radians(" . $lng . "))
+                + sin(radians(" . $lat . "))
+                * sin(radians(candidates_details.latitude))) AS distance")
+                );
+                $query->having('distance', '<', $radius);
+            });
+            // dd($jobApp->get()->toArray());
+        }
+        // if ($request->has('radius')) {
+        //     $lat = auth()->user()->company->lat;
+        //     $lng = auth()->user()->company->lng;
+        //     // dd($request->all());
+        //     // dd($lat, $lng);
+        //     $radius = $request->radius;
+        //     $jobApp = $jobApp->whereHas('candidate', function ($query) use ($lat, $lng, $radius) {
+        //         $query->select(
+        //             "candidates_details.id",
+        //             DB::raw("6371 * acos(cos(radians(" . $lat . "))
+        //         * cos(radians(candidates_details.latitude))
+        //         * cos(radians(candidates_details.longitude) - radians(" . $lng . "))
+        //         + sin(radians(" . $lat . "))
+        //         * sin(radians(candidates_details.latitude))) AS distance")
+        //         );
+        //         $query->having('distance', '<', $radius);
+        //     });
+        //     // dd($jobApp->get()->toArray());
+        // }
+        if ($request->lat == null && $request->lng == null && $request->posted_date == null && $request->validity == null && $request->search == null) {
+            $jobApp = $jobApp->take(10);
+        }
+        $jobApp = $jobApp->get();
         return $jobApp;
+    
     }
     public function postAnExistingJob($id)
     {
@@ -649,15 +969,23 @@ class CompanyDashboardController extends Controller
         // if (count(auth()->user()->company->posts) < auth()->user()->package->no_of_posts) {
         $recruiter = CompanyRecRelation::where('com_id', auth()->user()->company->id)->where('status', 1)->get();
         $post = Posts::where('id', $id)->first();
+        
         $data = JobCategory::orderby('title', 'asc')->get();
+        $selected_job = JobCategory::where('id',$post->class_id)->first();
+
         // dd($post->toArray());
         $skill = Skills::all();
         $test = Http::get('https://api.e-rec.com.au/api/qst/to/classes', [
             'class_id' => $post->class_id,
         ]);
-        $test_id = $test->json();
+        
+        $company_id = Company::where('user_id' , auth::user()->id)->value('id');
+        $test_id = Exam::where('company_id',$company_id)->where('status',1)->get();
+
+        $selected_exam = Exam::where('id',$post->test_id)->first();
+        
         $postSkills = PostSkill::where('post_id', $post->id)->get();
-        return view('companypanel.pages.jobs.postAnExisting.create', compact('post', 'skill', 'postSkills', 'recruiter', 'data', 'test_id'));
+        return view('companypanel.pages.jobs.postAnExisting.create', compact('post', 'skill', 'postSkills', 'recruiter', 'data', 'test_id','selected_job','selected_exam'));
         // } else {
         //     return back();
         // }
@@ -757,7 +1085,7 @@ class CompanyDashboardController extends Controller
         //$datas = Exam::with('questions')->get()->toArray();
         $company_id = Company::where('user_id' , $request->user_id)->value('id');
         
-        $data = Exam::where('company_id' , $company_id)->has('questions')->with('questions')->get();
+        $data = Exam::where('company_id' , $company_id)->where('status',1)->has('questions')->with('questions')->get();
 
         return $data;
 

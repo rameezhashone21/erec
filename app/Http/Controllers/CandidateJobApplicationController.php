@@ -37,7 +37,7 @@ class CandidateJobApplicationController extends Controller
             // }
 
             $session_id = 'test';
-
+            
             return view('candidatepanel.pages.jobApplications.index', compact('apps', 'session_id'));
         } else {
             return redirect()->route('candidates.details');

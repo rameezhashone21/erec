@@ -65,6 +65,8 @@ trait RequestValidation
         
         $user = User::where('id',$user_id->id)->first();
         
+        //dd($user);
+        
         
         if ($user->stripe_id == 0) {
             

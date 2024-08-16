@@ -33,21 +33,21 @@
                     <ul class="dropdown-menu user-setting" aria-labelledby="messageDropdown">
                         {{-- <li><a class="dropdown-item" href="#">Action</a></li>
                             <li><a class="dropdown-item" href="#">Another action</a></li> --}}
-                        @if (Route::is('company.map'))
-                            <li class="p-2 mx-3">
-                                <a class="dropdown-item fs-12 p-0 d-flex justify-content-between"
-                                    href="{{ route('home') }}">
-                                    <span>
-                                        Profile
-                                    </span>
-                                    <span>
-                                        <img src="{{ asset('/dashboard/images/edit.png') }}" alt="dashboard icon"
-                                            style="width: 21px; height: 21px;">
-                                    </span>
-                                </a>
-                            </li>
-                            {{-- <hr class="my-0"> --}}
-                        @endif
+                        <!--@if (Route::is('company.map'))-->
+                        <!--    <li class="p-2 mx-3">-->
+                        <!--        <a class="dropdown-item fs-12 p-0 d-flex justify-content-between"-->
+                        <!--            href="{{ route('home') }}">-->
+                        <!--            <span>-->
+                        <!--                Profile-->
+                        <!--            </span>-->
+                        <!--            <span>-->
+                        <!--                <img src="{{ asset('/dashboard/images/edit.png') }}" alt="dashboard icon"-->
+                        <!--                    style="width: 21px; height: 21px;">-->
+                        <!--            </span>-->
+                        <!--        </a>-->
+                        <!--    </li>-->
+                        <!--    {{-- <hr class="my-0"> --}}-->
+                        <!--@endif-->
                         <li class=" p-2 mx-3">
                             <a class="dropdown-item fs-12 p-0 d-flex justify-content-between"
                                 href="{{ route('company.dashboard') }}">
@@ -72,19 +72,19 @@
                                 </span>
                             </a>
                         </li>
-                        <li class="p-2 mx-3">
-                            <a class="dropdown-item fs-12 p-0 d-flex justify-content-between "
-                                href="{{ route('company.profile') }}">
-                                <span>
-                                    My Profile
-                                </span>
-                                <span>
-                                    <img src="{{ asset('/dashboard/images/edit.png') }}" alt="dashboard icon"
-                                        style="width: 21px; height: 21px;">
-                                </span>
+                        <!--<li class="p-2 mx-3">-->
+                        <!--    <a class="dropdown-item fs-12 p-0 d-flex justify-content-between "-->
+                        <!--        href="{{ route('company.profile') }}">-->
+                        <!--        <span>-->
+                        <!--            My Profile-->
+                        <!--        </span>-->
+                        <!--        <span>-->
+                        <!--            <img src="{{ asset('/dashboard/images/edit.png') }}" alt="dashboard icon"-->
+                        <!--                style="width: 21px; height: 21px;">-->
+                        <!--        </span>-->
 
-                            </a>
-                        </li>
+                        <!--    </a>-->
+                        <!--</li>-->
                         <li class="p-2 mx-3">
                             <a class="dropdown-item fs-12 p-0 d-flex justify-content-between"
                                 href="{{ route('company.map') }}">
@@ -265,21 +265,21 @@
                                 <ul class="dropdown-menu user-setting" aria-labelledby="messageDropdown">
                                     {{-- <li><a class="dropdown-item" href="#">Action</a></li>
                                         <li><a class="dropdown-item" href="#">Another action</a></li> --}}
-                                    @if (Route::is('company.map'))
-                                        <li class="p-2 mx-3">
-                                            <a class="dropdown-item fs-12 p-0 d-flex justify-content-between"
-                                                href="{{ route('home') }}">
-                                                <span>
-                                                    Profile
-                                                </span>
-                                                <span>
-                                                    <img src="{{ asset('/dashboard/images/edit.png') }}"
-                                                        alt="dashboard icon" style="width: 21px; height: 21px;">
-                                                </span>
-                                            </a>
-                                        </li>
-                                        {{-- <hr class="my-0"> --}}
-                                    @endif
+                                    <!--@if (Route::is('company.map'))-->
+                                    <!--    <li class="p-2 mx-3">-->
+                                    <!--        <a class="dropdown-item fs-12 p-0 d-flex justify-content-between"-->
+                                    <!--            href="{{ route('home') }}">-->
+                                    <!--            <span>-->
+                                    <!--                Profile-->
+                                    <!--            </span>-->
+                                    <!--            <span>-->
+                                    <!--                <img src="{{ asset('/dashboard/images/edit.png') }}"-->
+                                    <!--                    alt="dashboard icon" style="width: 21px; height: 21px;">-->
+                                    <!--            </span>-->
+                                    <!--        </a>-->
+                                    <!--    </li>-->
+                                    <!--    {{-- <hr class="my-0"> --}}-->
+                                    <!--@endif-->
                                     <li class=" p-2 mx-3">
                                         <a class="dropdown-item p-0 d-flex justify-content-between"
                                             style='font-size: 14px;' href="{{ route('company.dashboard') }}">
@@ -436,6 +436,70 @@
                             @endif
                             {{-- </li>
                             </ul> --}}
+                            @php
+                             $notifications = App\Models\ExamNotification::latest('id','asc')->where('user_id',Auth::user()->id)->take(5)->get();
+                             $unread_notifications_count = App\Models\ExamNotification::latest('id','asc')->where('read',0)->where('user_id',Auth::user()->id)->take(5)->get();
+                            @endphp
+                            <div class="dropdown d-none d-lg-block">
+                                <a class="text_dark_292929" href="#"
+                                    role="button" id="notificationsDropdown" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <i class="fa-solid fa-bell fs-5"></i>
+                                    @if(count($unread_notifications_count) > 0)
+                                    <div class="notification-count">{{count($unread_notifications_count)}}</div>
+                                    @endif
+                                </a>
+                                <ul class="dropdown-menu user-setting notifications-dropdown" aria-labelledby="notificationsDropdown">
+                                    <li class='d-flex align-items-center justify-content-between p-2 mx-3'>
+                                        <div>
+                                            <h3> Notifications </h3>
+                                        </div>
+                                        <div>
+                                            <a href={{route("company.markNotificationsRead")}} class='fs-14 text_primary onhover_text-decoration'> Mark as all read </a>
+                                        </div> 
+                                    </li>
+                                    @if(!$notifications->isEmpty())
+                                    @foreach($notifications as $notification)
+                                    {{-- Unread Notifications --}}
+                                    @if($notification->read == 0) 
+                                    <li>
+                                        <a class="dropdown-item fs-12 d-flex align-items-center" style="background-color: #f5f5f5;"
+                                            href="{{ route('company.job.applicantsById', ['id' => $notification->job_id, 'notification_id' => $notification->id]) }}">
+                                                <span>
+                                                    <img src='https://backend.hostingladz.com/webapp/erec/public/storage/companyLogo/img/2024-08-05_.84.142857142857_.jpg' alt='' class='profile_thumb me-2 rounded-50' />
+                                                </span>
+                                                <span style='white-space: normal;'>{{$notification->content}}
+                                                </span>
+                                        </a>
+                                    </li>
+                                    {{-- Read Notifications --}}
+                                    @else
+                                    <li>
+                                        <a class="dropdown-item fs-12 d-flex align-items-center"
+                                            href="{{ route('company.job.applicantsById', ['id' => $notification->job_id , 'notification_id' => $notification->id]) }}">
+                                                <span>
+                                                    <img src='https://backend.hostingladz.com/webapp/erec/public/storage/companyLogo/img/2024-08-05_.84.142857142857_.jpg' alt='' class='profile_thumb me-2 rounded-50' />
+                                                </span>
+                                                <span style='white-space: normal;'>{{$notification->content}}
+                                                </span>
+                                        </a>
+                                    </li>
+                                    @endif
+                                    @endforeach
+                                    @else
+                                    <li class="p-2 mx-3">
+                                        <a class="dropdown-item fs-12 px-0">
+                                            No Notifications Found
+                                        </a>
+                                    </li>
+                                    @endif
+                                    
+                                    <li class='p-2 mx-3 text-center'>
+                                        <a href="{{route('company.allNotifications')}}" class='fs-14 text_primary onhover_text-decoration'> See all notifications </a>
+                                    </li>
+
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     {{-- <div class="col-md-4 d-md-flex align-items-center justify-content-evenly">

@@ -156,14 +156,28 @@ class MapController extends Controller
         // $results = DB::connection('pgsql')->select('select * from qst_questions');
 
         $post = Posts::where('comp_id', auth()->user()->company->id)->get(['post', 'id']);
-        // dd($post->toArray());
+        //dd($post->toArray());
         $data = JobCategory::orderby('title', 'asc')->get();
-        // dd($data);
         return view('companypanel.pages.map.index', compact('post', 'data'));
     }
+    // public function smartSearch(Request $request)
+    // {
+    //     dd($request);
+    //     $post = Posts::select('id')->where("comp_id", auth()->user()->company->id)->get();
+        
+    //     if(isset($request->post)){
+    //         $jobApp = JobApplications::with('post', 'candidate', 'candidate.jobApplications', 'candidate.jobApplications.post', 'candidate.user', 'candidate.user.candidatePro', 'candidate.user.candidateEdu', 'candidateDocument', 'postComp')->where("post_id", $request->post)->get();
+    //     }
+    //     else{
+    //         $jobApp = JobApplications::with('post', 'candidate', 'candidate.jobApplications', 'candidate.jobApplications.post', 'candidate.user', 'candidate.user.candidatePro', 'candidate.user.candidateEdu', 'candidateDocument', 'postComp')->whereIn("post_id",$post)->get();
+    //     }
+
+    //     return $jobApp;
+    // }
+    
     public function smartSearch(Request $request)
     {
-        $jobApp = JobApplications::with('post', 'candidate', 'candidate.jobApplications', 'candidate.jobApplications.post', 'candidate.user', 'candidate.user.candidatePro', 'candidate.user.candidateEdu', 'candidateDocument', 'postComp', 'sec_qstSocre', 'qst_total_marks')->whereHas('post', function ($query) {
+        $jobApp = JobApplications::with('post', 'candidate', 'candidate.jobApplications', 'candidate.jobApplications.post', 'candidate.user', 'candidate.user.candidatePro', 'candidate.user.candidateEdu', 'candidateDocument', 'postComp')->whereHas('post', function ($query) {
             $query->where('comp_id', auth()->user()->company->id);
         });
         if ($request->has('post') && $request->post != null) {
@@ -266,7 +280,7 @@ class MapController extends Controller
         //     $jobApp = $jobApp->whereIn('id',$pluck_ids);
         // }
 
-        if ($request->has('lat') && $request->lat != null && $request->has('lng') && $request->lng != null) {
+        if($request->has('lat') && $request->lat != null && $request->has('lng') && $request->lng != null) {
             $lat = $request->lat;
             $lng = $request->lng;
             if ($request->has('radius')) {
@@ -311,6 +325,7 @@ class MapController extends Controller
         }
         $jobApp = $jobApp->get();
         return $jobApp;
+
     }
     // Hire a candidate
     public function changeJobAppStatus($id)

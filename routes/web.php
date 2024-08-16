@@ -35,6 +35,14 @@ Route::get('/apply/job/session', [App\Http\Controllers\FrontendController::class
 Route::get('/get_question_data', [App\Http\Controllers\Company\ExamQuestionAnswerController::class, 'get_question_data'])->name("get-question-data");
 Route::post('/update-question-data', [App\Http\Controllers\Company\ExamQuestionAnswerController::class, 'update_question_data'])->name("update-question-data");
 
+Route::post('/candidate_notify', [ShowTestController::class, 'candidate_notify'])->name("candidate.notify");
+
+Route::post('/candidates_filter', [App\Http\Controllers\CompanyDashboardController::class, 'candidates_filter'])->name("candidates.filter");
+
+Route::get('/download-csv', [ExamController::class, 'downloadCSV'])->name("downloadCSV");
+
+
+
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -315,7 +323,7 @@ Route::middleware(['auth', 'check_status'])->group(function () {
     });
 
     Route::prefix('/company')->middleware(['auth', 'verified'])->group(function () {
-        Route::middleware(['checkcompany'])->group(
+        Route::middleware(['Notification', 'checkcompany'])->group(
             function () {
 
                 Route::get('/', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('company.dashboard');
@@ -376,7 +384,8 @@ Route::middleware(['auth', 'check_status'])->group(function () {
                 Route::get('/job/deactive/status/{id}', [App\Http\Controllers\CompanyDashboardController::class, 'deactivePostStatus'])->name('change.deactive.job');
 
                 Route::get('/job/details/{id}', [App\Http\Controllers\CompanyDashboardController::class, 'jobDetailsComp'])->name('company.job.details');
-                Route::get('/job/applicants/{id}', [App\Http\Controllers\CompanyDashboardController::class, 'jobApplicantsComp'])->name('company.job.applicants');
+                Route::get('/job/applicants/{slug}', [App\Http\Controllers\CompanyDashboardController::class, 'jobApplicantsCompBySlug'])->name('company.job.applicants');
+                Route::get('/job/applicantsById/{id}/{notification_id}', [App\Http\Controllers\CompanyDashboardController::class, 'jobApplicantsCompById'])->name('company.job.applicantsById');
                 Route::get('/job/shortlisted/{id}', [App\Http\Controllers\CompanyDashboardController::class, 'jobshortlistedComp'])->name('company.job.shortlisted');
                 Route::get('/exam/result/{id}', [App\Http\Controllers\CompanyDashboardController::class, 'examResultComp'])->name('company.exam.result');
 
@@ -418,6 +427,10 @@ Route::middleware(['auth', 'check_status'])->group(function () {
                 Route::get('/shortlist/candidate/{id}', [App\Http\Controllers\CompanyDashboardController::class, 'shortListCandidate'])->name('shortlist.candidate.comp');
 
                 Route::post('/hire-or-reject/candidate', [App\Http\Controllers\CompanyDashboardController::class, 'hireReject'])->name('hireReject.candidate.comp');
+            
+                Route::get('/allNotifications', [App\Http\Controllers\FrontendController::class, 'allNotifications'])->name('company.allNotifications');
+            
+                Route::get('/markNotificationsRead', [App\Http\Controllers\FrontendController::class, 'markAllNotificationsRead'])->name('company.markNotificationsRead');
             }
         );
     });

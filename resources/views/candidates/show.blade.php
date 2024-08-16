@@ -20,7 +20,7 @@
                             <div class="view_profile_image">
                                 @if (isset($user->candidate))
                                     @if ($user->avatar != null)
-                                        <img class="" src="{{ asset('public/storage/' . $user->avatar) }}"
+                                        <img class="" src="{{ asset('storage/' . $user->avatar) }}"
                                             alt="">
                                     @else
                                         <img class="" src="{{ asset('adminpanel/images/avatar/dummy.png') }}"

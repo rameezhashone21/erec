@@ -8,6 +8,7 @@ use Session;
 use Carbon\Carbon;
 use App\Models\Faq;
 use App\Models\User;
+use App\Models\ExamNotification;
 use App\Models\Posts;
 use App\Models\Skills;
 use App\Models\Company;
@@ -32,6 +33,7 @@ use App\Models\SubscriptionPackages;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use App\Models\CandidateProfessionalExp;
+use DB;
 
 class FrontendController extends Controller
 {
@@ -907,7 +909,6 @@ class FrontendController extends Controller
             // 'plan_id' => 'required|numeric|exists:packages,id',
 
         ]);
-
         if ($request->payment_mode == "stripe") {
             $valid = $this->valid($request);
         }
@@ -934,11 +935,13 @@ class FrontendController extends Controller
 
                     $data["price"] = $request->price;
 
+
                     $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
 
                     $user_id = auth()->user();
 
                     $userDetail = User::where('id', auth()->user()->id)->firstOrFail();
+                    
 
                     $stripe_subscribe_token = $stripe->subscriptions->create([
                         'customer' => $userDetail->stripe_id,
@@ -946,6 +949,7 @@ class FrontendController extends Controller
                             ['price' => $request->plan_stripe_id],
                         ],
                     ]);
+                    
                 }
 
                 $userDetail->package_id = $request->plan_id;
@@ -974,16 +978,23 @@ class FrontendController extends Controller
                 // $email = $userDetail->email;
                 // $email = $userDetail->email;
                 // $email = $userDetail->email;
-                // dd('ok');
                 if (auth()->user()->role == 'rec') {
                     # code...
                     $userName = auth()->user()->recruiter->name . ' ' . auth()->user()->recruiter->lastName;
                     $address = auth()->user()->recruiter->address . ' ' . auth()->user()->recruiter->city . ', ' . auth()->user()->recruiter->country . ', ' . auth()->user()->recruiter->postal_code;
-                } else {
+                } elseif(auth()->user()->role == 'company') {
+                    
                     # code...
-                    $userName = auth()->user()->company->name;
+                    $userName = auth()->user()->name;
                     $address = auth()->user()->company->address . ' ' . auth()->user()->company->city . ', ' . auth()->user()->company->country . ', ' . auth()->user()->company->postal_code;
+                }else {
+                    
+                    $candiatedetails = DB::table('candidates_details')->where('user_id',auth()->user()->id)->first();
+                    # code...
+                    $userName = $candiatedetails->first_name . ' ' . $candiatedetails->last_name;
+                    $address = $candiatedetails->address . ' ' . $candiatedetails->city . ', ' . $candiatedetails->country . ', ' . $candiatedetails->zipCode;
                 }
+                
                 // dd($userName);
                 $tax = $tax_price;
                 $mail = Mail::to($email)->send(new PackageSubscription($packageName, $packageNo_of_posts, $packagePrice, $tax, $packagePrice_show, $packageTime_interval, $userName, $address));
@@ -1455,5 +1466,20 @@ class FrontendController extends Controller
         $comp->delete();
 
         return back();
+    }
+    
+    public function allNotifications()
+    {
+        $allnotifications = ExamNotification::where('user_id', auth::user()->id)->get();
+
+        return view('companypanel.pages.notifications.index', compact('allnotifications'));
+    }
+    
+    public function markAllNotificationsRead()
+    {
+        $markAllNotificationsread = DB::table('exam_notifications')
+              ->where('user_id', auth::user()->id)
+              ->update(['read' => 1]);
+        return redirect()->route('company.allNotifications')->with('message', 'Marked All Notifitions Read');
     }
 }

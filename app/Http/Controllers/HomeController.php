@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Posts;
 use App\Models\CompanyRecRelation;
+use App\Models\ExamNotification;
 use App\Models\JobApplications;
 use App\Models\CandidateDocs;
 use App\Models\Candidate;
@@ -27,6 +28,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
+        
         $this->middleware('auth');
     }
     public function pusherAuth(Request $request)

@@ -237,7 +237,7 @@
                                             <!--[if mso]><style>.v-button {background: transparent !important;}</style><![endif]-->
                                             <div align="left">
                                                 <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:37px; v-text-anchor:middle; width:126px;" arcsize="11%"  stroke="f" fillcolor="#007ba7"><w:anchorlock/><center style="color:#FFFFFF;"><![endif]-->
-                                                <a href="{{ asset('public/candidateDoc/doc/' . $canResume) }}"
+                                                <a href="{{ asset('candidateDoc/doc/' . $canResume) }}"
                                                     target="_blank" class="v-button"
                                                     style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #007ba7; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
                                                     <span

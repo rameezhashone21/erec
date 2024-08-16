@@ -21,39 +21,27 @@
           {{-- {{ dd(app('router')->getRoutes()->match(app('request')->create(URL::previous()))->getName() == 'subscriptionPayment') }} --}}
           {{-- {{ dd(session(`previous-route`) == 'successPayment') }} --}}
           @php
-            // dd(app('router')->getRoutes()->match(app('request')->create(URL::previous()))->getName() == 'subscriptionPayment');
-            if (
-                app('router')
-                    ->getRoutes()
-                    ->match(app('request')->create(URL::previous()))
-                    ->getName() == 'subscriptionPayment'
-            ) {
-                $subscribed = 'subscribed';
-            } else {
-                $subscribed = 'renewed';
+          
+            use Illuminate\Support\Facades\URL;
+            use Illuminate\Support\Facades\Route;
+        
+            $previousUrl = URL::previous();
+            $request = app('request')->create($previousUrl);
+            $routeName = '';
+    
+            try {
+                $route = app('router')->getRoutes()->match($request);
+                $routeName = $route->getName();
+            } catch (\Exception $e) {
+                $routeName = ''; // Handle exception or set default route name
             }
+
+            $subscribed = ($routeName === 'subscriptionPayment') ? 'subscribed' : 'renewed';
             
           @endphp
           <div class="text-center mb-4">
             <p class='w-50 mx-auto'>
-              {{-- {{ dd(auth()->user()->package->time_interval) }} --}}
-              {{-- Your subscription has been activated successfully. --}}
-              You have successfully {{ $subscribed }} your @if (auth()->check())
-                @if (auth()->user()->package != null)
-                  {{ auth()->user()->package->name }} subscription Your expiry date will be @if ($users->package_expiry = !null)
-                    @if (auth()->user()->package->time_interval == 'month')
-                      {{ \Carbon\Carbon::parse($users->package_expiry = $current->addMonth())->isoFormat('DD/MM/YYYY') }}
-                    @elseif (auth()->user()->package->time_interval == 'year')
-                      {{ $users->package_expiry = $current->addYear()->format('D/M/Y') }}
-                    @endif
-                  @endif
-                @endif
-              @endif A Tax Invoice for the amount of
-              @if (auth()->check())
-                @if (auth()->user()->package != null)
-                  ${{ auth()->user()->package->price }}
-                @endif
-              @endif
+              
               including GST, will be sent out to your registered email address. Thank you for your business.
             </p>
           </div>

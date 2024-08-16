@@ -31,7 +31,7 @@
           </thead>
           <tbody>
             @if (count($jobApp) > 0)
-              @foreach ($jobApp as $key => $row)
+            @foreach ($jobApp as $key => $row)
                 @if (isset($row->post))
                   <tr>
                     <td>{{ ++$key }}. </td>
@@ -42,6 +42,7 @@
                         {{ $row->candidate->last_name }}
                       </a>
                     </td>
+                    
                     <td class="jopAssignSelectbox" id="td_id{{ $row->id }}">
                       @if ($row->status == 0)
                         {{-- {{ dd($row->test($row->class_id)) }} --}}
@@ -55,8 +56,9 @@
                           @endforeach
                         </select>
                       @else
+                      
                         @if ($row->qst_id != '0')
-                          <p>{{ $row->qst($row->qst_id)['name'] }}</p>
+                          <p>{{ $row->qst($row->qst_id) }}</p>
                         @endif
                       @endif
                     </td>

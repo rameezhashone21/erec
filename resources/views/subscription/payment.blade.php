@@ -19,9 +19,41 @@
         .swal2-styled.swal2-confirm:focus {
             box-shadow: none;
         }
+        
+        /* HTML: <div class="loader"></div> */
+        .loader_payment {
+          width: 50px;
+          aspect-ratio: 1;
+          border-radius: 50%;
+          padding: 6px;
+          background:
+            conic-gradient(from 135deg at top,currentColor 90deg, #0000 0) 0 calc(50% - 4px)/17px 8.5px,
+            radial-gradient(farthest-side at bottom left,#0000 calc(100% - 6px),currentColor calc(100% - 5px) 99%,#0000) top right/50%  50% content-box content-box,
+            radial-gradient(farthest-side at top        ,#0000 calc(100% - 6px),currentColor calc(100% - 5px) 99%,#0000) bottom   /100% 50% content-box content-box;
+          background-repeat: no-repeat;
+          animation: l11 1s infinite linear;
+        }
+        @keyframes l11{ 
+          100%{transform: rotate(1turn)}
+        }
+        .loader_payment_container {
+            background-color: #00000059;
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999999;
+      
+        }
     </style>
-    <div class="loader__formsubmit" style="display: none;">
-        <div></div>
+    <!--<div class="loader__formsubmit" style="display: none;">-->
+    <!--    <div></div>-->
+    <!--</div>-->
+    <div id="payment_loader" class='loader_payment_container d-none justify-content-center align-items-center'>
+        <div class='loader_payment'>
+        
+        </div>
     </div>
     <section class="light-bg subcription_banner">
         <div class="container ">
@@ -54,8 +86,16 @@
                                     <h2 class="bronze ">
                                         {{ $pkg->name }}
                                     </h2>
-                                    <h3 class='payment__title d-flex align-items-center'>${{ $pkg->price }}<span
+                                    @if($pkg->price == 90)
+                                    <h3 class='payment__title d-flex align-items-center'>99<span
                                             class='ms-2 text-white-hover'>/ {{ $pkg->time_interval }}</span></h3>
+                                    @elseif($pkg->price == 272)
+                                    <h3 class='payment__title d-flex align-items-center'>299<span
+                                            class='ms-2 text-white-hover'>/ {{ $pkg->time_interval }}</span></h3>
+                                    @elseif($pkg->price == 454)
+                                    <h3 class='payment__title d-flex align-items-center'>499<span
+                                            class='ms-2 text-white-hover'>/ {{ $pkg->time_interval }}</span></h3>
+                                    @endif
                                 </div>
                                 {{-- <a class='payment-subcription-btn d-flex justify-content-center align-items-center'>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11.839" height="23.684"
@@ -73,6 +113,7 @@
             <div class="row justify-content-center mt-5">
                 <div class="col-lg-8">
                     <div class="payment_box payment_tabs mb-5">
+                        
                         <div>
                             <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
                                 <li class="nav-item flex-w50" role="presentation">
@@ -535,6 +576,12 @@
                 var myarr = mystr.split("/");
                 var card_exp_month = myarr[0];
                 var card_exp_year = myarr[1];
+                
+                // Start a loader
+                var element = document.getElementById('payment_loader');
+                element.classList.remove('d-none');
+                element.classList.add('d-flex');
+                        
                 if (card_name == "" || card_number == "" || card_exp_month == "" || card_exp_year == "" ||
                     card_cvv == "") {
                     if (card_name == "") {
@@ -556,6 +603,7 @@
                 } else {
                     if (payment_method == 'eway') {
                         var formData = $('#payment-form').serialize();
+                        
                         // console.log(formData);
                         $.ajax({
                                 type: "POST",
@@ -565,6 +613,12 @@
                                 encode: true,
                             })
                             .done(function(data) {
+                                console.log("111");
+                                // Stop the loader
+                                var element = document.getElementById('payment_loader');
+                                element.classList.remove('d-flex');
+                                element.classList.add('d-none');
+                
                                 var errors = data.responseJSON;
                                 if (errors) {
                                     console.log(errors);
@@ -582,10 +636,17 @@
                                 // window.location.href = "{{ route('successPayment') }}";
                             })
                             .fail(function(error) {
+                                console.log("222");
+                                // Stop the loader
+                                var element = document.getElementById('payment_loader');
+                                element.classList.remove('d-flex');
+                                element.classList.add('d-none');
+                                
                                 console.log(error.responseText);
 
                             });
                     } else {
+                        console.log("333");
                         $("#submit-form").prop('disabled', true);
                         $(".load-loader").append("<div class='loader' id='loader'></div> ");
                         $("#submit-form > span").css("display", "none");
@@ -622,10 +683,9 @@
                         function stripeResponseHandler(status, response) {
                             let isChecked = $('#customCheck').is(':checked');
                             if (response.error) {
-                                // $('.error')
-                                //     .removeClass('hide')
-                                //     .find('.alert')
-                                //     .text(response.error.message);
+                                var element = document.getElementById('payment_loader');
+                                element.classList.remove('d-flex');
+                                element.classList.add('d-none');
                                 $(".loader").css("display", "none");
                                 $("#submit-form > span").css("display", "block");
                                 $("#submit-form").prop('disabled', false);

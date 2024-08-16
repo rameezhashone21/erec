@@ -24,7 +24,7 @@
           @endforeach
         @endif
       </div>
-      <form class="dashboard-form needs-validation" method="post" action="{{ route('company.exam.create') }}">
+      <form class="dashboard-form needs-validation" method="post" action="{{ route('company.exam.create') }}" enctype="multipart/form-data">
         @csrf
         <div class="row gy-4">
           <div class="col-md-6">
@@ -32,6 +32,13 @@
               <label for="name" class="form-label fs-14 text-theme-primary fw-bold">Title*</label>
               <input type="text" autocomplete="off" class="form-control fs-14 h-50px" name="title" required>
             </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group position-relative">
+              <label for="name" class="form-label fs-14 text-theme-primary fw-bold">Import Exam Questions</label>
+              <input type="file" name="csv_file" >
+            </div>
+            <a href="{{route('downloadCSV')}}"><u>Download Sample Test Format</u></a>
           </div>
           <div class="col-md-6">
             <div class="form-group set-cross-icon" id="criteria">
@@ -60,6 +67,7 @@
                 Save
               </button>
             </div>
+          </div>
           </div>
         </div>
       </form>

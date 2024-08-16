@@ -256,17 +256,27 @@ $(document).on("click", ".hello", function () {
                     $('.question').val(question);
                     $('.exam_id').val(exam_id);
                     
+                    console.log("cond 245 executed", response['answers'][0]['is_correct'], response['answers'][1]['is_correct'],
+                    response['answers'][2]['is_correct'],response['answers'][3]['is_correct']);
+                    
                     //Check or uncheck checkbox based on data.checkboxValue
                     if (response['answers'][0]['is_correct']=='yes') {
+                        console.log("option 1 correct")
                       $('.is-correct-m-1').prop('checked', true);
                     } 
                     if(response['answers'][1]['is_correct']=='yes') {
+                                                console.log("option 2 correct")
+
                       $('.is-correct-m-2').prop('checked', true);
                     }
                     if(response['answers'][2]['is_correct']=='yes') {
+                                                console.log("option 3 correct")
+
                       $('.is-correct-m-3').prop('checked', true);
                     }
                     if(response['answers'][3]['is_correct']=='yes') {
+                                                console.log("option 4 correct")
+
                       $('.is-correct-m-4').prop('checked', true);
                     }
                 }
@@ -281,23 +291,28 @@ $(document).on("click", ".hello", function () {
                     $('.exam_id').val(exam_id);
                     
                     
-                    console.log("cond 2 executed");
+                    console.log("cond 2 executed", response['answers'][0]['is_correct'], response['answers'][1]['is_correct'],
+                    response['answers'][3]['is_correct'],response['answers'][3]['is_correct']);
+                    
                     //Check or uncheck checkbox based on data.checkboxValue
                     if (response['answers'][0]['is_correct']=='yes') {
-                        var answer_option = document.getElementById('is-correct-m-2');
+                        //console.log("option 1 executed");
+                        var answer_option = document.getElementById('is-correct-m-1');
                         answer_option.checked = true;
                     } 
                     else if(response['answers'][1]['is_correct']=='yes') {
-                        console.log("cond 22 executed");
+                        //console.log("option 2 executed");
                         var answer_option = document.getElementById('is-correct-m-2');
                         answer_option.checked = true;
                         
                     }
                     else if(response['answers'][2]['is_correct']=='yes') {
+                        //console.log("option 3 executed");
                         var answer_option = document.getElementById('is-correct-m-3');
                         answer_option.checked = true;
                     }
                     else if(response['answers'][3]['is_correct']=='yes') {
+                        //console.log("option 4 executed");
                         var answer_option = document.getElementById('is-correct-m-4');
                         answer_option.checked = true;
                     }

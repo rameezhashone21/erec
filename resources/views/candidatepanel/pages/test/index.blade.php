@@ -24,10 +24,32 @@
         <img src="{{ asset('assets/images/test/headerdesign2.png') }}" alt="" />
       </div>
     </div>
+    
   </header>
   <main class="section-margin">
+     <div class='container'>
+          <div class='row'>
+               <div class='col-12'>
+                   <h3 style="margin-bottom:15px;">Employment Test Guidelines</h3>
+                    <ul>
+        <li>Ensure your internet connection is stable before starting the test.</li><br>
+        <li>Read each question carefully.</li><br>
+        <li>Provide the answer to each question to proceed with the test.</li><br>
+        <li>Double-check your answers before submitting to ensure accuracy.</li><br>
+        <li>If you exit the test, you cannot resume it; you must start from the beginning.</li><br>
+        <li>Manage your time effectively to answer all questions within the allocated time.</li><br>
+        <li>Refrain from seeking external assistance or using unauthorized resources during the test.</li><br>
+        <li>Avoid distractions and find a quiet environment to take the test.</li><br>
+        <li>Your answers and any other information you submit throughout the exam will be kept private.</li><br>
+        <li>Contact technical support immediately if you encounter any issues during the test.</li><br>
+    </ul>
+                </div> 
+            </div> 
+     </div> 
+     
     <section id="test-section" class="container-xl shadow rounded-3 mx-auto px-5 py-5 d-none">
       <h1 class="header-text-color mb-4">{{ strtoupper($exam->exam_title) }} Test</h1>
+
 
       <form action="{{ route('candidate.test.submit') }}" method="post" id="myForm">
         @csrf

@@ -5,10 +5,19 @@ namespace App\Http\Controllers\Candidate;
 use App\Models\Exam;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\ExamNotification;
+use App\Models\Company;
+use App\Models\Posts;
 use App\Models\ExamAnswer;
 use App\Models\ExamQuestion;
 use App\Models\ExamResult;
 use App\Models\JobApplications;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Result;
+use App\Mail\NotifyUser;
+use DB;
+
 
 class ShowTestController extends Controller
 {
@@ -32,6 +41,43 @@ class ShowTestController extends Controller
             return view('candidatepanel.pages.test.index', compact('exam', 'questions', 'jobApplicationId'));
         }
         
+    }
+    
+    /**
+     * Calculate result
+     */
+    public function candidate_notify(Request $request)
+    {
+        $result_id = $request->id;
+        
+        $exam_result = ExamResult::where('id',$result_id)->first();
+        
+        $job_application_id = $exam_result->job_application_id;
+        
+        $jobApplication = JobApplications::where('id',$job_application_id)->first();
+        
+        $job = Posts::where('id',$jobApplication->post_id)->first();
+        
+        $company = Company::where('id',$job->comp_id)->first();
+        $candidate = User::where('new_user_id',$exam_result->condidate_id)->first();
+        $employer = User::where('id',$company->user_id)->first();
+        
+        $data = ['candidate' => $candidate->name, 'position' => $job->post, 'employer' => $employer->name ];
+        $notified = Mail::to($candidate->email)->send(new NotifyUser($data));
+        
+       // Update Notification Status
+        $exam_result->notified = 1;
+        $exam_result->save();
+        
+        $notification = ExamNotification::create([
+            'content' => "Dear" .auth()->user()->name." You have been Hired for the postion of " .$job->post,
+            'status'       => "hired",
+            'job_id'       => $job_application_id,
+            'user_id'       => $candidate->id
+        ]);
+        
+        
+        return redirect()->back()->with('success', 'User has been Notified!');
     }
 
     /**
@@ -92,7 +138,7 @@ class ShowTestController extends Controller
                     }
 
                     // Check answer was correct than correct count increase for this anaswer
-                    $arraySearch = array_search($nanswer->answer, $answer['answer']);
+                    $arraySearch = array_search(trim($nanswer->answer), $answer['answer']);
                     // if ($nanswer->is_correct == 'yes' && ($arraySearch != false || $arraySearch == '0')) {
                     //     $correctMultiple++;
                     // }
@@ -121,7 +167,7 @@ class ShowTestController extends Controller
                     }
 
                     // Check answer was correct than correct count increase for this anaswer
-                    $arraySearch = array_search($nanswer->answer, $answer['answer']);
+                    $arraySearch = array_search(trim($nanswer->answer), $answer['answer']);
                     // if ($nanswer->is_correct == 'yes' && ($arraySearch != false || $arraySearch == '0')) {
                     //     $correctMultiple++;
                     // }
@@ -141,7 +187,7 @@ class ShowTestController extends Controller
                         continue;
                     }
                     // Check answer was correct
-                    if ($nanswer->answer == $answer['answer'][0]) {
+                    if (trim($nanswer->answer) == $answer['answer'][0]) {
                         $correct = $correct + 1;
                     }
                 }
@@ -165,11 +211,34 @@ class ShowTestController extends Controller
             'qst_id' => $exam->id
         ])->first();
 
-        if ($percentage >= $jobApplication->post->criteria) {
-            $status = 'pass';
-        } else {
-            $status = 'fail';
+        if($percentage > 90) {
+            $status = 'Pass';
+            $grade = 'A';
+            $email_status = "Cleared";
+        } else if($percentage >= 80 && $percentage <= 90 ) {
+            $status = 'Pass';
+            $grade = 'B';
+            $email_status = "Cleared";
+        } 
+        else if($percentage >= 60 && $percentage < 80) {
+            $status = 'Average';
+            $grade = 'C';
+            $email_status = "Cleared";
         }
+        else {
+            $status = 'Fail';
+            $grade = 'F';
+            $email_status = "Failed";
+        }
+        
+        $job = Posts::where('id',$jobApplication->post_id)->first();
+        
+        $company = Company::where('id',$job->comp_id)->first();
+        $employer = User::where('id',$company->user_id)->first();
+        $data = ['username' => auth()->user()->name, 'status' => $email_status, 'grade' => $grade, 'percentage' => $percentage, 'position' => $job->post, 'employer' => $employer->name ];
+        $j = Mail::to(auth()->user()->email)->send(new Result($data));
+        
+
 
         // Save data into db
         $result = ExamResult::create([
@@ -179,7 +248,15 @@ class ShowTestController extends Controller
             'total_marks'        => $totalMarks,
             'obtained_marks'     => $obtainMarks,
             'perentage'          => $percentage,
+            'grade'              => $grade, 
             'status'             => $status
+        ]);
+        
+        $notification = ExamNotification::create([
+            'content' => "User " .auth()->user()->name." has attempted a for the postion of " .$job->post,
+            'status'       => "exam_status",
+            'job_id'       => $jobApplication->post_id,
+            'user_id'       => $employer->id
         ]);
 
         if ($result) {

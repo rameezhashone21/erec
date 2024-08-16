@@ -35,7 +35,7 @@
                                             class="border-0 bg-white text_primary">Browse</button>
                                     </p>
                                     <input type="file" id="cvFile" accept=".pdf, .doc, .docx" required
-                                        name="resume_file" style="position: absolute; visibility: hidden; width: 0;">
+                                        name="resume_file" style="position: absolute;  width: 0;">
                                 </label>
                             </div>
                             <div class="col-lg-6" id="uploadContainer" style="display: none;">

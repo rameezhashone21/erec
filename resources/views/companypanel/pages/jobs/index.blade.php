@@ -14,18 +14,32 @@
 
 
     {{-- <section> --}}
-    <div class="col-xl-9 col-lg-8">
+        <div class="col-xl-9 col-lg-8">
         <button class="mobile_menu_trigger d-lg-none btn_theme border-0 py-2 px-4 mb-3">
             <i class="fa-solid fa-right-left me-3"></i><span>Side Menu</span>
         </button>
-        @if(session()->has('errorModal'))
-    <div class="alert alert-success">
-        {{ session()->get('errorModal') }}
-    </div>
-@endif
         <div class="dashboard_content bg-white rounded_10 p-4">
+            @if(session()->has('errorModal'))
+                <div class="alert alert-success">
+                    {{ session()->get('errorModal') }}
+                </div>
+                @endif
+        
+                @if (session('error'))
+                  <div class="alert alert-danger" role="alert">
+                    {{ session('error') }}
+                  </div>
+                @endif
+            
+                @if (session('success'))
+                  <div class="alert alert-success" role="alert">
+                    {{ session('success') }}
+                  </div>
+                @endif
             <div class="d-md-flex aling-items-center mb-3">
+                
                 <h2 class="fw-500 text_primary fs-5 align-self-center mb-3 mb-md-0">All Job Posts List</h2>
+                
                 {{-- {{ dd(auth()->user()->package->name) }} --}}
                 {{-- @if (auth()->user()->package->id == 21) --}}
 

@@ -100,7 +100,7 @@
                     4</label>
                   <input type="text" autocomplete="off" class="form-control fs-14 h-50px is-answer-a-4" name="answer[]">
                   <div class="mt-2">
-                    <input type="checkbox" class="is-correct-a-4" name="is_correct_m_4" value="4"
+                    <input type="checkbox" class="is-correct-m-4" name="is_correct_m_4" value="4"
                       autocomplete="off">
                     <label for="is-correct-m-4">correct</label>
                   </div>

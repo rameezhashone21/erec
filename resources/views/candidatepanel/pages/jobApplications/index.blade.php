@@ -76,8 +76,11 @@
                     @php
                       $class = $row->getSingleClass($row->class_id);
                       $qstest = $row->qst($row->qst_id);
+                      $candidate_id = App\Models\User::where('id',Auth::user()->id)->value('new_user_id');
+                      $attempt = App\Models\ExamResult::where('job_application_id',$row->id)->where('condidate_id',$candidate_id)->first();
 
                     @endphp
+                    
                     @if ($row->status == 0 && $row->qst_id == '0')
                       <p class="text-danger" style="color:#fff;">Not Assigned</p>
                     @elseif ($row->status == 2 && $row->qst_id == '0')
@@ -85,7 +88,7 @@
                     @elseif ($row->status == 2 && $row->qst_id != '0')
                       <p class="text-success" style="color:#fff;">Hired</p>
                     @else
-                      @if ($row->qstSocre($row->candidate->user->new_user_id, $row->qst_id) != null)
+                      @if(isset($attempt) == true)
                         <p class="text-success" style="color:#fff;">Given</p>
                       @else
                         @if ($row->status == 0 && $row->qst_id > 0)

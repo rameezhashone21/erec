@@ -23,7 +23,9 @@ class ExamResult extends Model
         'total_marks',
         'obtained_marks',
         'perentage',
+        'grade',
         'status',
+        'notified',
     ];
 
     /**

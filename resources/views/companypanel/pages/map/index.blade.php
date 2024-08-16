@@ -86,7 +86,7 @@
                                         <option value="" disabled selected>Select Job category --</option>
                                         @if ($data != null)
                                             @foreach ($data as $row)
-                                                <option value="{{ $row['class_id'] }}">{{ $row['class_name'] }}</option>
+                                                <option value="{{ $row['id'] }}">{{ $row['title'] }}</option>
                                             @endforeach
                                         @endif
                                         {{-- <option value="Category">Category</option>
@@ -530,7 +530,7 @@
             $("#cand-card").html("<p>Loading...</p>");
             e.preventDefault();
             var userFormData = $(this).serializeArray();
-            // console.log(userFormData);
+            console.log("formdata",userFormData)
             $.ajax({
                 type: "POST",
                 url: "{{ route('smartSearch.candidate') }}",
@@ -538,7 +538,7 @@
                 dataType: "json",
                 encode: true,
             }).done(function(data) {
-                // console.log(data);
+                console.log("llpa",data);
                 var html = "";
                 var newhtml = "";
                 if (data.length == 0) {
@@ -557,7 +557,7 @@
                         if (val['candidate']['user']['avatar'] != null) {
                             html += "<img class='user_map_hover'";
                             html +=
-                                "src='{{ asset('public/storage/') }}/" + val['candidate']['user'][
+                                "src='{{ asset('storage/') }}/" + val['candidate']['user'][
                                     'avatar'
                                 ] + "'";
                             html += "alt=''>";
@@ -789,7 +789,7 @@
                         //     "'";
                         // html += "alt='' class='img-fluid'>";
                         if (val['candidate']['user']['avatar'] != null) {
-                            html += "<img src='{{ asset('public/storage/') }}/" + val['candidate'][
+                            html += "<img src='{{ asset('storage/') }}/" + val['candidate'][
                                 'user'
                             ]['avatar'] + "' alt='' class='img-fluid'>";
                         } else {
@@ -1137,14 +1137,15 @@
                 }
                 var lat = "{{ auth()->user()->company->lat }}";
                 var lng = "{{ auth()->user()->company->lng }}";
+                
                 if ($("#lat").val() != '') {
                     lat = $("#lat").val();
                 }
                 if ($("#lng").val() != '') {
                     lng = $("#lng").val();
                 }
-                console.log(lat, lng);
-                initialize(lat, lng);
+                console.log("as",lat, lng, userFormData);
+                initialize(lat, lng, userFormData);
             }).fail(function(error) {
                 var errors = error.responseJSON;
                 console.log(errors);
@@ -1272,19 +1273,21 @@
             });
         }
 
-        function initialize(lat, lng) {
-            console.log(lat, lng);
+        function initialize(lat, lng, data) {
+            console.log("hdabc", lat, lng, data)
             $.ajax({
                 url: "{{ route('company.marker.candidate') }}",
                 type: 'GET',
-                dataType: 'json', // added data type
+                dataType: 'json',
+                data: data,// added data type
                 success: function(markers) {
+                    
                     var map;
-                    var latlng = new google.maps.LatLng(lat, lng);
+                    var latlng = { lat: parseInt(lat), lng: parseInt(lng) };
 
                     var mapOptions = {
                         center: latlng,
-                        zoom: 13,
+                        zoom: 4,
                         mapTypeId: google.maps.MapTypeId.ROADMAP
                     };
                     var el = document.getElementById("map");
@@ -1293,6 +1296,7 @@
                         map: map,
                         position: latlng
                     });
+
                     // Display multiple markers on a map
                     // Loop through our array of markers & place each one on the map
                     // console.log(markers.length );
@@ -1306,12 +1310,8 @@
                         var infoWindow = new google.maps.InfoWindow(),
                             marker, i;
                         for (i = 0; i < markers.length; i++) {
-                            var position = new google.maps.LatLng(markers[i]['candidate']['latitude'],
-                                markers[
-                                    i][
-                                    'candidate'
-                                ]['longitude']);
-                            // bounds.extend(position);
+                            var position = new google.maps.LatLng(markers[i]['candidate']['latitude'], markers[i]['candidate']['longitude']);
+                            console.log("pos",position);
                             marker = new google.maps.Marker({
                                 position: position,
                                 map: map,
@@ -1319,6 +1319,8 @@
                                 icon: "{{ asset('/imgs/candidate.png') }}",
 
                             });
+                                                                                                        console.log("dd",position);
+
                             // Each marker to have an info window
                             google.maps.event.addListener(marker, 'click', (function(marker, i) {
                                 return function() {
