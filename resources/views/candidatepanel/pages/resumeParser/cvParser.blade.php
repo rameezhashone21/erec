@@ -31,11 +31,11 @@
                                             class="img-fluid">
                                     </div>
                                     <p>
-                                        Drop your files here. or <button
-                                            class="border-0 bg-white text_primary">Browse</button>
+                                        Drop your files here. or <span class="text_primary"
+                                            style="cursor: pointer;">Browse</span>
                                     </p>
                                     <input type="file" id="cvFile" accept=".pdf, .doc, .docx" required
-                                        name="resume_file" style="position: absolute;  width: 0;">
+                                        name="resume_file" style="display: none;">
                                 </label>
                             </div>
                             <div class="col-lg-6" id="uploadContainer" style="display: none;">
@@ -192,36 +192,34 @@
 
     <script>
         $(document).ready(function() {
-            // Drag over event handler
             $('#uploadWrapper').on('dragover', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 $(this).addClass('dragover');
             });
 
-            // Drag leave event handler
             $('#uploadWrapper').on('dragleave', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 $(this).removeClass('dragover');
-
             });
 
-            // Drop event handler
             $('#uploadWrapper').on('drop', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 $(this).removeClass('dragover');
                 var files = e.originalEvent.dataTransfer.files;
                 handleFileUpload(files);
-
             });
 
-            // Click event handler for file input
+            // Trigger file input click when clicking on the label
+            $('.upload__wrapper').on('click', function() {
+                $('#cvFile').click();
+            });
+
             $('#cvFile').on('change', function() {
                 var files = this.files;
                 handleFileUpload(files);
-
             });
 
             // Function to handle file upload
