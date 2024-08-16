@@ -1029,6 +1029,7 @@
     }
 
     function enableField() {
+      
       // console.log($('#test_attached').val());
       if ($('#test_attached').val() == '1') {
 
@@ -1039,11 +1040,17 @@
         $('#criteria').addClass('d-none');
 
       }
+      $('#assign_test').select2({
+        placeholder: "Please Select Skills",
+        sorter: data => data.sort((a, b) => a.text.localeCompare(b.text)),
+        // allowClear: true
+      });
     }
 
     function testFillBox() {
       var id = $('#class_id').val();
      var user_id = $('#user_id').val();
+     
       console.log(user_id);
     //   console.log("userid",user_id);
       var href = "{{ route('company.get.testCreate') }}";
@@ -1064,7 +1071,7 @@
             "<label for='class_id' class='form-label fs-14 text-theme-primary fw-bold'>Attach a test*</label>";
           // html += "<select name='test_id' onchange='assign_test()'";
           html += "<select name='test_id'";
-          html += "id='assign_test' class='select2-multiple form-control fs-14  h-50px'>";
+          html += "id='assign_test' class='form-select fs-14 h-50px'>";
           //   html += "required>";
           html += "<option selected disabled value=''>Select Test</option>";
           $.each(data, function(index, value) {
@@ -1180,6 +1187,7 @@ $(document).ready(function() {
             return markup;
         }
     });
+    
 
     // Attach event handler to the Select2 open event
     $('#mySelect2').off('select2:open').on('select2:open', function() {

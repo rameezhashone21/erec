@@ -15,7 +15,7 @@
 
                         @if (auth()->user()->recruiter->avatar != null)
                             <img class="side_bar_author rounded-50"
-                                src="{{ asset('public/storage/' . auth()->user()->recruiter->avatar) }}" alt="">
+                                src="{{ asset('storage/' . auth()->user()->recruiter->avatar) }}" alt="">
                             {{-- {{ dd(asset('public/storage/' . auth()->user()->recruiter->avatar)) }} --}}
                         @else
                             <img class="side_bar_author rounded-50"

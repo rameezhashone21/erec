@@ -38,6 +38,35 @@
 
   <link rel="stylesheet" href="{{ asset('dashboard/css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ asset('dashboard/css/theme.css') }}">
+
+  <style>
+    /* HTML: <div class="loader"></div> */
+    .loader_payment {
+          width: 50px;
+          aspect-ratio: 1;
+          border-radius: 50%;
+          padding: 6px;
+          background:
+            conic-gradient(from 135deg at top,currentColor 90deg, #0000 0) 0 calc(50% - 4px)/17px 8.5px,
+            radial-gradient(farthest-side at bottom left,#0000 calc(100% - 6px),currentColor calc(100% - 5px) 99%,#0000) top right/50%  50% content-box content-box,
+            radial-gradient(farthest-side at top        ,#0000 calc(100% - 6px),currentColor calc(100% - 5px) 99%,#0000) bottom   /100% 50% content-box content-box;
+          background-repeat: no-repeat;
+          animation: l11 1s infinite linear;
+        }
+        @keyframes l11{ 
+          100%{transform: rotate(1turn)}
+        }
+        .loader_payment_container {
+            background-color: #00000059;
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999999;
+      
+        }  
+    </style>
 </head>
 
 <body>
@@ -109,6 +138,9 @@
       <div class="file-upload">
         <div class="file_upload_inner_div">
           <span class="close"></span>
+          <div id="payment_loader" class='loader_payment_container d-none justify-content-center align-items-center'> 
+            <div class='loader_payment'> </div> 
+          </div>
           <div class="file-upload-wrap">
             <form method="post" action="{{ route('candidates.applyNow') }}" enctype="multipart/form-data"
               name="myForm">
@@ -1080,6 +1112,9 @@
           console.log(radioButton.checked);
           if (radioButton.checked == true) {
             $("#alert-text").addClass("d-none");
+            var element = document.getElementById('payment_loader');
+            element.classList.remove('d-none');
+            element.classList.add('d-flex');
             myForm.submit();
             break;
             return false;

@@ -31,7 +31,7 @@
     <div class="pt__banner"></div>
     <section class="position-relative">
         @if ($comp->user->banner != null)
-            <img class="" src="{{ asset('public/storage/' . $comp->user->banner) }}" alt=""
+            <img class="" src="{{ asset('storage/' . $comp->user->banner) }}" alt=""
                 class="w-100 banner__image" width="100%" height="300rem">
         @else
             <img src="{{ asset('dashboard/images/Company.png') }}" alt="" class="w-100 banner__image">
@@ -46,7 +46,7 @@
                         <div class="text-center">
                             <div class="view_profile_image">
                                 @if (isset($comp->logo))
-                                    <img src="{{ asset('public/storage/' . $comp->logo) }}" alt="profile-img">
+                                    <img src="{{ asset('storage/' . $comp->logo) }}" alt="profile-img">
                                 @else
                                     <img class="" src="{{ asset('adminpanel/images/avatar/dummy.png') }}"
                                         alt="">
@@ -335,7 +335,7 @@
                                                 <div class="d-md-flex mb-3">
                                                     <div class="me-3 mb-2 mb-md-0">
                                                         @if (isset($row->banner))
-                                                            <img src="{{ asset('public/storage/' . $row->banner) }}"
+                                                            <img src="{{ asset('storage/' . $row->banner) }}"
                                                                 alt="" class="candidate_thumb rounded-50">
                                                         @else
                                                             <img src="{{ asset('images/profile-img.svg') }}"
@@ -381,7 +381,7 @@
                                                     <li class="d-flex align-items-center">
                                                         <span>Posted by :</span>
                                                         <span><img
-                                                                src="{{ asset('public/storage/' . $row->company->logo) }}"
+                                                                src="{{ asset('storage/' . $row->company->logo) }}"
                                                                 alt="" class="rounded-50 rounded_img_xxm"></span>
                                                         <span class="text_primary">{{ $row->company->name }}</span>
                                                     </li>
@@ -455,7 +455,7 @@
                                         class="views_others_box d-flex align-items-center">
                                         <div class="view_profile_candidates">
                                             @if ($row->logo != null)
-                                                <img class="" src="{{ asset('public/storage/' . $row->logo) }}"
+                                                <img class="" src="{{ asset('storage/' . $row->logo) }}"
                                                     alt="">
                                             @else
                                                 <img class=""
