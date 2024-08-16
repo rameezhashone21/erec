@@ -61,7 +61,7 @@
                         name="banner" />
                     {{-- <img src="{{ asset('dashboard/images/candidate.png') }}" id="output" /> --}}
                     @if (isset(auth()->user()->banner))
-                        <img src="{{ asset('public/storage/' . auth()->user()->banner) }}" alt="profile-img"
+                        <img src="{{ asset('storage/' . auth()->user()->banner) }}" alt="profile-img"
                             id="output">
                     @else
                         <img src="{{ asset('dashboard/images/Recruiter.png') }}" id="output" />
