@@ -244,8 +244,9 @@ $(document).on("click", ".hello", function () {
                 if(question_type == 'multiple')
                 {
                   document.getElementById('multiple-section').classList.remove('d-none')
-
                   document.getElementById('text-section').classList.add('d-none')
+                  document.getElementById('true-false-section').classList.add('d-none');
+                  document.getElementById('single-section').classList.add('d-none')
 
 
                   var answer_option = document.getElementById('multiple');
@@ -278,8 +279,9 @@ $(document).on("click", ".hello", function () {
                 else if(question_type == 'single'){
 
                   document.getElementById('single-section').classList.remove('d-none')
-
                   document.getElementById('text-section').classList.add('d-none')
+                  document.getElementById('true-false-section').classList.add('d-none');
+                  document.getElementById('mutiple-section').classList.add('d-none')
                   
                   var answer_option = document.getElementById('single');
                   answer_option.checked = true;
@@ -317,6 +319,10 @@ $(document).on("click", ".hello", function () {
                 else if(question_type == 'text'){
 
                   document.getElementById('text-section').classList.remove('d-none')
+                  document.getElementById('true-false-section').classList.add('d-none');
+                  document.getElementById('mutiple-section').classList.add('d-none')
+                  document.getElementById('single-section').classList.add('d-none')
+
 
                   var answer_option = document.getElementById('text');
                   answer_option.checked = true;
@@ -334,8 +340,9 @@ $(document).on("click", ".hello", function () {
                 else if(question_type == 'boolean'){
 
                   document.getElementById('true-false-section').classList.remove('d-none');
-
                   document.getElementById('text-section').classList.add('d-none')
+                  document.getElementById('true-false-section').classList.add('d-none');
+                  document.getElementById('single-section').classList.add('d-none')
 
                   var answer_option = document.getElementById('boolean');
                   answer_option.checked = true;
