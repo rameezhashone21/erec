@@ -245,6 +245,9 @@ $(document).on("click", ".hello", function () {
                 {
                   document.getElementById('multiple-section').classList.remove('d-none')
 
+                  document.getElementById('text-section').classList.add('d-none')
+
+
                   var answer_option = document.getElementById('multiple');
                   answer_option.checked = true;
 
@@ -275,6 +278,8 @@ $(document).on("click", ".hello", function () {
                 else if(question_type == 'single'){
 
                   document.getElementById('single-section').classList.remove('d-none')
+
+                  document.getElementById('text-section').classList.add('d-none')
                   
                   var answer_option = document.getElementById('single');
                   answer_option.checked = true;
