@@ -220,14 +220,14 @@ $(document).on("click", ".hello", function () {
      console.log("question_id",eventId);
      $('#idHolder').html(eventId)
      
-     //var url = '/get_question_data'; // Replace with your actual endpoint URL
+     var url = "{{ route('get-question-data') }}";
         var params = {
             id: eventId
         };
 
         // Make AJAX GET request
         $.ajax({
-            url: {{route('get-question-data')}},
+            url: url,
             method: 'GET',
             data: params,
             success: function(response) {
