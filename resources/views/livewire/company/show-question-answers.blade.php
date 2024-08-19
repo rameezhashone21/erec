@@ -46,14 +46,7 @@
     <div>
         
             
-                      @include('modals.example-modal')
-                      
-                      @include('modals.example-modal-2')
-                      
-                      @include('modals.example-modal-3')
-                      
-                      @include('modals.example-modal-4')                      
-
+    @include('modals.example-modal-6')
         
 
       <div class="accordion" id="accordionExample">
@@ -85,22 +78,22 @@
                     <li class="px-3 pb-2 pt-2">
                       @if($row['type'] == "multiple")
                       <a data-bs-placement="top" title="Edit" data-id={{$row['id']}}
-                        class="btn btn_viewall d-block w-100 hello" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
+                        class="btn btn_viewall d-block w-100 hello" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal6">
                         Edit
                       </a>
                       @elseif($row['type'] == "single")
                       <a data-bs-placement="top" title="Edit" data-id={{$row['id']}}
-                        class="btn btn_viewall d-block w-100 hello" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal2">
+                        class="btn btn_viewall d-block w-100 hello" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal6">
                         Edit
                       </a>
                       @elseif($row['type'] == "text")
                       <a data-bs-placement="top" title="Edit" data-id={{$row['id']}}
-                        class="btn btn_viewall d-block w-100 hello" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal3">
+                        class="btn btn_viewall d-block w-100 hello" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal6">
                         Edit
                       </a>
                       @elseif($row['type'] == "boolean")
                       <a data-bs-placement="top" title="Edit" data-id={{$row['id']}}
-                        class="btn btn_viewall d-block w-100 hello" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal4">
+                        class="btn btn_viewall d-block w-100 hello" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal6">
                         Edit
                       </a>
                       @endif
@@ -227,7 +220,7 @@ $(document).on("click", ".hello", function () {
      console.log("question_id",eventId);
      $('#idHolder').html(eventId)
      
-     var url = '/webapp/erec/public/get_question_data'; // Replace with your actual endpoint URL
+     var url = '/get_question_data'; // Replace with your actual endpoint URL
         var params = {
             id: eventId
         };
@@ -245,81 +238,87 @@ $(document).on("click", ".hello", function () {
                 question = response['question_type']['question'];
                 exam_id = response['question_type']['exam_id'];
 
+                console.log("sda",question_type)
+
                 
                 if(question_type == 'multiple')
                 {
-                    $('.is-answer-a-1').val(response['answers'][0]['answer']);
-                    $('.is-answer-a-2').val(response['answers'][1]['answer']);
-                    $('.is-answer-a-3').val(response['answers'][2]['answer']);
-                    $('.is-answer-a-4').val(response['answers'][3]['answer']);
-                    $('#question_id').val(params['id']);
+                  document.getElementById('multiple-section').classList.remove('d-none')
+
+                  var answer_option = document.getElementById('multiple');
+                  answer_option.checked = true;
+
+                  console.log("jj",response['answers'][0]['answer']);
+                    $('.is-answer-m-1').val(response['answers'][0]['answer']);
+                    $('.is-answer-m-2').val(response['answers'][1]['answer']);
+                    $('.is-answer-m-3').val(response['answers'][2]['answer']);
+                    $('.is-answer-m-4').val(response['answers'][3]['answer']);
+                    $('.question_id').val(params['id']);
+                    $('.question_type').val("multiple");
                     $('.question').val(question);
                     $('.exam_id').val(exam_id);
                     
-                    console.log("cond 245 executed", response['answers'][0]['is_correct'], response['answers'][1]['is_correct'],
-                    response['answers'][2]['is_correct'],response['answers'][3]['is_correct']);
-                    
                     //Check or uncheck checkbox based on data.checkboxValue
                     if (response['answers'][0]['is_correct']=='yes') {
-                        console.log("option 1 correct")
                       $('.is-correct-m-1').prop('checked', true);
                     } 
                     if(response['answers'][1]['is_correct']=='yes') {
-                                                console.log("option 2 correct")
-
                       $('.is-correct-m-2').prop('checked', true);
                     }
                     if(response['answers'][2]['is_correct']=='yes') {
-                                                console.log("option 3 correct")
-
                       $('.is-correct-m-3').prop('checked', true);
                     }
                     if(response['answers'][3]['is_correct']=='yes') {
-                                                console.log("option 4 correct")
-
                       $('.is-correct-m-4').prop('checked', true);
                     }
                 }
                 else if(question_type == 'single'){
+
+                  document.getElementById('single-section').classList.remove('d-none')
+                  
+                  var answer_option = document.getElementById('single');
+                  answer_option.checked = true;
+
                     
-                    $('.is-answer-a-1').val(response['answers'][0]['answer']);
-                    $('.is-answer-a-2').val(response['answers'][1]['answer']);
-                    $('.is-answer-a-3').val(response['answers'][2]['answer']);
-                    $('.is-answer-a-4').val(response['answers'][3]['answer']);
+                    $('.is-answer-s-1').val(response['answers'][0]['answer']);
+                    $('.is-answer-s-2').val(response['answers'][1]['answer']);
+                    $('.is-answer-s-3').val(response['answers'][2]['answer']);
+                    $('.is-answer-s-4').val(response['answers'][3]['answer']);
                     $('.question_id').val(params['id']);
+                    $('.question_type').val("single");
                     $('.question').val(question);
                     $('.exam_id').val(exam_id);
                     
-                    
-                    console.log("cond 2 executed", response['answers'][0]['is_correct'], response['answers'][1]['is_correct'],
-                    response['answers'][3]['is_correct'],response['answers'][3]['is_correct']);
-                    
-                    //Check or uncheck checkbox based on data.checkboxValue
+                     //Check or uncheck checkbox based on data.checkboxValue
                     if (response['answers'][0]['is_correct']=='yes') {
-                        //console.log("option 1 executed");
-                        var answer_option = document.getElementById('is-correct-m-1');
+                        var answer_option = document.getElementById('is-correct-s-1');
                         answer_option.checked = true;
                     } 
                     else if(response['answers'][1]['is_correct']=='yes') {
-                        //console.log("option 2 executed");
-                        var answer_option = document.getElementById('is-correct-m-2');
+                        console.log("cond 22 executed");
+                        var answer_option = document.getElementById('is-correct-s-2');
                         answer_option.checked = true;
                         
                     }
                     else if(response['answers'][2]['is_correct']=='yes') {
-                        //console.log("option 3 executed");
-                        var answer_option = document.getElementById('is-correct-m-3');
+                        var answer_option = document.getElementById('is-correct-s-3');
                         answer_option.checked = true;
                     }
                     else if(response['answers'][3]['is_correct']=='yes') {
-                        //console.log("option 4 executed");
-                        var answer_option = document.getElementById('is-correct-m-4');
+                        var answer_option = document.getElementById('is-correct-s-4');
                         answer_option.checked = true;
                     }
                 }
                 else if(question_type == 'text'){
+
+                  document.getElementById('text-section').classList.remove('d-none')
+
+                  var answer_option = document.getElementById('text');
+                  answer_option.checked = true;
+
                     console.log('Response:', response['answers']['0']['answer'], params['id']);
                     $('.question_id').val(params['id']);
+                    $('.question_type').val("text");
                     $('.question').val(question);
                     $('.exam_id').val(exam_id);
                     $('.is-answer-text').val(response['answers'][0]['answer']);
@@ -328,6 +327,13 @@ $(document).on("click", ".hello", function () {
                     $('.f').val(response['answers'][0]['answer']);
                 }
                 else if(question_type == 'boolean'){
+
+                  document.getElementById('true-false-section').classList.remove('d-none');
+
+                  document.getElementById('text-section').classList.add('d-none')
+
+                  var answer_option = document.getElementById('boolean');
+                  answer_option.checked = true;
                     
                     console.log("r1", response['answers'][0]['is_correct']);
                     if (response['answers'][0]['is_correct']=='yes') {
@@ -341,6 +347,7 @@ $(document).on("click", ".hello", function () {
                     }
                     
                     $('.question_id').val(params['id']);
+                    $('.question_type').val("boolean");
                     $('.question').val(question);
                     $('.is-answer-single').val(response['answers'][0]['answer']);
                     $('.exam_id').val(exam_id);
