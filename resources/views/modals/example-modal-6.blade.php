@@ -10,7 +10,7 @@
 
         </h2>
         <h3 class="fw-500 text_primary fs-5 mb-4">
-          Add Question
+          Edit Question
         </h3>
 
               </div>
