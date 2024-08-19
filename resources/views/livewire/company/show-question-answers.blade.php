@@ -281,7 +281,7 @@ $(document).on("click", ".hello", function () {
                   document.getElementById('single-section').classList.remove('d-none')
                   document.getElementById('text-section').classList.add('d-none')
                   document.getElementById('true-false-section').classList.add('d-none');
-                  document.getElementById('mutiple-section').classList.add('d-none')
+                  document.getElementById('multiple-section').classList.add('d-none')
                   
                   var answer_option = document.getElementById('single');
                   answer_option.checked = true;
