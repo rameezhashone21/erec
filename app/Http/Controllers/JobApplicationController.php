@@ -10,6 +10,7 @@ use App\Models\JobApplications;
 use App\Models\Posts;
 use Illuminate\Support\Facades\Http;
 use App\Mail\JobApplyCandidate;
+use App\Mail\JobApplyCandidateTestLink;
 use App\Mail\ShortListed;
 use App\Mail\JobApply;
 use Illuminate\Support\Facades\Mail;
@@ -129,7 +130,14 @@ class JobApplicationController extends Controller
                 //     Mail::to($canEmail)->send(new ShortListed($postName, $canName, $postedBy));
                 // }
                 // dd($canEmail ,'postName:'.$postName, 'canName:'.$canName, 'postSlug:'.$postSlug, 'postDesc:'.$postDesc, 'postedBy:'.$postedBy, 'canSlug:'.$canSlug);
-                $can = Mail::to($canEmail)->send(new JobApplyCandidate($postName, $postSlug, $postDesc, $canName, $postedBy,$email));
+                if($jobApp->post->test_id == NULL)
+                {
+                    $can = Mail::to($canEmail)->send(new JobApplyCandidate($postName, $postSlug, $postDesc, $canName, $postedBy,$email));
+                }
+                else{
+                    $testLink = "https://backend.hostingladz.com/webapp/erec/public/user/candidates/job/application";
+                    $can = Mail::to($canEmail)->send(new JobApplyCandidateTestLink($postName, $postSlug, $postDesc, $canName, $postedBy, $email, $testLink));
+                }
                 if ($jobApp->post->company != null) {
                     $compEmail = $jobApp->post->company->user->email;
                     $jobAppPartner = $jobApp->post->company->name;
