@@ -6,7 +6,7 @@
       <div class="dashboard_content bg-white rounded_10 p-4">
       <div class="heading">
         <h2 class="fw-500 text_primary fs-3 mb-2">
-          Exam Title: front tst
+          Exam Title: {{ $exam->exam_title }}
 
         </h2>
         <h3 class="fw-500 text_primary fs-5 mb-4">
@@ -16,9 +16,9 @@
               </div>
         <form class="dashboard-form needs-validation" action="{{ route('update-question-data') }}" method="post">
         @csrf
-        <input type="text" autocomplete="off" class="form-control fs-14 h-50px exam_id" name="exam_id" required>
-        <input type="text" autocomplete="off" class="form-control fs-14 h-50px question_id" name="question_id" required>
-        <input type="text" autocomplete="off" class="form-control fs-14 h-50px question_type" name="question_type" required>
+        <input type="hidden" autocomplete="off" class="form-control fs-14 h-50px exam_id" name="exam_id" required>
+        <input type="hidden" autocomplete="off" class="form-control fs-14 h-50px question_id" name="question_id" required>
+        <input type="hidden" autocomplete="off" class="form-control fs-14 h-50px question_type" name="question_type" required>
 
         <div class="row gy-4">
           <div class="col-12">
