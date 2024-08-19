@@ -3098,6 +3098,20 @@ p.title_text_sugg {
     color: white;
 }
 
+.notifications__wrapper.unread {
+    background-color: #e6ecf8;
+    
+}
+
+.notifications__wrapper {
+    display: block;
+    border-radius: 5px;
+    background-color: transparent;
+    border-bottom: 1px solid #c9c9c9;
+    padding: 30px 20px 30px 20px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
 
 /*========= MEDIA QUERIES===========*/
 
