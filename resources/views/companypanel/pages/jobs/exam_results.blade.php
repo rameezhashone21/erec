@@ -40,7 +40,7 @@
             <tr>
               <th>Sr. #</th>
               <th>Candidate Name</th>
-              <th>Candidate Docs</th>
+              <th>Candidate Document</th>
               <th>Exam Score</th>
               <th>Action</th>
             </tr>
