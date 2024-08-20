@@ -86,10 +86,20 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <p class="btn btn-success btn-sm ">
-                                                {{-- <i class="fa fa-check" id=""style="font-size:18px"></i> --}}
-                                                Shortlisted</p>
-                                        </td>
+                                        @if ($row->status == 2)
+                                        <p>Hired</p>
+                                        @elseif ($row->status == 1)
+                                        <input type="radio" class="btn-check" name="setStatus{{ $row->id }}"
+                                            value="2" autocomplete="off" id="setStatus1">
+                                            <label class="btn btn-outline-primary fs-14" for="hire{{ $row->id }}"
+                                            onclick="hireStatus('{{ $row->id }}')">Hire</label>
+                                            {{-- @if ($gender == 'male') selected @endif>Male</label> --}}
+
+                                            <input type="radio" class="btn-check" name="setStatus{{ $row->id }}"
+                                            value="5" autocomplete="off" id="setStatus2">
+                                            <label class="btn btn-outline-primary fs-14" for="reject{{ $row->id }}"
+                                            onclick="rejectStatus('{{ $row->id }}')">Reject</label>
+                                        @endif
                                     </tr>
                                 @endforeach
                             @endif
@@ -102,4 +112,77 @@
 @endsection
 
 @section('bottom_script')
+
+<script>
+    function hireStatus(value) {
+      
+      var url = '{{ route('hireReject.candidate.comp') }}';
+      var status = $('#setStatus1').val();
+      var statText = "";
+
+      console.log(status)
+
+      if (status == 1) {
+        statText = "Hired";
+      } else if (status == 5) {
+        statText = "Rejected";
+      }
+      
+
+      $.ajax({
+        type: 'POST',
+        url: url,
+        data: {
+          _token: "{{ csrf_token() }}",
+          id: value,
+          status: status
+        },
+        crossDomain: true,
+        success: function(data) {
+          console.log(data);
+        }
+      }).done(function() {
+
+        var f = $('#setStatus3' + value).html('<p class="btn btn_viewall text-center p-2 disabled" disabled> Hired </p>');
+        
+         console.log(f)
+        
+        successModal(statText + "...");
+      });
+    }
+    
+    function rejectStatus(value) {
+      
+      var url = '{{ route('hireReject.candidate.comp') }}';
+      var status = $('#setStatus2').val();
+      var statText = "";
+      
+      console.log(status)
+
+      if (status == 1) {
+        statText = "Hired";
+      } else if (status == 5) {
+        statText = "Rejected";
+      }
+
+      $.ajax({
+        type: 'POST',
+        url: url,
+        data: {
+          _token: "{{ csrf_token() }}",
+          id: value,
+          status: status
+        },
+        crossDomain: true,
+        success: function(data) {
+          console.log(data);
+        }
+      }).done(function() {
+
+        var f = $('#setStatus3' + value).html('<p class="btn btn_viewall text-center p-2 disabled" disabled> Rejected</p>');
+
+        successModal(statText + "...");
+      });
+    }
+  </script>
 @endsection

@@ -18,7 +18,7 @@
           <span class="fw-bold text-secondary">Time Left:</span>
           <span class="header-text-color header-text-bg" id="demo">00m 00s</span>
         </div>
-        <button class="primary-button" id="startButton">START TEST</button>
+        <button class="primary-button" id="startButton" onclick="hideInstruction()">START TEST</button>
       </nav>
       <div class="col-md-1 text-end">
         <img src="{{ asset('assets/images/test/headerdesign2.png') }}" alt="" />
@@ -30,8 +30,9 @@
      <div class='container'>
           <div class='row'>
                <div class='col-12'>
-                   <h3 style="margin-bottom:15px;">Employment Test Guidelines</h3>
-                    <ul>
+        <div id="test_instructions">          
+        <h3 style="margin-bottom:15px;">Employment Test Guidelines</h3>
+        <ul>
         <li>Ensure your internet connection is stable before starting the test.</li><br>
         <li>Read each question carefully.</li><br>
         <li>Provide the answer to each question to proceed with the test.</li><br>
@@ -42,8 +43,9 @@
         <li>Avoid distractions and find a quiet environment to take the test.</li><br>
         <li>Your answers and any other information you submit throughout the exam will be kept private.</li><br>
         <li>Contact technical support immediately if you encounter any issues during the test.</li><br>
-    </ul>
-                </div> 
+        </ul>
+        </div>
+        </div> 
             </div> 
      </div> 
      
@@ -227,5 +229,14 @@
         });
       });
     });
+
+function hideInstruction() {
+  var show_test_instructions = document.getElementById("test_instructions");
+  if (show_test_instructions.style.display === "none") {
+    show_test_instructions.style.display = "block";
+  } else {
+    show_test_instructions.style.display = "none";
+  }
+}
   </script>
 @endsection

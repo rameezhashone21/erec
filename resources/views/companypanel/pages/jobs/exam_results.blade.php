@@ -99,10 +99,10 @@
                                         </td> --}}
                     <td id="setStatus3{{ $row->id }}">
                       @if ($row->status == 2)
-                        <p class="btn btn_viewall text-center p-2">
+                        <p class="text-center p-2">
                           Hired</p>
                       @elseif ($row->status == 5)
-                        <p class="btn btn_viewall text-center p-2">
+                        <p class="text-center p-2">
                           Rejected</p>  
                       @else
                         {{-- <select name="setStatus" onchange="hireRejectStatus({{ $row->id }})"

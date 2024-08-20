@@ -16,6 +16,8 @@ use App\Models\JobApplications;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Result;
 use App\Mail\NotifyUser;
+use App\Mail\ResultEmailCandidate;
+use App\Mail\TestAttempted;
 use DB;
 
 
@@ -63,15 +65,33 @@ class ShowTestController extends Controller
         $employer = User::where('id',$company->user_id)->first();
         
         $data = ['candidate' => $candidate->name, 'position' => $job->post, 'employer' => $employer->name ];
-        $notified = Mail::to($candidate->email)->send(new NotifyUser($data));
+        //$notified = Mail::to($candidate->email)->send(new NotifyUser($data));
+
+        if ($jobApplication->post->company != null){
+            $postedBy = $jobApplication->post->company->name;
+        }
+        elseif($jobApplication->post->recruiter != null)
+        {
+            $postedBy = $jobApplication->post->recruiter->name;
+        }
+
+        if($exam_result->grade == "A" || $exam_result->grade == "B") {
+            $j = Mail::to($candidate->email)->send(new ResultEmailCandidate($exam_result->grade, $candidate->name, $postedBy, $exam_result->perentage));
+        } else if($exam_result->grade == "C") {
+            $j = Mail::to($candidate->email)->send(new ResultEmailCandidate($exam_result->grade, $candidate->name, $postedBy, $exam_result->perentage));
+        } 
+        else if($exam_result->grade == "F") {
+            $j = Mail::to($candidate->email)->send(new ResultEmailCandidate($exam_result->grade, $candidate->name, $postedBy, $exam_result->perentage));
+        }
+        
         
        // Update Notification Status
         $exam_result->notified = 1;
         $exam_result->save();
         
         $notification = ExamNotification::create([
-            'content' => "Dear" .auth()->user()->name." You have been Hired for the postion of " .$job->post,
-            'status'       => "hired",
+            'content' => "Dear" .auth()->user()->name." You have been Shortlisted for the postion of " .$job->post,
+            'status'       => "exam_result",
             'job_id'       => $job_application_id,
             'user_id'       => $candidate->id
         ]);
@@ -211,6 +231,18 @@ class ShowTestController extends Controller
             'qst_id' => $exam->id
         ])->first();
 
+        $canName = $jobApplication->candidate->first_name.' '.$jobApplication->candidate->last_name;
+
+        if ($jobApplication->post->company != null){
+            $email = $jobApplication->post->company->user->email;
+            $postedBy = $jobApplication->post->company->name;
+        }
+        elseif($jobApplication->post->recruiter != null)
+        {
+            $email = $jobApplication->post->recruiter->user->email;
+            $postedBy = $jobApplication->post->recruiter->name;
+        }
+
         if($percentage > 90) {
             $status = 'Pass';
             $grade = 'A';
@@ -235,10 +267,9 @@ class ShowTestController extends Controller
         
         $company = Company::where('id',$job->comp_id)->first();
         $employer = User::where('id',$company->user_id)->first();
-        $data = ['username' => auth()->user()->name, 'status' => $email_status, 'grade' => $grade, 'percentage' => $percentage, 'position' => $job->post, 'employer' => $employer->name ];
-        $j = Mail::to(auth()->user()->email)->send(new Result($data));
-        
-
+        $data = ['username' => auth()->user()->name, 'status' => $email_status, 'grade' => $grade, 'percentage' => $percentage, 'position' => $job->post, 'employer' => $employer->name, 'postedBy' => $postedBy ];
+        Mail::to($employer->email)->send(new Result($data));
+        Mail::to(auth()->user()->email)->send(new TestAttempted($data));
 
         // Save data into db
         $result = ExamResult::create([

@@ -799,7 +799,7 @@ class CompanyDashboardController extends Controller
         $post = Posts::with('jobAppRecComp', 'skills', 'company')->find($id);
         // dd($post->toArray());
         $job = Posts::with('jobAppRecComp', 'skills', 'company')->whereHas('jobAppRecComp', function ($query) {
-            $query->where('status', 1);
+            $query->whereIn('status', ["1","2"]);
         })->find($id);
         return view('companypanel.pages.jobs.jobs_shortlisted', compact('post', 'job'));
     }
@@ -1041,8 +1041,22 @@ class CompanyDashboardController extends Controller
         $jobApp->status = 2;
         $jobApp->save();
 
+        if ($jobApp->post->company != null){
+            $postName = $jobApp->post->post;
+            $postedBy = $jobApp->post->company->name;
+        }
+        elseif($jobApp->post->recruiter != null)
+        {
+            $postName = $jobApp->post->post;
+            $postedBy = $jobApp->post->recruiter->name;
+        }
+
         $email = $jobApp->candidate->user->email;
-        // $hired = Mail::to($email)->send(new Hired($email));
+        $canName = $jobApp->candidate->user->name;
+
+        $data = ['postName' => $postName, 'postedBy' => $postedBy, 'email' => $email, 'canName'=>$canName ];
+
+        $hired = Mail::to($email)->send(new Hired($data));
     }
     public function shortListCandidate($id)
     {
@@ -1064,7 +1078,9 @@ class CompanyDashboardController extends Controller
         }
 
         $email = $jobApp->candidate->user->email;
-        // Mail::to($email)->send(new ShortListed($postName, $canName, $postedBy));
+        Mail::to($email)->send(new ShortListed($postName, $canName, $postedBy));
+
+        exit;
     }
     public function hireReject(Request $request)
     {

@@ -174,6 +174,8 @@
                                                         <option value="{{ $col['number'] }}">{{ $col['name'] }}</option>
                                                     @endforeach
                                                 </select>
+                                            @elseif ($row->status == 5)
+                                                <p>Rejected</p>
                                             @elseif ($row->status == 2)
                                                 <p>Hired</p>
                                             @else --}}
@@ -206,13 +208,14 @@
 
                     <td id="hireTr-{{ $row->id }}">
                       @if ($row->status == 2)
-                        <p class="btn btn_viewall text-center p-2">
+                        <p class="text-center p-2">
                           Hired</p>
+                      @elseif ($row->status == 5)
+                        <p class="text-center p-2">
+                          Rejected</p>
                       @else
                         @if ($row->status == 1)
-                          <p onclick="hideCandidate({{ $row->id }})" id="buttonHire({{ $row->id }})"
-                            class="btn btn_viewall text-center p-2">
-                            Hire</p>
+                          <p class="text-center p-2">ShortListed</p>
                         @elseif ($row->status == 0)
                           <p onclick="shortCandidate({{ $row->id }})" class="btn btn_viewall text-center p-2">
                             Shortlist</p>
@@ -669,7 +672,7 @@
                         </div>
                       @endif
                       @if ($row->coverLetter == null && $row->coverLetterFile == null)
-                        No Record Found...
+                        No Recordss Found...
                       @endif
                     </td>
                     <td id="td_id{{ $row->id }}">
@@ -682,15 +685,15 @@
                                                         <option value="{{ $col['number'] }}">{{ $col['name'] }}</option>
                                                     @endforeach
                                                 </select>
-                                            @elseif ($row->status == 2)
+                                            @elseif($row->status == 5)
+                                                <p>Rejected</p>
+                                            @elseif($row->status == 2)
                                                 <p>Hired</p>
                                             @else --}}
-                      {{-- {{ dd($row->qst_id) }} --}}
                       @if ($row->qst_id != '0')
                         <p>{{ $row->qst($row->qst_id)['exam_title'] }}
                         </p>
                       @endif
-                      {{-- @endif --}}
                     </td>
 
                     <td>

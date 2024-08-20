@@ -36,7 +36,7 @@ class ShortListed extends Mailable
      */
     public function build()
     {
-        $subject = 'You have been shortlisted for this job';
+        $subject = 'You’ve Been Shortlisted!';
         return $this->view('emails.shortListed')->subject($subject);
     }
 }

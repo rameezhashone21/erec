@@ -42,7 +42,10 @@ class Result extends Mailable
     
     public function build()
     {
-        return $this->view('emails.result')
-                    ->with('data', $this->data);
+        $subject = "Applicant’s Test Results";
+        // return $this->view('emails.result')
+        //             ->with('data', $this->data);
+                    return $this->view('emails.result')->subject($subject);
+
     }
 }

@@ -26,7 +26,7 @@
 
                                             <h1
                                                 style="margin: 0px; color: #007ba7; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 700;">
-                                                You’ve Been Shortlisted!</h1>
+                                                Test Completed – Next Steps.</h1>
 
                                         </td>
                                     </tr>
@@ -69,18 +69,20 @@
 
                                             <div
                                                 style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-                                                <p style="line-height: 140%;">Dear {{ $canName }}</p>
-                                                <p style="line-height: 140%;"><br />You have successfully been shortlisted for the position of {{ $postName }} at {{ $postedBy }}. 
-                                                We would like to congratulate you on this wonderful achievement. We’ll get back to you shortly 
-                                                with the next steps in the selection process.</p><br>
+                                                <p style="line-height: 140%;">Dear {{$data['username']}}</p>
+                                                <p style="line-height: 140%;"><br />Thank you for completing the test for the {{$data['position']}} position at {{$data['postedBy']}}. 
+                                                We have received your test submission. The relevant person will review your results and contact you regarding the next steps in the process. 
+                                                If you have any questions in the meantime, please feel free to reach out.</p><br>
+
                                             </div>
 
-                                            <div style="font-size: 14px; line-height: 100%; text-align: left; word-wrap: break-word;">
-                                                <p style="line-height: 140%;">Best Regards,<br />
-                                                    {{$postedBy}}<br>
+                                            <div
+                                                style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
+                                                <p style="line-height: 100%;">Best Regards,<br />
+                                                    {{$data['postedBy']}}<br>
                                                     E-REC Support Team</p>
                                             </div>
-
+                                            
                                         </td>
                                     </tr>
                                 </tbody>
@@ -96,6 +98,7 @@
             </div>
         </div>
     </div>
+
 
     <div class="u-row-container" style="padding: 0px;background-color: transparent">
         <div class="u-row"
@@ -113,6 +116,7 @@
                             style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
                             <!--<![endif]-->
 
+                    
 
                             <!--[if (!mso)&(!IE)]><!-->
                         </div>

@@ -7,14 +7,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class Hired extends Mailable
+class TestAttempted extends Mailable
 {
     use Queueable, SerializesModels;
+    public $data;
 
-    // public $name;
-    // public $phone;
-    public $email;
-    // public $message;
 
     /**
      * Create a new message instance.
@@ -23,9 +20,9 @@ class Hired extends Mailable
      */
     public function __construct($data)
     {
-        // $this->name = $name;
-        // $this->phone = $phone;
+        //
         $this->data = $data;
+
     }
 
     /**
@@ -35,7 +32,7 @@ class Hired extends Mailable
      */
     public function build()
     {
-        $subject = 'You’ve Been Hired!.';
-        return $this->view('emails.hired')->subject($subject)->with('data', $this->data);
+        $subject = 'Test Completed – Next Steps';
+        return $this->view('emails.testAttempted')->subject($subject);
     }
 }
