@@ -13,7 +13,7 @@ class Hired extends Mailable
 
     // public $name;
     // public $phone;
-    public $email;
+    public $data;
     // public $message;
 
     /**

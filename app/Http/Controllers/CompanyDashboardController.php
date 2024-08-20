@@ -1079,8 +1079,6 @@ class CompanyDashboardController extends Controller
 
         $email = $jobApp->candidate->user->email;
         Mail::to($email)->send(new ShortListed($postName, $canName, $postedBy));
-
-        exit;
     }
     public function hireReject(Request $request)
     {
@@ -1089,8 +1087,24 @@ class CompanyDashboardController extends Controller
         $jobApp->status = $request->status;
         $jobApp->save();
 
+        if ($jobApp->post->company != null){
+            $postName = $jobApp->post->post;
+            $postedBy = $jobApp->post->company->name;
+        }
+        elseif($jobApp->post->recruiter != null)
+        {
+            $postName = $jobApp->post->post;
+            $postedBy = $jobApp->post->recruiter->name;
+        }
+
         $email = $jobApp->candidate->user->email;
-        // $hired = Mail::to($email)->send(new Hired($email));
+        $canName = $jobApp->candidate->user->name;
+
+        $data = ['postName' => $postName, 'postedBy' => $postedBy, 'email' => $email, 'canName'=>$canName ];
+
+        if($request->status == "2"){
+            $hired = Mail::to($email)->send(new Hired($data));
+        }
     }
     public function getTest(Request $request)
     {
