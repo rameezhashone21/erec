@@ -32,7 +32,7 @@
                 </li>
                 <li class='col'>
                     <a href="{{ route('company.exam.result', $post->slug) }}"
-                        @if (Route::is('company.exam.result', $post->slug)) class="active" @endif>Exam Results</a>
+                        @if (Route::is('company.exam.result', $post->slug)) class="active" @endif>Hired</a>
                 </li>
             </ul>
             <div class="table table-border table-responsive">

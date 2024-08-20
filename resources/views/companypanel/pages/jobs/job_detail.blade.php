@@ -55,7 +55,7 @@
         </li>
         <li class='col'>
           <a href="{{ route('company.exam.result', $post->slug) }}"
-            @if (Route::is('company.exam.result', $post->slug)) class="active" @endif>Exam Results</a>
+            @if (Route::is('company.exam.result', $post->slug)) class="active" @endif>Hired</a>
         </li>
       </ul>
       <h2 class='job-title'>Job Title</h2>
