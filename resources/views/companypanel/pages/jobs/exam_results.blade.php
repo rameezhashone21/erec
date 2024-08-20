@@ -31,7 +31,7 @@
         </li>
         <li class='col'>
           <a href="{{ route('company.exam.result', $post->slug) }}"
-            @if (Route::is('company.exam.result', $post->slug)) class="active" @endif>Exam Results</a>
+            @if (Route::is('company.exam.result', $post->slug)) class="active" @endif>Hired</a>
         </li>
       </ul>
       <div class="table table-border table-responsive">
@@ -48,6 +48,8 @@
           <tbody>
             @if (count($post->jobAppRecComp) > 0)
               @foreach ($post->jobAppRecComp as $key => $row)
+              
+              @if($row->status != 0 && $row->status != 1 )
                 @if ($row->result != null)
                   <tr>
                     <td>{{ ++$key }}. </td>
@@ -99,10 +101,10 @@
                                         </td> --}}
                     <td id="setStatus3{{ $row->id }}">
                       @if ($row->status == 2)
-                        <p class="text-center p-2">
+                        <p class="p-2">
                           Hired</p>
                       @elseif ($row->status == 5)
-                        <p class="text-center p-2">
+                        <p class="p-2">
                           Rejected</p>  
                       @else
                         {{-- <select name="setStatus" onchange="hireRejectStatus({{ $row->id }})"
@@ -127,6 +129,7 @@
                     </td>
                   </tr>
                 @endif
+              @endif
               @endforeach
             @endif
           </tbody>

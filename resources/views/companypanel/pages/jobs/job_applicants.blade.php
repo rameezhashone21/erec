@@ -5,7 +5,37 @@
 @section('head_style')
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
 @endsection
+
+<style>
+    /* HTML: <div class="loader"></div> */
+    .loader_shortlisted {
+          width: 50px;
+          aspect-ratio: 1;
+          border-radius: 50%;
+          padding: 6px;
+          background:
+            conic-gradient(from 135deg at top,currentColor 90deg, #0000 0) 0 calc(50% - 4px)/17px 8.5px,
+            radial-gradient(farthest-side at bottom left,#0000 calc(100% - 6px),currentColor calc(100% - 5px) 99%,#0000) top right/50%  50% content-box content-box,
+            radial-gradient(farthest-side at top        ,#0000 calc(100% - 6px),currentColor calc(100% - 5px) 99%,#0000) bottom   /100% 50% content-box content-box;
+          background-repeat: no-repeat;
+          animation: l11 1s infinite linear;
+        }
+        @keyframes l11{ 
+          100%{transform: rotate(1turn)}
+        }
+        .loader_shortlisted_container {
+            background-color: #00000059;
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999999;
+      
+        }  
+    </style>
 
 @section('content')
  
@@ -51,6 +81,9 @@
             <option value="Average">Average</option>
             <!-- Add more options as needed -->
         </select>
+    </div>
+    <div id="shortlisted_loader" class='loader_shortlisted_container d-none justify-content-center align-items-center'> 
+            <div class='loader_shortlisted'> </div> 
     </div>
       <div class="table table-border table-responsive">
         <table id="example1" class="table table-striped table-payment display nowrap" style="width:100%">
@@ -376,15 +409,16 @@
                       @endif
                       </td>
 
-                    <td id="hireTr-{{ $row->id }}">
+                      <td id="hireTr-{{ $row->id }}">
                       @if ($row->status == 2)
-                        <p class="btn btn_viewall text-center p-2">
+                        <p class="text-center p-2">
                           Hired</p>
+                      @elseif ($row->status == 5)
+                        <p class="text-center p-2">
+                          Rejected</p>
                       @else
                         @if ($row->status == 1)
-                          <p onclick="hideCandidate({{ $row->id }})" id="buttonHire({{ $row->id }})"
-                            class="btn btn_viewall text-center p-2">
-                            Hire</p>
+                          <p class="text-center p-2">ShortListed</p>
                         @elseif ($row->status == 0)
                           <p onclick="shortCandidate({{ $row->id }})" class="btn btn_viewall text-center p-2">
                             Shortlist</p>
@@ -802,6 +836,9 @@
     }
 
     function shortCandidate(value) {
+      var element = document.getElementById('shortlisted_loader');
+      element.classList.remove('d-none');
+      element.classList.add('d-flex');
       var url = '{{ route('shortlist.candidate.comp', ':id') }}';
       url = url.replace(':id', value);
       $.ajax({
@@ -812,9 +849,12 @@
           console.log(data);
         }
       }).done(function() {
+        var element = document.getElementById('shortlisted_loader');
+        element.classList.add('d-none');
+        element.classList.remove('d-flex');
         $('#hireTr-' + value).html('');
         var html = "";
-        html += "<p class='btn btn_viewall text-center p-2 disabled' disabled>Shortlisted</p>";
+        html += "<p class='text-center p-2 disabled' disabled>Shortlisted</p>";
         $('#hireTr-' + value).html(html);
         // console.log('#td_id' + value);
         $('#td_id' + value).html('');

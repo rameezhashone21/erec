@@ -5,6 +5,7 @@
 @section('head_style')
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
 @endsection
 
 @section('content')
@@ -85,7 +86,7 @@
                                                 Candidate has removed their Resume
                                             @endif
                                         </td>
-                                        <td>
+                                        <td id="hireTr-{{ $row->id }}">
                                         @if ($row->status == 2)
                                         <p>Hired</p>
                                         @elseif ($row->status == 1)
@@ -143,7 +144,7 @@
         }
       }).done(function() {
 
-        var f = $('#setStatus3' + value).html('<p class="btn btn_viewall text-center p-2 disabled" disabled> Hired </p>');
+        var f = $('#hireTr-' + value).html('<p class="p-2 disabled" disabled> Hired </p>');
         
          console.log(f)
         
@@ -179,7 +180,7 @@
         }
       }).done(function() {
 
-        var f = $('#setStatus3' + value).html('<p class="btn btn_viewall text-center p-2 disabled" disabled> Rejected</p>');
+        var f = $('#hireTr-' + value).html('<p class=" p-2 disabled" disabled> Rejected</p>');
 
         successModal(statText + "...");
       });
