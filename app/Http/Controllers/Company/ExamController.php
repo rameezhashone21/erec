@@ -74,24 +74,12 @@ class ExamController extends Controller
   public function store(Request $request)
   {
         
-    if($request->file('csv_file'))
-    {
-        // Validate data
-        $this->validate($request, [
-          'title'                     => 'required|string',
-          'exam_time'                 => ['required', Rule::in(['30', '45', '60', '70'])],
-          'question_showto_condidate' => 'required',
-         'csv_file' => 'required|file|mimes:csv',
-        ]);
-    }
-    else{
         // Validate data
         $this->validate($request, [
           'title'                     => 'required|string',
           'exam_time'                 => ['required', Rule::in(['30', '45', '60', '70'])],
           'question_showto_condidate' => 'required'
         ]);
-    }
 
     // Get company details
     $company = Company::select('id')->where('user_id', Auth::id())->first();
@@ -111,16 +99,6 @@ class ExamController extends Controller
       'exam_completion_in_minutes' => $request->exam_time,
       'status'                     => 0
     ]);
-    
-    if($request->file('csv_file'))
-    {
-        $file = $request->file('csv_file');
-
-        // Getting the Exam Id to pass to UsersImport Class in order to save question with exam id 
-        $exam_id = $result->id;
-
-        Excel::import(new UsersImport($exam_id), $file);
-    }
         
         
     if ($result) {
