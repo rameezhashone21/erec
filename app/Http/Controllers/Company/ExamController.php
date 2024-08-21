@@ -42,6 +42,35 @@ class ExamController extends Controller
   /**
    * Store a newly created resource in storage.
    */
+  public function uploadCSV(Request $request)
+  {
+        
+    // Validate data
+    $this->validate($request, [
+      'csv_file' => 'required|file|mimes:csv',
+    ]);
+    
+    if($request->file('csv_file'))
+    {
+        $file = $request->file('csv_file');
+
+        // Getting the Exam Id to pass to UsersImport Class in order to save question with exam id 
+        $exam_id = $request->exam_id;
+
+        $excel = Excel::import(new UsersImport($exam_id), $file);
+    }
+        
+        
+    if ($excel) {
+      return redirect()->route('company.exam.question.listing', ['id' => $exam_id])->with('message', 'File Imported Succesfully!');
+    } else {
+      return redirect()->route('company.exam.question.listing', ['id' => $exam_id])->with('error', 'Sorry something went wrong!');
+    }
+  }
+
+  /**
+   * Store a newly created resource in storage.
+   */
   public function store(Request $request)
   {
         

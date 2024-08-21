@@ -60,7 +60,7 @@ class CandidateDashboardController extends Controller
         $imageDataHead = base64_encode(file_get_contents($imagePathHead));
         $head = 'data:image/jpeg;base64,' . $imageDataHead;
 
-        $imagePathUntitled = 'https://e-rec.com.au/public/storage/candidateAvatar/img/2024-02-16_.125.42857142857_.jpg';
+        $imagePathUntitled = 'https://e-rec.com.au/storage/candidateAvatar/img/2024-02-16_.125.42857142857_.jpg';
         $imageDataUntitled = base64_encode(file_get_contents($imagePathUntitled));
         $untitled = 'data:image/jpeg;base64,' . $imageDataUntitled;
         $data = CvBuilder::with('contact','experience','education','skills','others')->where('user_id', auth()->user()->id)->latest()->first();
@@ -613,8 +613,8 @@ class CandidateDashboardController extends Controller
 
         </html>";
         // dd($htmlContent);
-        $client = new \Pdfcrowd\HtmlToPdfClient("HashOneDeveloper", "e85d1f3bb3c50df86dd1f628ca8f2f7c"); // Replace with your Pdfcrowd username and API key
-
+        $client = new \Pdfcrowd\HtmlToPdfClient("HashOneDeveloper", "e85d1f3bb3c50df86dd1f628ca8f2f7c");
+         // Replace with your Pdfcrowd username and API key
         try {
             // Convert HTML to PDF and save to file
             // dd($client);
@@ -727,6 +727,7 @@ class CandidateDashboardController extends Controller
                 }
             }
             $pdf = $this->generate_pdf_cv();
+
             return response($pdf)
             ->header('Content-Type', 'application/pdf')
             ->header('Content-Disposition', 'attachment; filename="resume.pdf"');
@@ -788,7 +789,7 @@ class CandidateDashboardController extends Controller
         // Get the uploaded file
         $resumeFile = $request->file('resume_file');
 
-        $apiKey = env('OpenAIapiKey');
+        $apiKey = env('OPENAI_API_KEY');
         
         $resumeText = $request->extracted_text;
         $dummy_text = "Has s an   Sultan   Fullstack   Web   Developer    •   Result   oriented   Web   Developer   with   5+   years   of   working   experience using Laravel, VueJS and MySQL.    •   Highly   knowledgeable   in   REST   APIs,   Test   Driven   Development,   payment   gateway integrations and web scraping.    •   Solid   experience   with   Linux   server   administration,   setup   and   management.       Personal   Info      Phone    Experience       2018 - 02   -   Web   Developer    +92   3 012691232   20 19 - 02   One Ten Logics ,   Karachi    E - mail    h.hsultan277@gmail.com       Date   of   birth    199 7 - 0 6 - 18       Github    github.com/hassasultan       Fiverr    fiverr.com/hassan8125    Upwork    upwork.com/fl/ hassansultan8  125                            201 9 - 0 2   -    20 20 - 04    •   Developed   multiple   REST   APIs   using   Laravel   API   Resources.    •   Integrated   various   APIs   including   Google   Places,   Flights   and   Hotels   APIs.    •   Programmed   and   implemented   multiple   Web   scrappers   for   data   gathering.    •   Worked   on   data   cleaning   and   data   visualization.    •   Configured,   deployed   and   administered   multiple   AWS   instances.       Web   App   Developer    Shashi Enterprises,   Karachi    •   Built   chhatt .com   and   various   other   website   portals.    •   Integrated   multiple   payment   gateways.    •   Designed   multi   user   authentication   systems   with   roles   for   various   types   of   user s  Programming   Skills           20 20 - 05   -    20 21 - 0 1    Senior W eb   Developer    Code Box Solution,   Karachi    Programming   Languages   –   PHP ,   Javascript , JQuery ,   N odeJs,   Expressjs,   Sale s for ce Admin   &   Python    Backend   Framework   –   Laravel ,   PHP ,   Concerete5,   N od e js   &   Express js    •   Developed,   tested   and   deployed   web   applications   using   Laravel ,  JQuery   &   Vuejs .    •   Improved   legacy   code   of   custom   framework.  Frontend   Framework   –   VueJS ,   Flutter       Component   Framework   –   Bootstrap ,   Vuetify    Further   Skills   -   Wordpress ,   Twig ,    C oncerete5,   j Query ,  HTML ,  CSS    Database   Skills        MySQL    MongoDB   Firebase   Amazon   RDS    20 21 - 0 2   -    20 21 - 11                      2021 - 02   -    Work ing                                  Education      201 6   -    20 20    Senior  Web   Developer    Shashi Enterprises (Rehbur Technologies), Karachi    •   Built   rehbur.com   ( Providing Ride Hailing   Service Through Online Cab Booking App   In Pakistan) .    •   Integrated   JazzCash   payment   gateways.    •   Designed   multi   user   authentication   systems   with   roles   for   various   types   of   users    Added   security   measures   to   improve   security   and   performance   of   websites       Senior  Software Engineer    Hash One Creative , Karachi    •   Developed   multiple   REST   APIs   using   Laravel   API   Resources.    •   Integrated   various Third party   APIs   including   Zoho, Quick Book, GooglePlaces,    directions .    •   Programmed   and   implemented   multiple   Web   scrappers   for   data   gathering.    •   Worked   on   data   cleaning   and   data   visualization.    •   Configured,   deployed   and   administered   multiple   AWS   instances.    •   Developed   multiple   REST   APIs   using   Node and Express js   Resources.    •   Integrate   Api s in F lutter  Application            Bachelors   in   Computer   Science    PAF - KEIT,   Pakistan.  Languages         English   (fluent)       Urdu   (native)       Interests        Traveling,   Salesforce ,   History, AI.  Technical   Skills      •   Proficient   in    RestAPIs ,   Web    Scraping   and    Google   APIs .    •   Skilled   in   Integration    of   payment   gateways   -   Paypal ,   Stripe ,   JazzCash   and    Easypaisa .    •   Sufficient   knowledge   of   Linux   (Ubuntu),   Git   and   Laravel -   Homestead .    •   Expert   in   tools   like   Postman ,   PHPStorm ,   MySQL   VsCode   and    Photoshop .    Server Management  Skill •   Managed   and   configured   instances   on   EC2   of   Amazon   Web   Services .    •   Managed   and   deployed   instances   on   Digital   Ocean   with   and   without   Laravel   Forge.    •   Handled   Google   Cloud   services   and   implemented   Google   Maps   &   Places   APIs.";
@@ -939,6 +940,7 @@ class CandidateDashboardController extends Controller
 
         // Execute cURL session and get the response
         $response = curl_exec($ch);
+
         
         // Check for cURL errors
         if (curl_errno($ch)) {

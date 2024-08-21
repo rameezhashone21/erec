@@ -344,6 +344,7 @@ Route::middleware(['auth', 'check_status'])->group(function () {
                 Route::controller(ExamController::class)->group(function () {
                     Route::get('/exams/add', 'create')->name('company.exam.create');
                     Route::post('/exams/add', 'store');
+                    Route::post('/csv/add', 'uploadCSV')->name('company.exam.uploadCSV');
                     Route::get('/exams/edit/{id}', 'edit')->name('company.exam.update');
                     Route::put('/exams/edit/{id}', 'update');
                     Route::get('/exams/delete/{id}', 'destroy')->name('company.exam.delete');

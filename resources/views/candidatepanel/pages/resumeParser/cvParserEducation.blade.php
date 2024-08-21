@@ -190,7 +190,7 @@
                         </div>
                         <div class="cv-view-body position-relative">
                             @if ($edu->contact->cv_profile != null)
-                                <img src="{{ asset('public/storage/' . $edu->contact->cv_profile) }}" alt="profile"
+                                <img src="{{ asset('storage/' . $edu->contact->cv_profile) }}" alt="profile"
                                     class="cv-view-profile-image">
                             @else
                                 <img src="{{ asset('/images/image_preview_noimage.png') }}" alt="profile"
