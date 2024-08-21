@@ -1106,26 +1106,35 @@
     // required cv
     function validateAndSend() {
       console.log("sadas")
-      if (myForm.new_doc.value.length == 0) {
-        const radioButtons = document.querySelectorAll('input[name="cv_file"]');
-        for (const radioButton of radioButtons) {
-          console.log(radioButton.checked);
-          if (radioButton.checked == true) {
-            $("#alert-text").addClass("d-none");
-            myForm.submit();
-            break;
-            return false;
+      var element = document.getElementById('payment_loader');
+      element.classList.remove('d-none');
+      element.classList.add('d-flex');
+      if(myForm.new_doc){
+        if (myForm.new_doc.value.length == 0) {
+          const radioButtons = document.querySelectorAll('input[name="cv_file"]');
+          for (const radioButton of radioButtons) {
+            console.log(radioButton.checked);
+            if (radioButton.checked == true) {
+              $("#alert-text").addClass("d-none");
+              myForm.submit();
+              break;
+              return false;
 
-          } else {
-            $("#alert-text").removeClass("d-none");
-            return false;
-          }
+            } else {
+              $("#alert-text").removeClass("d-none");
+              return false;
+            }
         }
         var element = document.getElementById('payment_loader');
         element.classList.remove('d-none');
         element.classList.add('d-flex');
         // alert('check.hostingladz.com.');
       } else {
+        $("#alert-text").addClass("d-none");
+        myForm.submit();
+      }
+      }
+      else{
         $("#alert-text").addClass("d-none");
         myForm.submit();
       }

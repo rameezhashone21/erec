@@ -1016,7 +1016,7 @@
                                         <!--</option>-->
                                         
                                         <option value="{{ $row['id'] }}" 
-                                            {{ $row['id'] == $selected_exam->id ? 'selected' : '' }}>
+                                            {{($selected_exam && $row['id'] == $selected_exam->id) ? 'selected' : '' }}>
                                             {{ $row['exam_title'] }}
                                         </option>
                                     @endforeach

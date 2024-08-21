@@ -983,6 +983,7 @@ class CompanyDashboardController extends Controller
         $test_id = Exam::where('company_id',$company_id)->where('status',1)->get();
 
         $selected_exam = Exam::where('id',$post->test_id)->first();
+
         
         $postSkills = PostSkill::where('post_id', $post->id)->get();
         return view('companypanel.pages.jobs.postAnExisting.create', compact('post', 'skill', 'postSkills', 'recruiter', 'data', 'test_id','selected_job','selected_exam'));
