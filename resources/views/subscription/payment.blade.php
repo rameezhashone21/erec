@@ -87,15 +87,18 @@
                                         {{ $pkg->name }}
                                     </h2>
                                     @if($pkg->price == 90)
-                                    <h3 class='payment__title d-flex align-items-center'>99<span
+                                    <h3 class='payment__title d-flex align-items-center'>$99<span
                                             class='ms-2 text-white-hover'>/ {{ $pkg->time_interval }}</span></h3>
                                     @elseif($pkg->price == 272)
-                                    <h3 class='payment__title d-flex align-items-center'>299<span
+                                    <h3 class='payment__title d-flex align-items-center'>$299<span
                                             class='ms-2 text-white-hover'>/ {{ $pkg->time_interval }}</span></h3>
                                     @elseif($pkg->price == 454)
-                                    <h3 class='payment__title d-flex align-items-center'>499<span
+                                    <h3 class='payment__title d-flex align-items-center'>$499<span
                                             class='ms-2 text-white-hover'>/ {{ $pkg->time_interval }}</span></h3>
                                     @endif
+
+                                    <div style="font-size:14px;font-style:italic">Note: The pricing of our packages is inclusive of 10% (GST) tax
+                                    Make sure the pricing on button and page should be same</div>
                                 </div>
                                 {{-- <a class='payment-subcription-btn d-flex justify-content-center align-items-center'>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11.839" height="23.684"

@@ -8,6 +8,35 @@
 
 @endsection
 
+<style>
+    /* HTML: <div class="loader"></div> */
+    .loader_hired {
+          width: 50px;
+          aspect-ratio: 1;
+          border-radius: 50%;
+          padding: 6px;
+          background:
+            conic-gradient(from 135deg at top,currentColor 90deg, #0000 0) 0 calc(50% - 4px)/17px 8.5px,
+            radial-gradient(farthest-side at bottom left,#0000 calc(100% - 6px),currentColor calc(100% - 5px) 99%,#0000) top right/50%  50% content-box content-box,
+            radial-gradient(farthest-side at top        ,#0000 calc(100% - 6px),currentColor calc(100% - 5px) 99%,#0000) bottom   /100% 50% content-box content-box;
+          background-repeat: no-repeat;
+          animation: l11 1s infinite linear;
+        }
+        @keyframes l11{ 
+          100%{transform: rotate(1turn)}
+        }
+        .loader_hired_container {
+            background-color: #00000059;
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999999;
+      
+        }  
+    </style>
+
 @section('content')
     <div class="col-xl-9 col-lg-8">
         <button class="mobile_menu_trigger d-lg-none btn_theme border-0 py-2 px-4 mb-3">
@@ -35,6 +64,9 @@
                         @if (Route::is('company.exam.result', $post->slug)) class="active" @endif>Hired</a>
                 </li>
             </ul>
+            <div id="hired_loader" class='loader_hired_container d-none justify-content-center align-items-center'> 
+            <div class='loader_hired'> </div> 
+            </div>
             <div class="table table-border table-responsive">
                 <table id="example" class="table table-striped table-payment display nowrap" style="width:100%">
                     <thead>
@@ -55,7 +87,7 @@
                                         <td>
                                             @if ($row->candidateDocument != null)
                                                 @if ($row->candidateDocument->document != null)
-                                                    <a href="{{ asset('public/candidateDoc/doc/' . $row->candidateDocument->document) }}"
+                                                    <a href="{{ asset('candidateDoc/doc/' . $row->candidateDocument->document) }}"
                                                         target="_blank" class='text-decoration-underline d-flex text-dark'>
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="27.5"
                                                             height="27.5" viewBox="0 0 27.5 27.5">
@@ -77,7 +109,7 @@
                                                         <span class='align-self-end ms-1'>
                                                             Click to view
                                                             {{-- <a class='px-4 py-2 progress_card d-block rounded-3'
-                                                    href="{{ asset('public/candidateDoc/doc/' . $item->document) }}"
+                                                    href="{{ asset('candidateDoc/doc/' . $item->document) }}"
                                                     target="_blank"> --}}
                                                         </span>
                                                     </a>
@@ -96,10 +128,10 @@
                                             onclick="hireStatus('{{ $row->id }}')">Hire</label>
                                             {{-- @if ($gender == 'male') selected @endif>Male</label> --}}
 
-                                            <input type="radio" class="btn-check" name="setStatus{{ $row->id }}"
+                                            <!-- <input type="radio" class="btn-check" name="setStatus{{ $row->id }}"
                                             value="5" autocomplete="off" id="setStatus2">
                                             <label class="btn btn-outline-primary fs-14" for="reject{{ $row->id }}"
-                                            onclick="rejectStatus('{{ $row->id }}')">Reject</label>
+                                            onclick="rejectStatus('{{ $row->id }}')">Reject</label> -->
                                         @endif
                                     </tr>
                                 @endforeach
@@ -116,6 +148,10 @@
 
 <script>
     function hireStatus(value) {
+
+      var element = document.getElementById('hired_loader');
+      element.classList.remove('d-none');
+      element.classList.add('d-flex');
       
       var url = '{{ route('hireReject.candidate.comp') }}';
       var status = $('#setStatus1').val();
@@ -143,6 +179,10 @@
           console.log(data);
         }
       }).done(function() {
+
+        var element = document.getElementById('hired_loader');
+        element.classList.remove('d-flex');
+        element.classList.add('d-none');
 
         var f = $('#hireTr-' + value).html('<p class="p-2 disabled" disabled> Hired </p>');
         

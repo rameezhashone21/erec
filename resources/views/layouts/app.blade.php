@@ -65,11 +65,10 @@
             }).done(function(data) {
                 var html = "";
                 $.each(data, function(index, value) {
-                    console.log(value);
+                    console.log("cat",value);
                     if(index < 9)
                     {
-                        html += "<li><a href='{{ route('job.browse') }}?job_cat%5B%5D=" + value
-                            .class_id + "'>" + value.class_name + "</a></li>";
+                        html += "<li><a href='{{ route('job.browse') }}?job_cat%5B%5D=" + value.id + "'>" + value.title + "</a></li>";
                         $('#implode').html(html);
                     }
                 });
