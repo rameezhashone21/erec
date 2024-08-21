@@ -135,6 +135,7 @@ class JobApplicationController extends Controller
                     $can = Mail::to($canEmail)->send(new JobApplyCandidate($postName, $postSlug, $postDesc, $canName, $postedBy,$email));
                 }
                 else{
+                    //dd($postedBy);
                     $testLink = "https://backend.hostingladz.com/webapp/erec/public/user/candidates/job/application";
                     $can = Mail::to($canEmail)->send(new JobApplyCandidateTestLink($postName, $postSlug, $postDesc, $canName, $postedBy, $email, $testLink));
                 }

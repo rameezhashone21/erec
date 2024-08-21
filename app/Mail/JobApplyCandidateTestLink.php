@@ -30,7 +30,7 @@ class JobApplyCandidateTestLink extends Mailable
         $this->postDesc = $postDesc;
         $this->canName = $canName;
         $this->postedBy = $postedBy;
-        $this->postedBy = $email;
+        $this->postedBy = $postedBy;
         $this->testLink = $testLink;
     }
 

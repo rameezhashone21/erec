@@ -70,9 +70,19 @@
                                             <div
                                                 style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
                                                 <p style="line-height: 140%;">Dear {{$data['employer']}}</p>
+                                                @if($data['grade'] == "A" || $data['grade'] == "B" )
                                                 <p style="line-height: 140%;"><br />This email is to inform you of {{$data['username']}} test results who applied for the position of {{$data['position']}} at {{$data['postedBy']}}.
-                                                 They have passed and scored {{round($data['percentage'],2)}}% on the test, making them eligible for the position. 
+                                                 He has passed and scored {{round($data['percentage'],2)}}% on the test, making them eligible for the position. 
                                                  If you have additional questions about their test, please get in touch.</p><br>
+                                                 @elseif($data['grade'] == "C")
+                                                 <p style="line-height: 140%;"><br />This email is to inform you of {{$data['username']}} test results who applied for the position of {{$data['position']}} at {{$data['postedBy']}}.
+                                                 He has passed and scored {{round($data['percentage'],2)}}% on the test, his score was decent but not exceptional. 
+                                                 If you have additional questions about their test, please get in touch.</p><br>
+                                                 @else
+                                                 <p style="line-height: 140%;"><br />This email is to inform you of {{$data['username']}} test results who applied for the position of {{$data['position']}} at {{$data['postedBy']}}.
+                                                 He couldn't succeed in the exam and scored {{round($data['percentage'],2)}}% on the test, not making them eligible for the position. 
+                                                 If you have additional questions about their test, please get in touch.</p><br>
+                                                 @endif
 
                                             </div>
 

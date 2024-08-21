@@ -262,6 +262,7 @@ class ShowTestController extends Controller
             $grade = 'F';
             $email_status = "Failed";
         }
+
         
         $job = Posts::where('id',$jobApplication->post_id)->first();
         
