@@ -34,13 +34,6 @@
             </div>
           </div>
           <div class="col-md-6">
-            <div class="form-group position-relative">
-              <label for="name" class="form-label fs-14 text-theme-primary fw-bold">Import Exam Questions</label>
-              <input type="file" name="csv_file" >
-            </div>
-            <a href="{{route('downloadCSV')}}"><u>Download Sample Test Format</u></a>
-          </div>
-          <div class="col-md-6">
             <div class="form-group set-cross-icon" id="criteria">
               <label for="exam-time" class="form-label fs-14 text-theme-primary fw-bold">Time in
                 minutes</label>
