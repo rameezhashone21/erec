@@ -3089,18 +3089,17 @@ p.title_text_sugg {
 }
 
 .add-category-button {
-    background-color:transparent;
+    background-color: transparent;
     color: #005876;
 }
 
 .add-category-button:hover {
-    background-color:#005876;
+    background-color: #005876;
     color: white;
 }
 
 .notifications__wrapper.unread {
     background-color: #e6ecf8;
-    
 }
 
 .notifications__wrapper {
@@ -3111,6 +3110,11 @@ p.title_text_sugg {
     padding: 30px 20px 30px 20px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+}
+
+.btn_viewall.bg-black {
+    background-color: #333;
+    color: #fff;
 }
 
 /*========= MEDIA QUERIES===========*/

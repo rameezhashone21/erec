@@ -110,7 +110,7 @@
               <input type="hidden" name="answer{{ $q }}[]" value="{{ $question->type }}">
               <input type="hidden" name="answer{{ $q }}[]" value="{{ $question->id }}">
             @elseif ($question->type == 'text')
-              <div class="form-floating">
+              <div>
                 <textarea class="form-control resize" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"
                   name="answer{{ $q }}[answer][]"></textarea>
                 <label for="floatingTextarea2" class="text-secondary">Write Your Answer Here</label>
