@@ -1109,7 +1109,6 @@
       var element = document.getElementById('payment_loader');
       element.classList.remove('d-none');
       element.classList.add('d-flex');
-      console.log('myForm.new_doc.value.length', myForm.new_doc.value.length);
       if (myForm.new_doc.value.length == 0) {
         const radioButtons = document.querySelectorAll('input[name="cv_file"]');
         for (const radioButton of radioButtons) {
