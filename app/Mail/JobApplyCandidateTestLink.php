@@ -41,7 +41,7 @@ class JobApplyCandidateTestLink extends Mailable
      */
     public function build()
     {
-        $subject = 'Your Test Link';
+        $subject = 'Thank You for Applying';
         return $this->view('emails.jobApplyCandidateTestLink')->subject($subject);
     }
 }

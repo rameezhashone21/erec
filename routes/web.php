@@ -145,6 +145,8 @@ Route::post('recruiter/hire-or-reject/candidate', [App\Http\Controllers\CompanyD
 
 Route::post('/category/store-new-category', [App\Http\Controllers\AdminController::class, 'storeJobCategory'])->name('categories.store');
 
+Route::get('/notificationRead/{id}', [App\Http\Controllers\RequestController::class, 'markConnectionNotificationRead'])->name('notificationRead');
+
 
 Route::middleware(['auth', 'check_status'])->group(function () {
 
@@ -336,6 +338,9 @@ Route::middleware(['auth', 'check_status'])->group(function () {
                 Route::post('/jobs/update', [App\Http\Controllers\CompanyDashboardController::class, 'updateJob'])->name('company.jobs.update');
                 Route::get('/job/delete/{id}', [App\Http\Controllers\CompanyDashboardController::class, 'deleteCompPost'])->name('companys.jobs.delete');
 
+                Route::get('/recruiter/accept/request/{id}', [App\Http\Controllers\CompanyDashboardController::class, 'AcceptRequest'])->name('company.accept');
+                Route::get('/recruiter/reject/request/{id}', [App\Http\Controllers\CompanyDashboardController::class, 'rejectRequest'])->name('company.reject');
+                
                 // Exam section
                 Route::get('/exams', ShowExams::class)
                     //->middleware(['packageCheck'])
@@ -372,6 +377,7 @@ Route::middleware(['auth', 'check_status'])->group(function () {
                 Route::get('/all/applications', [App\Http\Controllers\CompanyDashboardController::class, 'jobApplications'])->name('company.jobApplications');
                 Route::get('/jobs/edit/{id}', [App\Http\Controllers\CompanyDashboardController::class, 'editPost'])->name('company.job.edit');
                 Route::get('/recruiters', [App\Http\Controllers\RequestController::class, 'recruiter'])->name('company.recruiters');
+                Route::get('/recruiters/{notification_id}', [App\Http\Controllers\RequestController::class, 'recruiterMarknotificationRead'])->name('company.recruiters.notification');
 
                 Route::get('/candidate', [App\Http\Controllers\CompanyDashboardController::class, 'candidateIndex'])->name('company.candidateIndex');
                 Route::get('/recruiters/send/request/{id}', [App\Http\Controllers\RequestController::class, 'sendRequest'])->name('company.recruiters.send');
@@ -431,6 +437,8 @@ Route::middleware(['auth', 'check_status'])->group(function () {
             
                 Route::get('/allNotifications', [App\Http\Controllers\FrontendController::class, 'allNotifications'])->name('company.allNotifications');
             
+                //Route::get('/markallNotifications', [App\Http\Controllers\FrontendController::class, 'markallNotifications'])->name('company.markallNotifications');
+
                 Route::get('/markNotificationsRead', [App\Http\Controllers\FrontendController::class, 'markAllNotificationsRead'])->name('company.markNotificationsRead');
             }
         );
@@ -450,6 +458,7 @@ Route::middleware(['auth', 'check_status'])->group(function () {
                 Route::post('/profileupdate', [App\Http\Controllers\RecruiterDashboardController::class, 'profileUpdate'])->name('recruiter.profile.update');
                 Route::get('/details', [App\Http\Controllers\FrontendController::class, 'recruiterDetails'])->name('recruiter.details');
                 Route::get('/company', [App\Http\Controllers\RecruiterDashboardController::class, 'companyIndex'])->name('recruiter.companyIndex');
+                Route::get('/company/{notification_id}', [App\Http\Controllers\RecruiterDashboardController::class, 'companyIndexMarknotificationRead'])->name('recruiter.companyIndex.notification');
                 Route::get('/company/accept/request/{id}', [App\Http\Controllers\RecruiterDashboardController::class, 'AcceptRequest'])->name('recruiters.accept');
                 Route::get('/company/reject/request/{id}', [App\Http\Controllers\RecruiterDashboardController::class, 'rejectRequest'])->name('recruiters.reject');
                 Route::get('/candidate', [App\Http\Controllers\RecruiterDashboardController::class, 'candidateIndex'])->name('recruiter.candidateIndex');
@@ -473,6 +482,7 @@ Route::middleware(['auth', 'check_status'])->group(function () {
 
                 Route::get('/job/details/{id}', [App\Http\Controllers\RecruiterDashboardController::class, 'jobDetailsRec'])->name('recruiter.job.details');
                 Route::get('/job/applicants/{id}', [App\Http\Controllers\RecruiterDashboardController::class, 'jobApplicantsRec'])->name('recruiter.job.applicants');
+                Route::get('/job/applicantsById/{id}/{notification_id}', [App\Http\Controllers\RecruiterDashboardController::class, 'jobApplicantsRecById'])->name('recruiter.job.applicantsById');
                 Route::get('/job/shortlisted/{id}', [App\Http\Controllers\RecruiterDashboardController::class, 'jobshortlistedRec'])->name('recruiter.job.shortlisted');
                 Route::get('/exam/result/{id}', [App\Http\Controllers\RecruiterDashboardController::class, 'examResultRec'])->name('recruiter.exam.result');
 
@@ -500,6 +510,10 @@ Route::middleware(['auth', 'check_status'])->group(function () {
 
                 //Get Test by Categories
                 Route::get('/test/{id}', [App\Http\Controllers\CompanyDashboardController::class, 'getTest'])->name('recruiter.get.testCreate');
+                
+                Route::get('/allNotifications', [App\Http\Controllers\RecruiterDashboardController::class, 'allNotifications'])->name('recruiter.allNotifications');
+
+                Route::get('/markNotificationsRead', [App\Http\Controllers\RecruiterDashboardController::class, 'markAllNotificationsRead'])->name('recruiter.markNotificationsRead');
 
                 //approve recruiters post
                 Route::get('/rec/job/change/status/{id}', [App\Http\Controllers\CompanyDashboardController::class, 'updatePostStatus'])->name('rec.change.status.job');

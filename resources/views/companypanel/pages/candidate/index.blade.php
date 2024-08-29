@@ -63,19 +63,10 @@
                                             </a>
                                         </div>
                                         <div>
-                                            <open-box :openBoxFunction="openBox"
-                                                :id="{{ $row->candidate->user->id }}"></open-box>
+                                            <open-box :openBoxFunction="openBox":id="{{ $row->candidate->user->id }}"></open-box>
                                         </div>
                                         {{-- <a href="#" class="d-flex aling-items-center button">
-                      <span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14.95" height="14.95" viewBox="0 0 14.95 14.95">
-                          <path id="Icon_feather-message-square" data-name="Icon feather-message-square"
-                            d="M18.25,13.667a1.528,1.528,0,0,1-1.528,1.528H7.556L4.5,18.25V6.028A1.528,1.528,0,0,1,6.028,4.5H16.722A1.528,1.528,0,0,1,18.25,6.028Z"
-                            transform="translate(-3.9 -3.9)" fill="none" stroke="#007ba7" stroke-linecap="round"
-                            stroke-linejoin="round" stroke-width="1.2">
-                          </path>
-                        </svg>
-                      </span>
+                      
                       <span>
                         Message
                       </span>

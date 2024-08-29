@@ -9,7 +9,7 @@
             <img src="{{ asset('/images/cv-head.png') }}" alt="Erec logo" class="img-fluid">
         </div>
         <div class="cv-view-body position-relative">
-            <img src="{{ asset('/images/Untitled-3.png') }}" alt="profile" class="cv-view-profile-image">
+            <img src="{{ asset('/images/Untitled-3.png') }}" alt="profile8" class="cv-view-profile-image">
             <div class="row">
                 <div class="col-lg-6">
                     <h3 class="cv-profile-name">Philip Gutmann</h3>

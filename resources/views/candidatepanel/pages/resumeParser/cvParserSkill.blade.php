@@ -85,10 +85,10 @@
                         </div>
                         <div class="cv-view-body position-relative">
                             @if ($skills->contact->cv_profile != null)
-                                <img src="{{ asset('storage/' . $skills->contact->cv_profile) }}" alt="profile"
+                                <img src="{{ asset('storage/' . $skills->contact->cv_profile) }}" alt="profile7"
                                     class="cv-view-profile-image">
                             @else
-                                <img src="{{ asset('/images/image_preview_noimage.png') }}" alt="profile"
+                                <img src="{{ asset('/images/image_preview_noimage.png') }}" alt="profile7"
                                     class="cv-view-profile-image">
                             @endif
                             <div class="row">

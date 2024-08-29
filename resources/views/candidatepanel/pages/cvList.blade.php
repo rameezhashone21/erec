@@ -30,7 +30,7 @@
     @foreach ($docs as $key => $item)
     <div class="d-flex justify-content-between border-bottom py-3">
       <div class="d-flex align-items-center" style="gap: 0 8px;">
-        <a class="d-flex align-items-center" style="gap: 0 15px;" href="{{ asset('public/candidateDoc/doc/' . $item->document) }}" target="_blank">
+        <a class="d-flex align-items-center" style="gap: 0 15px;" href="{{ asset('candidateDoc/doc/' . $item->document) }}" target="_blank">
           <span>
             {{-- pdf doc type icon --}}
             @if (pathinfo($item->document, PATHINFO_EXTENSION) == 'pdf')
@@ -59,7 +59,7 @@
       </div>
       <div class="d-flex align-items-center">
         <span class="me-lg-5 me-3">
-          <a href="{{ asset('public/candidateDoc/doc/' . $item->document) }}" download="">
+          <a href="{{ asset('candidateDoc/doc/' . $item->document) }}" download="">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="23.188" viewBox="0 0 22 23.188">
               <g id="Layer_2" data-name="Layer 2" transform="translate(-4 -3)">
                 <g id="download" transform="translate(4 3)">
@@ -95,7 +95,7 @@
                 @foreach ($docs as $key => $item)
                     <div class="col position-relative">
                         <a class='px-4 py-2 progress_card bg-white shadow d-block rounded-3'
-                            href="{{ asset('public/candidateDoc/doc/' . $item->document) }}" target="_blank">
+                            href="{{ asset('candidateDoc/doc/' . $item->document) }}" target="_blank">
     <div class="d-flex align-items-center">
       <div class="">
         <i class="fa fa-file fs-3 me-3"></i>

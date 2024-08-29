@@ -93,7 +93,7 @@ class ShowTestController extends Controller
             'content' => "Dear" .auth()->user()->name." You have been Shortlisted for the postion of " .$job->post,
             'status'       => "exam_result",
             'job_id'       => $job_application_id,
-            'user_id'       => $candidate->id
+            'receiver_id'       => $candidate->id
         ]);
         
         
@@ -285,10 +285,11 @@ class ShowTestController extends Controller
         ]);
         
         $notification = ExamNotification::create([
-            'content' => "User " .auth()->user()->name." has attempted a for the postion of " .$job->post,
+            'content' => "User " .auth()->user()->name." has attempted a test for the postion of " .$job->post,
             'status'       => "exam_status",
             'job_id'       => $jobApplication->post_id,
-            'user_id'       => $employer->id
+            'receiver_id'       => $employer->id,
+            'sender_id'       => $jobApplication->candidate->user->id
         ]);
 
         if ($result) {

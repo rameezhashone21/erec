@@ -179,8 +179,12 @@
                                             <div class="col-lg-4 hiddenDiv">
                                                 <div class="new_candidate_box ">
                                                     {{-- <a href="" class=""> --}}
-                                                    @if (isset($row->user->avatar))
-                                                        <img src="{{ asset('public/storage/' . $row->user->avatar) }}"
+                                                    @php
+                                                        $url = asset('storage/' . $row->user->avatar);
+                                                        $response = Http::head($url);
+                                                    @endphp
+                                                    @if ($response->status() != 404 && isset($row->user->avatar))
+                                                        <img src="{{ asset('storage/' . $row->user->avatar) }}"
                                                             alt="profile-img" class="profile img-fluid">
                                                     @else
                                                         <img src="{{ asset('images/profile-img.png') }}" alt="profile-img"
@@ -249,8 +253,12 @@
                                             <div class="col-lg-4 hiddenDiv">
                                                 <div class="new_candidate_box ">
                                                     {{-- <a href="" class=""> --}}
-                                                    @if (isset($row->logo))
-                                                        <img src="{{ asset('public/storage/' . $row->logo) }}"
+                                                    @php
+                                                        $url = asset('storage/' . $row->logo);
+                                                        $response = Http::head($url);
+                                                    @endphp
+                                                    @if ($response->status() != 404 && isset($row->logo))
+                                                        <img src="{{ asset('storage/' . $row->logo) }}"
                                                             alt="profile-img" class="profile img-fluid">
                                                     @else
                                                         <img src="{{ asset('images/profile-img.png') }}"
@@ -321,7 +329,7 @@
                                                 <div class="new_candidate_box ">
                                                     <a href="" class="">
                                                         @if (isset($row->avatar))
-                                                            <img src="{{ asset('public/storage/' . $row->avatar) }}"
+                                                            <img src="{{ asset('storasge/' . $row->avatar) }}"
                                                                 alt="profile-img" class="profile img-fluid">
                                                         @else
                                                             <img src="{{ asset('images/profile-img.png') }}"

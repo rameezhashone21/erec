@@ -26,6 +26,11 @@
         {{ session('success') }}
       </div>
     @endif
+    
+    @php
+    use App\Models\User;
+        $package_id = User::where('id', Auth::user()->id)->value('package_id');
+    @endphp
 
     <div class="d-md-flex aling-items-center mb-3">
       <div>
@@ -37,8 +42,8 @@
         </h3>
       </div>
       <div class="ms-auto">
-      <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"
-        class="btn_viewall fw-500 px-4 py-2 d-inline-block ">
+      <button id="importButton" type="button" 
+        class="btn_viewall fw-500 px-4 py-2 d-inline-block" data-value={{$package_id}}>
           Import Question
         </button>
         <a href="{{ route('company.exam.question.create', ['id' => $exam->id]) }}" role="button"
@@ -594,6 +599,39 @@ $(document).ready(function() {
             return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
         }
     });
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var importButton = document.getElementById('importButton');
+    var exampleModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+
+    importButton.addEventListener('click', function(event) {
+      // Replace this with your actual condition
+      var condition = true; // Change this to your condition
+      
+      var value = importButton.getAttribute('data-value');
+
+console.log("va",value);
+
+      if(value == "12" || value == "13") {
+        // Prevent the modal from opening
+        Swal.fire({
+            title: 'Upgrade Package Alert',
+            text: "Sorry, You cant use import questions functionality please upgrade your package",
+            icon: 'warning',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Submit the form if user confirms
+                $(this).closest('form').submit();
+            }
+        });
+      }
+      else{
+        exampleModal.show(); // Open the modal
+      }
+    });
+  });
 </script>
 @section('bottom_script')
 @endsection

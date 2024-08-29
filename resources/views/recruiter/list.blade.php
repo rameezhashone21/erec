@@ -137,7 +137,7 @@
                     <div class="col">
                       <div class="new-recruter-box">
                         @if ($row->user->banner != null)
-                          <img src="{{ asset('public/storage/' . $row->user->banner) }}" alt="profile-img"
+                          <img src="{{ asset('storage/' . $row->user->banner) }}" alt="profile-img"
                             class="user_banner img-fluid">
                         @else
                           <img src="{{ asset('dashboard/images/RecruiterSM.png') }}" alt=""
@@ -145,7 +145,7 @@
                         @endif
                         <div class="text-center px-3 pb-4">
                           @if ($row->avatar != null)
-                            <img src="{{ asset('public/storage/' . $row->avatar) }}" alt="profile-img" class="user_logo">
+                            <img src="{{ asset('storage/' . $row->avatar) }}" alt="profile-img" class="user_logo">
                           @else
                             <img src="{{ asset('images/profile-img.png') }}" alt="profile-img" class="user_logo">
                           @endif

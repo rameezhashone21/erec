@@ -6,6 +6,7 @@
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <style>
+    
         #map_wrapper_div {
             height: 400px;
         }
@@ -22,7 +23,17 @@
 @endsection
 
 @section('content')
-
+<style>
+        .bg-theme-secondary1{
+            background-color: #f9f9f9 !important;
+            height: 40px !important;
+    }
+    
+    .edit_arrow{
+        padding-top:5px !important;
+        margin-top:5px !important;
+    }
+</style>
     {{-- <div class="col-xl-9 col-lg-8 col-md-7"> --}}
     <div class="col-12">
         <div class="dashboard_content bg-white rounded_10 p-md-4 p-2">
@@ -59,7 +70,15 @@
                             <div class="col">
                                 <label for="jobCategory" class="mb-2 fw-600">All Jobs</label>
                                 <div class="position-relative">
-                                    <select name="post" id="jobCategory" class="form-select fs-14 bg-theme-secondary">
+                                    <!--<div class="form__icon">-->
+                                    <!--    <svg xmlns="http://www.w3.org/2000/svg" width="15.095" height="15.176"-->
+                                    <!--        viewBox="0 0 15.095 15.176">-->
+                                    <!--        <path id="Path_3283" data-name="Path 3283"-->
+                                    <!--            d="M103.032,78.4a1.361,1.361,0,0,0-1.174,1.476v.632H99.174A1.361,1.361,0,0,0,98,81.981V92.1a1.361,1.361,0,0,0,1.174,1.476H108.9a.456.456,0,0,0,.36-.182.752.752,0,0,0,0-.9.456.456,0,0,0-.36-.182H99.174c-.1,0-.168-.083-.168-.211V87.672h4.282a1.582,1.582,0,0,0,1.42,1.265h1.677a1.582,1.582,0,0,0,1.42-1.265h4.282V92.1c0,.128-.066.211-.168.211a.456.456,0,0,0-.36.182.752.752,0,0,0,0,.9.456.456,0,0,0,.36.182,1.361,1.361,0,0,0,1.174-1.476V81.981a1.361,1.361,0,0,0-1.174-1.476h-2.684v-.632a1.361,1.361,0,0,0-1.174-1.476Zm0,1.265h5.032c.1,0,.168.083.168.211v.632h-5.367v-.632c0-.128.066-.211.168-.211ZM99.174,81.77h12.747c.1,0,.168.083.168.211v4.426h-4.282a1.589,1.589,0,0,0-1.42-1.265h-1.677a1.589,1.589,0,0,0-1.42,1.265H99.007V81.981c0-.128.066-.211.168-.211Zm5.535,4.637h1.677a.649.649,0,0,1,0,1.265h-1.677a.649.649,0,0,1,0-1.265Zm5.7,5.9a.649.649,0,1,0,.5.632A.579.579,0,0,0,110.411,92.309Z"-->
+                                    <!--            transform="translate(-98 -78.398)" fill="#aba6ac" />-->
+                                    <!--    </svg>-->
+                                    <!--</div>-->
+                                    <select name="post" id="jobCategory" class="select2 form-select fs-14 bg-theme-secondary">
                                         <option value="" disabled selected>-- Select Job Post --</option>
                                         @foreach ($post as $row)
                                             <option value="{{ $row->id }}">{{ $row->post }}</option>
@@ -73,17 +92,17 @@
                             <div class="col">
                                 <label for="category" class="mb-2 fw-600">Category</label>
                                 <div class="position-relative">
-                                    <div class="form__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="15.095" height="15.176"
-                                            viewBox="0 0 15.095 15.176">
-                                            <path id="Path_3283" data-name="Path 3283"
-                                                d="M103.032,78.4a1.361,1.361,0,0,0-1.174,1.476v.632H99.174A1.361,1.361,0,0,0,98,81.981V92.1a1.361,1.361,0,0,0,1.174,1.476H108.9a.456.456,0,0,0,.36-.182.752.752,0,0,0,0-.9.456.456,0,0,0-.36-.182H99.174c-.1,0-.168-.083-.168-.211V87.672h4.282a1.582,1.582,0,0,0,1.42,1.265h1.677a1.582,1.582,0,0,0,1.42-1.265h4.282V92.1c0,.128-.066.211-.168.211a.456.456,0,0,0-.36.182.752.752,0,0,0,0,.9.456.456,0,0,0,.36.182,1.361,1.361,0,0,0,1.174-1.476V81.981a1.361,1.361,0,0,0-1.174-1.476h-2.684v-.632a1.361,1.361,0,0,0-1.174-1.476Zm0,1.265h5.032c.1,0,.168.083.168.211v.632h-5.367v-.632c0-.128.066-.211.168-.211ZM99.174,81.77h12.747c.1,0,.168.083.168.211v4.426h-4.282a1.589,1.589,0,0,0-1.42-1.265h-1.677a1.589,1.589,0,0,0-1.42,1.265H99.007V81.981c0-.128.066-.211.168-.211Zm5.535,4.637h1.677a.649.649,0,0,1,0,1.265h-1.677a.649.649,0,0,1,0-1.265Zm5.7,5.9a.649.649,0,1,0,.5.632A.579.579,0,0,0,110.411,92.309Z"
-                                                transform="translate(-98 -78.398)" fill="#aba6ac" />
-                                        </svg>
-                                    </div>
+                                    <!--<div class="form__icon">-->
+                                    <!--    <svg xmlns="http://www.w3.org/2000/svg" width="15.095" height="15.176"-->
+                                    <!--        viewBox="0 0 15.095 15.176">-->
+                                    <!--        <path id="Path_3283" data-name="Path 3283"-->
+                                    <!--            d="M103.032,78.4a1.361,1.361,0,0,0-1.174,1.476v.632H99.174A1.361,1.361,0,0,0,98,81.981V92.1a1.361,1.361,0,0,0,1.174,1.476H108.9a.456.456,0,0,0,.36-.182.752.752,0,0,0,0-.9.456.456,0,0,0-.36-.182H99.174c-.1,0-.168-.083-.168-.211V87.672h4.282a1.582,1.582,0,0,0,1.42,1.265h1.677a1.582,1.582,0,0,0,1.42-1.265h4.282V92.1c0,.128-.066.211-.168.211a.456.456,0,0,0-.36.182.752.752,0,0,0,0,.9.456.456,0,0,0,.36.182,1.361,1.361,0,0,0,1.174-1.476V81.981a1.361,1.361,0,0,0-1.174-1.476h-2.684v-.632a1.361,1.361,0,0,0-1.174-1.476Zm0,1.265h5.032c.1,0,.168.083.168.211v.632h-5.367v-.632c0-.128.066-.211.168-.211ZM99.174,81.77h12.747c.1,0,.168.083.168.211v4.426h-4.282a1.589,1.589,0,0,0-1.42-1.265h-1.677a1.589,1.589,0,0,0-1.42,1.265H99.007V81.981c0-.128.066-.211.168-.211Zm5.535,4.637h1.677a.649.649,0,0,1,0,1.265h-1.677a.649.649,0,0,1,0-1.265Zm5.7,5.9a.649.649,0,1,0,.5.632A.579.579,0,0,0,110.411,92.309Z"-->
+                                    <!--            transform="translate(-98 -78.398)" fill="#aba6ac" />-->
+                                    <!--    </svg>-->
+                                    <!--</div>-->
                                     <select name="category" id="category"
-                                        class="form-select input_with_icon fs-14 bg-theme-secondary">
-                                        <option value="" disabled selected>Select Job category --</option>
+                                        class="select2 form-select fs-14 bg-theme-secondary">
+                                        <option value="" disabled selected>-- Select Job category --</option>
                                         @if ($data != null)
                                             @foreach ($data as $row)
                                                 <option value="{{ $row['id'] }}">{{ $row['title'] }}</option>
@@ -241,7 +260,7 @@
                                     <p class="range-slider-text mb-2">Score Range: <span><span
                                                 id="rangeValueScore">60</span>
                                             %</span> </p>
-                                    <input class="range" type="range" name="percentage" value="60"
+                                    <input class="range" type="range" name="percentage" value="0"
                                         min="0" max="100" id="score-range"
                                         onchange="rangeSlideScore(this.value)" />
                                 </div>
@@ -351,6 +370,9 @@
                                                     View Profile
                                                 </span>
                                             </a>
+                                            <div>
+                                            <open-box :openBoxFunction="openBox":id="{{ 1 }}"></open-box>
+                                            </div>
                                             <a href="" class="text-grey d-flex align-items-center"
                                                 style="font-size: 12px; gap: 6px;">
                                                 <span>
@@ -449,6 +471,20 @@
         $(document).ready(function() {
             $('#smart-search').trigger('submit');
 
+        });
+        
+        $(document).ready(function() {
+            $('#jobCategory').select2();
+            $('#category').select2();
+          $('.select2-selection.select2-selection--single').addClass('bg-theme-secondary1');
+          $('.select2-selection__rendered').css({'height': '100%','margin': '5px'});
+          //$('.select2-selection.select2-selection--single').addClass('form-control');
+        //   $('.select2-selection.select2-selection--single').addClass('input_with_icon');
+          $('.select2-selection__arrow').addClass('edit_arrow');
+          $('.select2.select2-container.select2-container--default').removeAttr('style');
+
+          //$('.select2.select2-container.select2-container--default.bg-theme-secondary').removeClass('select2-container--default');
+          //$('.select2-selection.select2-selection--single').addClass('bg-theme-secondary');
         });
 
         $('#candidateGender').on('change', function() {
@@ -646,7 +682,7 @@
                         html += "</div>";
                         html += "<div>";
                         html +=
-                            "<a href='{{ asset('public/candidateDoc/doc') }}/" + val[
+                            "<a href='{{ asset('candidateDoc/doc') }}/" + val[
                                 'candidate_document']['document'] + "'";
                         html += "target='_blank' class='fw-500 px-4 py-2 d-inline-block'";
                         html += "download=''>Download CV";
@@ -798,7 +834,7 @@
                             html += " alt='' class='img-fluid'>";
                         }
                         html +=
-                            "<a href='{{ asset('public/candidateDoc/doc') }}/" + val[
+                            "<a href='{{ asset('candidateDoc/doc') }}/" + val[
                                 'candidate_document'][
                                 'document'
                             ] +
@@ -958,6 +994,7 @@
                         //         'candidate']['slug'] +
                         //     "' class='text-grey d-flex align-items-center'";
                         html += "style='font-size: 12px; gap: 6px;' style='font-weight: 500'>";
+                        html += "'<div><open-box':openBoxFunction='openBox':id='1'></open-box></div>"
                         html +=
                             "<span>";
                         html +=
@@ -975,32 +1012,13 @@
                         html += "</span>";
                         html += "<span>";
                         html +=
-                            "Message";
+                            "Messasssge";
                         html += "</span>";
                         html += "</a>";
                         html += "<div class='ms-auto' id='testIsPending-" + val['id'] + "'>";
-                        if (val['status'] == 2) {
-                            html +=
-                                "<p class='bg-success text-white' style='padding: 10px;'>Hired</p>";
-                        } else if (val['status'] == 1 || val['status'] == 0) {
-                            html += "<select class='form-select status-select'";
-                            html += "onchange='statusPending(" + val['id'] + ")'";
-                            html += "id='pendingSelect-" + val['id'] + "'>";
-                            html += "<option value='0'";
-                            if (val['status'] == 0) {
-                                html += "selected";
-                            } else if (val['status'] == 1 || val['status'] == 2) {
-                                html += "disabled";
-                            }
-                            html += ">Pending</option>";
-                            html += "<option value='1'";
-                            if (val['status'] == 1) {
-                                html += "selected";
-                            }
-                            html += ">Shortlist</option>";
-                            html += "<option value='2'>Hire</option>";
-                            html += "</select>";
-                        }
+                        
+                            html += + val['exam_result']['perentage'] + "%";
+                    
                         html += "</div>";
                         html += "</div>";
                         html += "</div>";

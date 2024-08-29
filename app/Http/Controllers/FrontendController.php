@@ -1470,7 +1470,7 @@ class FrontendController extends Controller
     
     public function allNotifications()
     {
-        $allnotifications = ExamNotification::where('user_id', auth::user()->id)->get();
+        $allnotifications = ExamNotification::where('receiver_id', auth::user()->id)->get();
 
         return view('companypanel.pages.notifications.index', compact('allnotifications'));
     }
@@ -1478,8 +1478,17 @@ class FrontendController extends Controller
     public function markAllNotificationsRead()
     {
         $markAllNotificationsread = DB::table('exam_notifications')
-              ->where('user_id', auth::user()->id)
+              ->where('receiver_id', auth::user()->id)
               ->update(['read' => 1]);
+              
         return redirect()->route('company.allNotifications')->with('message', 'Marked All Notifitions Read');
     }
+    
+    // public function markallNotifications()
+    // {
+    //     $markAllNotificationsread = DB::table('exam_notifications')
+    //           ->where('user_id', auth::user()->id)
+    //           ->update(['read' => 1]);
+    //     return redirect()->route('company.allNotifications')->with('message', 'Marked All Notifitions Read');
+    // }
 }

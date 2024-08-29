@@ -60,7 +60,7 @@
             </ul>
             <h2 class='job-title'>Job Title</h2>
             <h3 class='job-name mb-3'>{{ $post->post }}</h3>
-            <img src="{{ asset('public/storage/' . $post->banner) }}" alt="" class="job-detail-banner">
+            <img src="{{ asset('storage/' . $post->banner) }}" alt="" class="job-detail-banner">
             <h3 class='fw-500 fs-5 mt-3 mb-1'>Job Description</h3>
             <p class="fs-14 text_grey_999">
                 {!! $post->description !!}

@@ -26,7 +26,7 @@
 
                                             <h1
                                                 style="margin: 0px; color: #007ba7; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 700;">
-                                                Your Test Link.</h1>
+                                                Thank You for Applying!.</h1>
 
                                         </td>
                                     </tr>

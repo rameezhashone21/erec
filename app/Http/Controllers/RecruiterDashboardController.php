@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Posts;
 use App\Models\Skills;
 use App\Models\Company;
+use App\Models\ExamNotification;
 use App\Mail\ShortListed;
 use App\Models\Candidate;
 use App\Models\PostSkill;
@@ -27,6 +28,7 @@ use App\Models\RecruiterFeatures;
 use App\Models\CompanyRecRelation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Auth;
 
 use Illuminate\Support\Facades\Mail;
 use App\Models\CandidateProfessionalExp;
@@ -48,6 +50,34 @@ class RecruiterDashboardController extends Controller
 
         // dd($user->toArray());
         return view('recruterpanel.pages.profileSetup', compact('user', 'skill', 'candSkills'));
+    }
+    
+    public function allNotifications()
+    {
+        $allnotifications = ExamNotification::where('receiver_id', auth::user()->id)->get();
+
+        return view('recruterpanel.pages.notifications.index', compact('allnotifications'));
+    }
+    
+    public function markAllNotificationsRead()
+    {
+        $markAllNotificationsread = DB::table('exam_notifications')
+              ->where('receiver_id', auth::user()->id)
+              ->update(['read' => 1]);
+              
+        return redirect()->route('recruiter.allNotifications')->with('message', 'Marked All Notifitions Read');
+    }
+    
+    public function jobApplicantsRecById($id, $notification_id)
+    {
+        $post = Posts::with('jobAppRecComp', 'skills', 'company', 'jobAppRecComp.candidate')->findOrFail($id);
+        
+        $notificationUpdate = ExamNotification::find($notification_id);
+        $notificationUpdate->read = "1";
+        $notificationUpdate->save();
+        
+         //dd($post);
+        return view('recruterpanel.pages.jobs.job_applicants', compact('post'));
     }
     public function assignJob(Request $request)
     {
@@ -75,7 +105,6 @@ class RecruiterDashboardController extends Controller
                 return true;
             }
             $email = $job->candidate->user->email;
-            $testAssign = Mail::to($email)->send(new TestAssigned($email));
             // dd($testAssign);
             $user_id = $job->candidate->user->new_user_id;
             $qst = $request->selectedId;
@@ -242,6 +271,17 @@ class RecruiterDashboardController extends Controller
         }
         return back()->with('error', 'Error in Update!');
     }
+    
+    public function companyIndexMarknotificationRead($id)
+    {
+        $comp = CompanyRecRelation::with('recruiter', 'company')->where('rec_id', auth()->user()->recruiter->id)->latest()->get();
+        
+        $markNotificationread = DB::table('exam_notifications')
+              ->where('id', $id)
+              ->update(['read' => 1]);
+        
+        return view('recruterpanel.pages.company.index', compact('comp'));
+    }
     public function companyIndex()
     {
         $comp = CompanyRecRelation::with('recruiter', 'company')->where('rec_id', auth()->user()->recruiter->id)->latest()->get();
@@ -253,7 +293,22 @@ class RecruiterDashboardController extends Controller
         // dd($id);
         $comp = CompanyRecRelation::find($id);
         // dd($comp->toArray());
+
+        $company = Company::where('id',$comp->com_id)->value('user_id');
+        $recruiter = Recruiter::where('id',$comp->rec_id)->value('user_id');
+                
+        $company_user_id = User::where('id',$company)->value('id');
+        $recruiter_user_id = User::where('id',$recruiter)->value('id');
+
+        $notification = ExamNotification::create([
+            'content' => auth()->user()->name . " has rejected Your Connection Request",
+            'status'       => "Company Connection Request Rejected",
+            'receiver_id'       => $company_user_id,
+            'sender_id'       => $recruiter_user_id
+        ]);
+
         $comp->delete();
+        
         return redirect()->route('recruiter.companyIndex');
     }
     public function AcceptRequest($id)
@@ -261,6 +316,23 @@ class RecruiterDashboardController extends Controller
         $comp = CompanyRecRelation::find($id);
         $comp->status = 1;
         $comp->save();
+        
+        $company = Company::where('id',$comp->com_id)->value('user_id');
+        $recruiter = Recruiter::where('id',$comp->rec_id)->value('user_id');
+                
+        $company_user_id = User::where('id',$company)->value('id');
+        $recruiter_user_id = User::where('id',$recruiter)->value('id');
+        
+        //dd($recruiter_user_id);
+
+        $notification = ExamNotification::create([
+            'content' => auth()->user()->name . " has accepted Your Connection Request",
+            'status'       => "Company Connection Request Accepted",
+            'receiver_id'       => $company_user_id,
+            'sender_id'       => $recruiter_user_id
+        ]);
+
+
         return redirect()->back();
     }
     public function candidateIndex()
@@ -437,6 +509,9 @@ class RecruiterDashboardController extends Controller
                     $post->banner = $filenamepath;
                 } elseif ($request->has('existingBanner')) {
                     $post->banner = $request->existingBanner;
+                }
+                else{
+                    $post->banner = "banner.png";
                 }
                 $post->slug = $slug;
                 $post->save();
@@ -739,11 +814,12 @@ class RecruiterDashboardController extends Controller
         $recruiter = CompanyRecRelation::where('rec_id', auth()->user()->recruiter->id)->where('status', 1)->get();
         $skill = Skills::all();
         $data = JobCategory::orderby('title', 'asc')->get();
+        $selected_job = JobCategory::where('id',$post->class_id)->first();
         $test = Http::get('https://api.e-rec.com.au/api/qst/to/classes', [
             'class_id' => $post->class_id,
         ]);
         $test_id = $test->json();
-        return view('recruterpanel.pages.jobs.postAnExisting.create', compact('recruiter', 'skill', 'post', 'data', 'test_id'));
+        return view('recruterpanel.pages.jobs.postAnExisting.create', compact('recruiter', 'selected_job','skill', 'post', 'data', 'test_id'));
         // } else {
         // $recruiter = CompanyRecRelation::where('rec_id', auth()->user()->recruiter->id)->where('status', 1)->get();
         // // dd($recruiter->toArray());

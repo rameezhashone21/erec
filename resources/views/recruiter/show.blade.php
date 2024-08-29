@@ -30,7 +30,7 @@
   <div class="pt__banner"></div>
   <section class="position-relative">
     @if ($rec->user->banner != null)
-      <img src="{{ asset('public/storage/' . $rec->user->banner) }}" alt="profile-img" class="w-100 banner__image"
+      <img src="{{ asset('storage/' . $rec->user->banner) }}" alt="profile-img" class="w-100 banner__image"
         id="imagePreview">
     @else
       <img src="{{ asset('dashboard/images/Recruiter.png') }}" alt="" class="w-100 banner__image">
@@ -53,14 +53,14 @@
             <div class="text-center">
               <div class="view_profile_image">
                 @if ($rec->avatar != null)
-                  {{-- @if (file_exists(asset('public/storage/' . $rec->avatar)))
-                                        <img class="" src="{{ asset('public/storage/' . $rec->avatar) }}"
+                  {{-- @if (file_exists(asset('storage/' . $rec->avatar)))
+                                        <img class="" src="{{ asset('storage/' . $rec->avatar) }}"
                                             alt="">
                                     @else
                                         <img class="" src="{{ asset('adminpanel/images/avatar/dummy.png') }}"
                                             alt="">
                                     @endif --}}
-                  <img class="" src="{{ asset('public/storage/' . $rec->avatar) }}" alt="">
+                  <img class="" src="{{ asset('storage/' . $rec->avatar) }}" alt="">
                 @else
                   <img class="" src="{{ asset('adminpanel/images/avatar/dummy.png') }}" alt="">
                 @endif
@@ -312,7 +312,7 @@
                         <div class="d-flex mb-3">
                           <div class="me-3">
                             @if ($row->banner != null)
-                              <img src="{{ asset('public/storage/' . $row->banner) }}" alt=""
+                              <img src="{{ asset('storage/' . $row->banner) }}" alt=""
                                 class="candidate_thumb rounded-50">
                             @else
                               <img src="{{ asset('images/profile-img.svg') }}" alt=""
@@ -356,7 +356,7 @@
                             <span>Posted by :</span>
                             @if ($row->comp_id != 0)
                               <span>
-                                <img src="{{ asset('public/storage/' . $row->company->logo) }}" alt=""
+                                <img src="{{ asset('storage/' . $row->company->logo) }}" alt=""
                                   class="rounded-50 rounded_img_xxm">
                               </span>
                               <span class="text_primary">{{ $row->company->name }}</span>
@@ -488,7 +488,7 @@
                     class="views_others_box d-flex align-items-center">
                     <div class="view_profile_candidates">
                       @if ($row->avatar != null)
-                        <img class="" src="{{ asset('public/storage/' . $row->avatar) }}" alt="">
+                        <img class="" src="{{ asset('storage/' . $row->avatar) }}" alt="">
                       @else
                         <img class="" src="{{ asset('adminpanel/images/avatar/dummy.png') }}" alt="">
                       @endif

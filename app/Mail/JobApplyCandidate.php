@@ -29,7 +29,6 @@ class JobApplyCandidate extends Mailable
         $this->postDesc = $postDesc;
         $this->canName = $canName;
         $this->postedBy = $postedBy;
-        $this->postedBy = $email;
     }
 
     /**

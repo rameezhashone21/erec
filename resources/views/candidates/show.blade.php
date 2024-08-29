@@ -3,8 +3,12 @@
 @section('content')
     <div class="pt__banner"></div>
     <section class="position-relative">
-        @if (isset($user->banner))
-            <img src="{{ asset('public/storage/' . $user->banner) }}" alt="profile-img" class="w-100 banner__image"
+        @php
+            $url = asset('storage/' . $user->banner);
+            $response = Http::head($url);
+        @endphp
+        @if ($response->status() != 404 && isset($user->banner))
+            <img src="{{ asset('storage/' . $user->banner) }}" alt="profile-img" class="w-100 banner__image"
                 id="imagePreview">
         @else
             <img src="{{ asset('dashboard/images/candidate.png') }}" alt="" class="w-100 banner__image">
@@ -577,7 +581,7 @@
                                         <div class="mt-4 mb-3 px-3">
                                             <h3 class="view_profile_txt">Download CV</h3>
                                         </div>
-                                        <a href="{{ asset('public/candidateDoc/doc/' . $user->resume[0]->document) }}"
+                                        <a href="{{ asset('candidateDoc/doc/' . $user->resume[0]->document) }}"
                                             class="d-flex align-items-center justify-content-center view_profile_button mx-3"
                                             target="_blank">
                                             <span>
@@ -809,10 +813,14 @@
                                     <a href="{{ route('candidate.detail', $row->slug) }}"
                                         class="views_others_box d-flex align-items-center">
                                         <div class="view_profile_candidates">
-                                            @if (isset($row->user->candidate))
+                                            @php
+                                                $url = asset('storage/' . $row->user->avatar);
+                                                $response = Http::head($url);
+                                            @endphp
+                                            @if ($response->status() != 404 && isset($row->user->avatar))
                                                 @if ($row->user->avatar != null)
                                                     <img class=""
-                                                        src="{{ asset('public/storage/' . $row->user->avatar) }}"
+                                                        src="{{ asset('storage/' . $row->user->avatar) }}"
                                                         alt="">
                                                 @else
                                                     <img class=""

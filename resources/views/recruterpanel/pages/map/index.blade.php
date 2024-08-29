@@ -530,7 +530,7 @@
                         if (val['candidate']['user']['avatar'] != null) {
                             html += "<img class='user_map_hover'";
                             html +=
-                                "src='{{ asset('public/storage/') }}/" + val['candidate']['user'][
+                                "src='{{ asset('storage/') }}/" + val['candidate']['user'][
                                     'avatar'
                                 ] + "'";
                             html += "alt=''>";
@@ -619,7 +619,7 @@
                         html += "</div>";
                         html += "<div>";
                         html +=
-                            "<a href='{{ asset('public/candidateDoc/doc') }}/" + val[
+                            "<a href='{{ asset('candidateDoc/doc') }}/" + val[
                                 'candidate_document'][
                                 'document'
                             ] +
@@ -761,11 +761,11 @@
                         html += "<div class='map-page-userbox d-flex  '>";
                         html += "<div class='border-end px-1 pt-1 text-center'>";
                         // html +=
-                        //     "<img src='{{ asset('public/storage/') }}/" + val['candidate']['user']['avatar'] +
+                        //     "<img src='{{ asset('storage/') }}/" + val['candidate']['user']['avatar'] +
                         //     "'";
                         // html += "alt='' class='img-fluid'>";
                         if (val['candidate']['user']['avatar'] != null) {
-                            html += "<img src='{{ asset('public/storage/') }}/" + val['candidate'][
+                            html += "<img src='{{ asset('storage/') }}/" + val['candidate'][
                                 'user'
                             ]['avatar'] + "' alt='' class='img-fluid'>";
                         } else {
@@ -774,7 +774,7 @@
                             html += " alt='' class='img-fluid'>";
                         }
                         html +=
-                            "<a href='{{ asset('public/candidateDoc/doc') }}/" + val[
+                            "<a href='{{ asset('/candidateDoc/doc') }}/" + val[
                                 'candidate_document'][
                                 'document'
                             ] +

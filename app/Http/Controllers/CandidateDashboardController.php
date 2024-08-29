@@ -60,13 +60,13 @@ class CandidateDashboardController extends Controller
         $imageDataHead = base64_encode(file_get_contents($imagePathHead));
         $head = 'data:image/jpeg;base64,' . $imageDataHead;
 
-        $imagePathUntitled = 'https://e-rec.com.au/storage/candidateAvatar/img/2024-02-16_.125.42857142857_.jpg';
+        $imagePathUntitled = 'https://e-rec.com.au/public/storage/candidateAvatar/img/2024-02-16_.125.42857142857_.jpg';
         $imageDataUntitled = base64_encode(file_get_contents($imagePathUntitled));
         $untitled = 'data:image/jpeg;base64,' . $imageDataUntitled;
         $data = CvBuilder::with('contact','experience','education','skills','others')->where('user_id', auth()->user()->id)->latest()->first();
         if ($data->contact->cv_profile != null)
         {
-            $untitled = asset('public/storage/' . $data->contact->cv_profile);
+            $untitled = asset('storage/' . $data->contact->cv_profile);
         }
         else
         {
@@ -613,8 +613,8 @@ class CandidateDashboardController extends Controller
 
         </html>";
         // dd($htmlContent);
-        $client = new \Pdfcrowd\HtmlToPdfClient("HashOneDeveloper", "e85d1f3bb3c50df86dd1f628ca8f2f7c");
-         // Replace with your Pdfcrowd username and API key
+        $client = new \Pdfcrowd\HtmlToPdfClient("rameezhashone", "0217049b1bb7b894d2ae10738b2a477e"); // Replace with your Pdfcrowd username and API key
+
         try {
             // Convert HTML to PDF and save to file
             // dd($client);
@@ -727,7 +727,6 @@ class CandidateDashboardController extends Controller
                 }
             }
             $pdf = $this->generate_pdf_cv();
-
             return response($pdf)
             ->header('Content-Type', 'application/pdf')
             ->header('Content-Disposition', 'attachment; filename="resume.pdf"');
@@ -783,7 +782,7 @@ class CandidateDashboardController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            'resume_file' => 'mimes:pdf|max:10240', // Adjust max file size as needed
+            'resume_file' => 'mimes:pdf,doc,docx|max:10240', // Adjust max file size as needed
         ]);
 
         // Get the uploaded file
@@ -940,7 +939,6 @@ class CandidateDashboardController extends Controller
 
         // Execute cURL session and get the response
         $response = curl_exec($ch);
-
         
         // Check for cURL errors
         if (curl_errno($ch)) {

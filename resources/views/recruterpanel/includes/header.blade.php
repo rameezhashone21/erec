@@ -17,7 +17,7 @@
 
                             @if (auth()->user()->recruiter->avatar != null)
                                 <img class="profile_thumb me-2 rounded-50"
-                                    src="{{ asset('public/storage/' . auth()->user()->recruiter->avatar) }}"
+                                    src="{{ asset('storage/' . auth()->user()->recruiter->avatar) }}"
                                     alt="">
                             @else
                                 <img class="profile_thumb me-2 rounded-50"
@@ -281,7 +281,7 @@
 
                                         @if (auth()->user()->recruiter->avatar != null)
                                             <img class="profile_thumb me-2 rounded-50"
-                                                src="{{ asset('public/storage/' . auth()->user()->recruiter->avatar) }}"
+                                                src="{{ asset('storage/' . auth()->user()->recruiter->avatar) }}"
                                                 alt="">
                                         @else
                                             <img class="profile_thumb me-2 rounded-50"
@@ -420,14 +420,14 @@
                             </div>
                             @if (isset(auth()->user()->package))
                                 <a href="" class="d-flex btn-subcription {{ auth()->user()->package->class }}"
-                                    style="font-size: 10px !important">
-                                    {{ auth()->user()->posts_count }}/
+                                    style="font-size: 10px !importaant">
                                     {{-- @if (auth()->user()->posts_count > auth()->user()->package->no_of_posts)
-                                        {{ auth()->user()->package->no_of_posts + auth()->user()->posts_count - auth()->user()->package->no_of_posts }}
+                                        {{ auth()->user()->package->no_of_posts + auth()->user()->posts_count - auth()->user()->package->no_of_posts }} /
                                         jobs Posts left
                                     @else --}}
-                                    {{ auth()->user()->all_posts_count }} Jobs posts left
+                                    {{ auth()->user()->posts_count }} /
                                     {{-- @endif --}}
+                                    {{ auth()->user()->all_posts_count }} Jobs posts left
                                 </a>
                                 {{-- @if (auth()->user()->package->name == 'Standard')
                                     <a href="" class="d-flex fs-12 btn-subcription bronze">
@@ -471,6 +471,96 @@
                                     </a>
                                 @endif --}}
                             @endif
+                            
+                            @php
+                             $notifications = App\Models\ExamNotification::latest('id','asc')->where('receiver_id',Auth::user()->id)->take(5)->get();
+                             $unread_notifications_count = App\Models\ExamNotification::latest('id','asc')->where('read',0)->where('receiver_id',Auth::user()->id)->take(5)->get();
+                            @endphp
+
+                            <div class="dropdown d-none d-lg-block">
+                                <a class="text_dark_292929" href="#"
+                                    role="button" id="notificationsDropdown" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <i class="fa-solid fa-bell fs-5"></i>
+                                    @if(count($unread_notifications_count) > 0)
+                                    <div class="notification-count">{{count($unread_notifications_count)}}</div>
+                                    @endif
+                                </a>
+                                <ul class="dropdown-menu user-setting notifications-dropdown" aria-labelledby="notificationsDropdown">
+                                    <li class='d-flex align-items-center justify-content-between p-2 mx-3'>
+                                        <div>
+                                            <h3> Notifications </h3>
+                                        </div>
+                                        <div>
+                                            <a href={{route("recruiter.markNotificationsRead")}} class='fs-14 text_primary onhover_text-decoration'> Mark as all read </a>
+                                        </div> 
+                                    </li>
+
+                                    @if(!$notifications->isEmpty())
+                                    @foreach($notifications as $notification)
+                                    {{-- Unread Notifications --}}
+                                    
+                                    @php
+                                        $candidate_banner = App\Models\User::where('id',$notification->sender_id)->value('avatar');
+                                    @endphp
+                                    
+
+                                    @if($notification->read == 0) 
+                                    <li>
+                                        @if($notification->status == "exam_status" || $notification->status == "job_apply")
+                                        <a class="dropdown-item fs-12 d-flex align-items-center" style="background-color: #f5f5f5;"
+                                            href="{{ route('recruiter.job.applicantsById', ['id' => $notification->job_id , 'notification_id' => $notification->id]) }}">
+                                        <span>
+                                            <img src='{{asset('storage/'.$candidate_banner)}}' alt='' class='profile_thumb me-2 rounded-50' />
+                                        </span>
+                                        <span style='white-space: normal;'>{{$notification->content}}</span>   
+                                        @elseif($notification->status == "Recruiter Connection Request Accepted" || $notification->status == "Recruiter Connection Request Rejected" || 
+                                        $notification->status == "Company Connection Request" || $notification->status == "Recruiter Connection Request")
+                                        <a class="dropdown-item fs-12 d-flex align-items-center"
+                                            href="{{route('notificationRead', ['id' => $notification->id])}}" style="background-color: #f5f5f5;">
+                                        <span>
+                                            <img src='{{asset('storage/'.$candidate_banner)}}' alt='' class='profile_thumb me-2 rounded-50' />
+                                        </span>
+                                        <span style='white-space: normal;'>{{$notification->content}}</span>    
+                                        @endif
+                                    </li>
+                                    {{-- Read Notifications --}}
+                                    @else
+                                    <li>
+                                        @if($notification->status == "exam_status" || $notification->status == "job_apply")
+                                        <a class="dropdown-item fs-12 d-flex align-items-center"
+                                            href="{{ route('recruiter.job.applicantsById', ['id' => $notification->job_id , 'notification_id' => $notification->id]) }}">
+                                        <span>
+                                            <img src='{{asset('storage/'.$candidate_banner)}}' alt='' class='profile_thumb me-2 rounded-50' />
+                                        </span>
+                                        <span style='white-space: normal;'>{{$notification->content}}</span>   
+                                        @elseif($notification->status == "Recruiter Connection Request Accepted" || $notification->status == "Recruiter Connection Request Rejected" ||
+                                        $notification->status == "Company Connection Request" || $notification->status == "Recruiter Connection Request")
+                                        <a class="dropdown-item fs-12 d-flex align-items-center"
+                                            href="{{route('notificationRead', ['id' => $notification->id])}}">
+                                        <span>
+                                            <img src='{{asset('storage/'.$candidate_banner)}}' alt='' class='profile_thumb me-2 rounded-50' />
+                                        </span>
+                                        <span style='white-space: normal;'>{{$notification->content}}</span>    
+
+                                        @endif
+                                    </li>
+                                    @endif
+                                    @endforeach
+                                    @else
+                                    <li class="p-2 mx-3">
+                                        <a class="dropdown-item fs-12 px-0">
+                                            No Notifications Found
+                                        </a>
+                                    </li>
+                                    @endif
+                                    
+                                    <li class='text-center'>
+                                        <a href="{{route('recruiter.allNotifications')}}" class='fs-14 text_primary onhover_text-decoration'> See all notifications </a>
+                                    </li>
+
+                                </ul>
+                                
                         </div>
                     </div>
                 </div>

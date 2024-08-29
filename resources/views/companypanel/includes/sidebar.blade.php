@@ -37,8 +37,8 @@
         </form>
       </div>
       <h3 class="fs-5 fw-600 text_primary mb-2">
-        {{-- {{ auth()->user()->company->name }} --}}
-        {{ \Illuminate\Support\Str::limit(auth()->user()->company->name, 20, $end = '...') }}
+        {{ auth()->user()->company->name }}
+        <!--{{ \Illuminate\Support\Str::limit(auth()->user()->company->name, 20, $end = '...') }}-->
       </h3>
       <p class="mb-2 px-3 fs-14">
         @if (auth()->user()->company->type != null)

@@ -97,8 +97,8 @@
                                             class='ms-2 text-white-hover'>/ {{ $pkg->time_interval }}</span></h3>
                                     @endif
 
-                                    <div style="font-size:14px;font-style:italic">Note: The pricing of our packages is inclusive of 10% (GST) tax
-                                    Make sure the pricing on button and page should be same</div>
+                                    <div style="font-size:14px;font-style:italic">Note: The pricing of our packages is inclusive of 10% (GST) tax.
+                                    </div>
                                 </div>
                                 {{-- <a class='payment-subcription-btn d-flex justify-content-center align-items-center'>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11.839" height="23.684"
@@ -332,7 +332,13 @@
                                                 </div>
                                                 <div class="col-12 text-center mt-5">
                                                     <button type="button" id="submit-form" class="btn_viewall">
-                                                        Pay ${{ $pkg->price }}.00 AUD
+                                                        @if($pkg->price == 90)
+                                                        Pay $99.00 AUD
+                                                        @elseif($pkg->price == 272)
+                                                        Pay $299.00 AUD
+                                                        @elseif($pkg->price == 454)
+                                                        Pay $499.00 AUD
+                                                        @endif
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="18"
                                                             height="12" viewBox="0 0 18 12">
                                                             <g id="Group_688" data-name="Group 688"
@@ -513,7 +519,13 @@
                                                 </div>
                                                 <div class="col-12 text-center mt-5">
                                                     <button type='button' class="btn_viewall">
-                                                        Pay ${{ $pkg->price }}.00 AUD
+                                                        @if($pkg->price == 90)
+                                                        Pay $99.00 AUD
+                                                        @elseif($pkg->price == 272)
+                                                        Pay $299.00 AUD
+                                                        @elseif($pkg->price == 454)
+                                                        Pay $499.00 AUD
+                                                        @endif
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="18"
                                                             height="12" viewBox="0 0 18 12">
                                                             <g id="Group_688" data-name="Group 688"
@@ -602,6 +614,11 @@
                     if (card_cvv == "") {
                         errorModal("Card CVV field is required");
                     }
+                    
+                    // Stop the loader
+                    var element = document.getElementById('payment_loader');
+                    element.classList.remove('d-flex');
+                    element.classList.add('d-none');
 
                 } else {
                     if (payment_method == 'eway') {

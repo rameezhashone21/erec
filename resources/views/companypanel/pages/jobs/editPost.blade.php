@@ -8,6 +8,11 @@
 @endsection
 
 @section('content')
+<style>
+    .hidden {
+      display: none;
+    }
+  </style>
   <div class="col-xl-9 col-lg-8">
     <button class="mobile_menu_trigger d-lg-none btn_theme border-0 py-2 px-4 mb-3">
       <i class="fa-solid fa-right-left me-3"></i><span>Side Menu</span>
@@ -857,6 +862,7 @@
           <div class="col-md-6">
             <div class="form-group set-cross-icon">
               <label for="" class="form-label fs-14 text-theme-primary fw-bold">Category*</label>
+              <input type="hidden" name="user_id" id="user_id" value="{{Auth::user()->id}}">
               <select name="category" id="class_id" data-placeholder='Please Select Category'
                 class="select2-multiple form-control fs-14  h-50px" required onchange="testFillBox()">
                 <option></option>
@@ -892,6 +898,7 @@
                             <label for="test_id" class="form-label fs-14 text-theme-primary fw-bold">Attach a test</label>
                             <select name="test_id" class="select2-multiple form-control fs-14  h-50px">
                                 <option selected disabled value="">Select Test</option>
+                                
                                 @if ($test_id != null)
                                     @foreach ($test_id as $row)
                                         <option value="{{ $row['number'] }}"
@@ -902,20 +909,21 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group set-cross-icon" id="criteria">
-                            <label for="criteria" class="form-label fs-14 text-theme-primary fw-bold">Test Passing
-                                Criteria</label>
-                            <select name="criteria" class="select2-multiple form-control fs-14 h-50px">
-                                <option disabled value="">Select Test Passing Criteria</option>
-                                <option value="50+" @if ($post->criteria == '50+') Selected @endif>50+</option>
-                                <option value="60+" @if ($post->criteria == '60+') Selected @endif>60+</option>
-                                <option value="70+" @if ($post->criteria == '70+') Selected @endif>70+</option>
-                                <option value="80+" @if ($post->criteria == '80+') Selected @endif>80+</option>
-                                <option value="90+" @if ($post->criteria == '90+') Selected @endif>90+</option>
-                            </select>
-                        </div>
-                    </div> --}}
+                    <!--<div class="col-md-6">-->
+                    <!--    <div class="form-group set-cross-icon" id="criteria">-->
+                    <!--        <label for="criteria" class="form-label fs-14 text-theme-primary fw-bold">Test Passing-->
+                    <!--            Criteria</label>-->
+                    <!--        <select name="criteria" class="select2-multiple form-control fs-14 h-50px">-->
+                    <!--            <option disabled value="">Select Test Passing Criteria</option>-->
+                    <!--            <option value="50+" @if ($post->criteria == '50+') Selected @endif>50+</option>-->
+                    <!--            <option value="60+" @if ($post->criteria == '60+') Selected @endif>60+</option>-->
+                    <!--            <option value="70+" @if ($post->criteria == '70+') Selected @endif>70+</option>-->
+                    <!--            <option value="80+" @if ($post->criteria == '80+') Selected @endif>80+</option>-->
+                    <!--            <option value="90+" @if ($post->criteria == '90+') Selected @endif>90+</option>-->
+                    <!--        </select>-->
+                    <!--    </div>-->
+                    <!--</div> -->
+                    --}}
           <div class="col-md-6">
             <div class="form-group set-cross-icon ">
               <label for="name" class="form-label fs-14 text-theme-primary fw-bold">Job Type*</label>
@@ -1199,20 +1207,23 @@
               </select>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="form-group set-cross-icon" id="criteria">
-              <label for="criteria" class="form-label fs-14 text-theme-primary fw-bold">Test Passing
-                Criteria</label>
-              <select name="criteria" class="select2-multiple form-control fs-14 h-50px">
-                <option disabled value="">Select Test Passing Criteria</option>
-                <option value="50+" @if ($post->criteria == '50') Selected @endif>50+</option>
-                <option value="60+" @if ($post->criteria == '60') Selected @endif>60+</option>
-                <option value="70+" @if ($post->criteria == '70') Selected @endif>70+</option>
-                <option value="80+" @if ($post->criteria == '80') Selected @endif>80+</option>
-                <option value="90+" @if ($post->criteria == '90') Selected @endif>90+</option>
-              </select>
-            </div>
+          <div id="createtest" class="hidden">
+              <a id="g" href="">Add a new test</a>
           </div>
+          <!--<div class="col-md-6">-->
+          <!--  <div class="form-group set-cross-icon" id="criteria">-->
+          <!--    <label for="criteria" class="form-label fs-14 text-theme-primary fw-bold">Test Passing-->
+          <!--      Criteria</label>-->
+          <!--    <select name="criteria" class="select2-multiple form-control fs-14 h-50px">-->
+          <!--      <option disabled value="">Select Test Passing Criteria</option>-->
+          <!--      <option value="50+" @if ($post->criteria == '50') Selected @endif>50+</option>-->
+          <!--      <option value="60+" @if ($post->criteria == '60') Selected @endif>60+</option>-->
+          <!--      <option value="70+" @if ($post->criteria == '70') Selected @endif>70+</option>-->
+          <!--      <option value="80+" @if ($post->criteria == '80') Selected @endif>80+</option>-->
+          <!--      <option value="90+" @if ($post->criteria == '90') Selected @endif>90+</option>-->
+          <!--    </select>-->
+          <!--  </div>-->
+          <!--</div>-->
           <div class="col-md-6">
             <div class="form-group">
               <button type="submit" class="btn_viewall fw-500 px-4 py-2 d-inline-block"> Update </button>
@@ -1243,7 +1254,33 @@
 
         $('#testBox').removeClass('d-none');
         $('#criteria').removeClass('d-none');
+        
+        var id = $('#class_id').val();
+        var user_id = $('#user_id').val();
+     
+        
+            $.ajax({
+                url: '{{ route('company.get.testCreate') }}',
+                method: 'GET',
+                data: {
+                    id: id,  // Parameters to send along with the request
+                    user_id: user_id
+                },
+                success: function(response) {
+                    console.log("ll",response.length)
+                    if(response.length == 0)
+                    {
+                        console.log("ssss");
+                        document.getElementById('createtest').classList.remove('hidden');
+                        $('#g').html('<a href="{{route('company.exam.create')}}">Add a new test</a></div>')
+                    }
+                },
+            });
+            
       } else {
+          
+        document.getElementById('createtest').classList.add('hidden');
+
         $('#testBox').addClass('d-none');
         $('#criteria').addClass('d-none');
 

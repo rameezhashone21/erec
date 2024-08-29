@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class JobApplications extends Model
 {
     use HasFactory;
+    
+    protected $connection = 'mysql';
 
     protected $table = 'job_applications';
 
@@ -129,8 +131,13 @@ class JobApplications extends Model
 
         return $sum;
     }
-
+    
     public function result()
+    {
+        return $this->hasOne(ExamResult::class, 'job_application_id', 'id');
+    }
+    
+    public function examResult()
     {
         return $this->hasOne(ExamResult::class, 'job_application_id', 'id');
     }

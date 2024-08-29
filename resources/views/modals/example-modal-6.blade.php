@@ -60,7 +60,7 @@
                   <input type="text" autocomplete="off" class="form-control fs-14 h-50px is-answer-m-1" name="answer[]">
                   <div class="mt-2">
                     <input type="checkbox" name="is_correct_m_1" class="is-correct-m-1" value="1" autocomplete="off">
-                    <label for="is-correct-m-1">correct</label>
+                    <label for="is-correct-m-1">Correct</label>
 
                   </div>
                 </div>
@@ -73,7 +73,7 @@
                   <input type="text" autocomplete="off" class="form-control fs-14 h-50px is-answer-m-2" name="answer[]">
                   <div class="mt-2">
                     <input type="checkbox" name="is_correct_m_2" class="is-correct-m-2" value="2" autocomplete="off">
-                    <label for="is-correct-m-2">correct</label>
+                    <label for="is-correct-m-2">Correct</label>
                   </div>
                 </div>
               </div>
@@ -86,7 +86,7 @@
 
                   <div class="mt-2">
                     <input type="checkbox" name="is_correct_m_3" class="is-correct-m-3" value="3" autocomplete="off">
-                    <label for="is-correct-m-3">correct</label>
+                    <label for="is-correct-m-3">Correct</label>
                   </div>
                 </div>
               </div>
@@ -98,7 +98,7 @@
                   <input type="text" autocomplete="off" class="form-control fs-14 h-50px is-answer-m-4" name="answer[]">
                   <div class="mt-2">
                     <input type="checkbox"  name="is_correct_m_4" class="is-correct-m-4" value="4" autocomplete="off">
-                    <label for="is-correct-m-4">correct</label>
+                    <label for="is-correct-m-4">Correct</label>
                   </div>
                 </div>
               </div>
@@ -114,7 +114,7 @@
                   <input type="text" autocomplete="off" class="form-control fs-14 h-50px is-answer-s-1" name="answer2[]">
                   <div class="mt-2">
                     <input type="radio" id="is-correct-s-1" name="is_correct" value="1" autocomplete="off">
-                    <label for="is-correct">correct</label>
+                    <label for="is-correct">Correct</label>
                   </div>
                 </div>
               </div>
@@ -126,7 +126,7 @@
                   <input type="text" autocomplete="off" class="form-control fs-14 h-50px is-answer-s-2" name="answer2[]">
                   <div class="mt-2">
                     <input type="radio" id="is-correct-s-2" name="is_correct" value="2" autocomplete="off">
-                    <label for="is-correct">correct</label>
+                    <label for="is-correct">Correct</label>
                   </div>
                 </div>
               </div>
@@ -138,7 +138,7 @@
                   <input type="text" autocomplete="off" class="form-control fs-14 h-50px is-answer-s-3" name="answer2[]">
                   <div class="mt-2">
                     <input type="radio" id="is-correct-s-3" name="is_correct" value="3" autocomplete="off">
-                    <label for="is-correct">correct</label>
+                    <label for="is-correct">Correct</label>
                   </div>
                 </div>
               </div>
@@ -150,7 +150,7 @@
                   <input type="text" autocomplete="off" class="form-control fs-14 h-50px is-answer-s-4" name="answer2[]">
                   <div class="mt-2">
                     <input type="radio" id="is-correct-s-4" name="is_correct" value="4" autocomplete="off">
-                    <label for="is-correct">correct</label>
+                    <label for="is-correct">Correct</label>
                   </div>
                 </div>
               </div>

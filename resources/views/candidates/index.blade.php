@@ -524,7 +524,7 @@
                             <div class="candidate-box">
                                 <div class="candidate-img p-0">
                                     @if ($ca->user->avatar != null)
-                                        <img src="{{ asset('public/storage/' . $ca->user->avatar) }}" alt="profile-img"
+                                        <img src="{{ asset('storage/' . $ca->user->avatar) }}" alt="profile-img"
                                             style="height: 16rem" class="img-fluid w-100">
                                     @else
                                         <img src="{{ asset('images/profile-img.png') }}" alt="profile-img"

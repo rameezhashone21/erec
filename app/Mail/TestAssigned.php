@@ -36,7 +36,7 @@ class TestAssigned extends Mailable
      */
     public function build()
     {
-        $subject = 'Test Assigned';
+        $subject = 'Test Assigjjned';
         return $this->view('emails.testAssigned')->subject($subject);
     }
 }

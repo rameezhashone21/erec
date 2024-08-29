@@ -7,12 +7,14 @@ use Illuminate\Support\Facades\DB;
 use App\Models\CandidateDocs;
 use App\Models\Candidate;
 use App\Models\JobApplications;
+use App\Models\User;
 use App\Models\Posts;
 use Illuminate\Support\Facades\Http;
 use App\Mail\JobApplyCandidate;
 use App\Mail\JobApplyCandidateTestLink;
 use App\Mail\ShortListed;
 use App\Mail\JobApply;
+use App\Models\ExamNotification;
 use Illuminate\Support\Facades\Mail;
 
 
@@ -20,8 +22,7 @@ class JobApplicationController extends Controller
 {
     public function applyNow(Request $request)
     {
-        // dd($request->all());
-        try {
+        // try {
             $user = auth()->user();
             $canDoc = count(auth()->user()->resume);
             $post = Posts::find($request->post_id);
@@ -105,7 +106,7 @@ class JobApplicationController extends Controller
 
                 }
                 $canEmail = $jobApp->candidate->user->email;
-                // $canName = auth()->user()->first_name . ' ' . auth()->user()->last_name;
+                $canId = $jobApp->candidate->user->id;
                 $canName = $jobApp->candidate->first_name.' '.$jobApp->candidate->last_name;
                 $canSlug = $jobApp->candidate->slug;
                 // $canResume = $jobApp->candidate_doc_Id;
@@ -114,22 +115,30 @@ class JobApplicationController extends Controller
                 $postName = $jobApp->post->post;
                 $postSlug = $jobApp->post->slug;
                 $postDesc = $jobApp->post->description;
-
+                
                 // dd($jobApp->post->company->name);
                 if ($jobApp->post->company != null){
                     $email = $jobApp->post->company->user->email;
                     $postedBy = $jobApp->post->company->name;
+                    $posterId = User::where('id',$jobApp->post->company->user_id)->value('id');
                 }
                 elseif($jobApp->post->recruiter != null)
                 {
                     $email = $jobApp->post->recruiter->user->email;
                     $postedBy = $jobApp->post->recruiter->name;
+                    $posterId = User::where('id',$jobApp->post->recruiter->user_id)->value('id');
+                    
                 }
-                // if($jobApp->post->test_id != null)
-                // {
-                //     Mail::to($canEmail)->send(new ShortListed($postName, $canName, $postedBy));
-                // }
-                // dd($canEmail ,'postName:'.$postName, 'canName:'.$canName, 'postSlug:'.$postSlug, 'postDesc:'.$postDesc, 'postedBy:'.$postedBy, 'canSlug:'.$canSlug);
+                $notification = ExamNotification::create([
+                    'content' => auth()->user()->name . " has applied for the postion of " .$postName,
+                    'status'       => "job_apply",
+                    'company_id'       => $posterId,
+                    'job_id'       => $jobApp->post->id,
+                    'receiver_id'       => $posterId,
+                    'sender_id'       => $canId
+                ]);
+                
+
                 if($jobApp->post->test_id == NULL)
                 {
                     $can = Mail::to($canEmail)->send(new JobApplyCandidate($postName, $postSlug, $postDesc, $canName, $postedBy,$email));
@@ -167,13 +176,17 @@ class JobApplicationController extends Controller
 
             // else {
             // }
+            
+           
 
-        } catch (\Throwable $th) {
-            // dd($th);
-            // return redirect()->route('candidates.details')->with('error', $th->getMessage());
-            return redirect()->back()->with('error', $th->getMessage());
-            // dd($th);
-            //throw $th;
-        }
+        // } catch (\Throwable $th) {
+        //     // dd($th);
+        //     // return redirect()->route('candidates.details')->with('error', $th->getMessage());
+        //     return redirect()->back()->with('error', $th->getMessage());
+        //     // dd($th);
+        //     //throw $th;
+        // }
+        
+         
     }
 }

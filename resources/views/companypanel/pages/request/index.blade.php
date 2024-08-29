@@ -8,7 +8,6 @@
 @endsection
 
 @section('content')
-
     {{-- <section> --}}
     <!-- start new box here  -->
     <div class="col-xl-9 col-lg-8">
@@ -16,6 +15,11 @@
             <i class="fa-solid fa-right-left me-3"></i><span>Side Menu</span>
         </button>
         <div class="dashboard_content bg-white rounded_10 p-4" id="msg-btn">
+            @if (session('message'))
+                <div class="alert alert-success">
+                    {{ session('message') }}
+                </div>
+            @endif
             <h2 class="fw-500 text_primary fs-5 mb-4">My Recruiters</h2>
             <div class="row gy-lg-5 gy-4">
                 <div class="col-12">
@@ -48,7 +52,7 @@
                                         <a href="{{ route('recruiter.detail', $row->slug) }}">
                                             {{-- @if ($row->user->banner != null) --}}
                                             @if ($row->user->banner != null)
-                                                <img src="{{ asset('public/storage/' . $row->user->banner) }}"
+                                                <img src="{{ asset('storage/' . $row->user->banner) }}"
                                                     alt="profile-img" class="user_banner img-fluid">
                                             @else
                                                 <img src="{{ asset('dashboard/images/RecruiterSM.png') }}" alt=""
@@ -59,7 +63,7 @@
                                             <a href="{{ route('recruiter.detail', $row->slug) }}">
                                                 {{-- @if ($row->avatar != null) --}}
                                                 @if ($row->avatar != null)
-                                                    <img src="{{ asset('public/storage/' . $row->avatar) }}"
+                                                    <img src="{{ asset('storage/' . $row->avatar) }}"
                                                         alt="profile-img" class="user_logo">
                                                 @else
                                                     <img src="{{ asset('adminpanel/images/avatar/dummy.png') }}"
@@ -68,6 +72,16 @@
                                             </a>
                                             <h2 class="title"><a href="{{ route('recruiter.detail', $row->slug) }}">{{ $row->name }}</a></h2>
                                             <p class="job_type mb-3">No Open Jobs</p>
+                                            <div class="row row-cols-2 button gx__0 gy-3">
+                                                <form class="col" method="get" action="{{route('company.accept',['id' => $row->id])}}">
+                                                @csrf
+                                                <button type="submit" class="view_profile_button d-block w-100 text-center">Accept</button>
+                                                </form>
+                                                <form class="col" method="get" action="{{route('company.reject',['id' => $row->id])}}">
+                                                @csrf
+                                                <button type="submit" class="view_profile_button d-block w-100 text-center">Ignore</button>
+                                                </form>
+                                            </div>
                                             <div class="row row-cols-2 button gx__0 gy-3">
                                                 @if (auth()->user()->role == 'company')
                                                     @if ($row->CompRecRelation(auth()->user()->company->id, $row->id) != null)
@@ -88,12 +102,8 @@
                                                     <a href="{{ route('recruiter.detail', $row->slug) }}"
                                                         class="view_profile_button d-block w-100 text-center">Request sent</a>
                                                     </div> --}}
-                                                <div class="col">
-                                                    <a type="button" class="default-btn w-100 text-center btn-disabled"
-                                                        disabled>Request Sent
-                                                    </a>
-                                                </div>
-                                                <div class="col message__button__mt-0">
+                                                    
+                                                <div class="col message__button__mt-0" style="margin:0 auto;">
                                                     <open-box :openBoxFunction="openBox"
                                                         :id="{{ $row->user->id }}"></open-box>
                                                 </div>
@@ -134,7 +144,7 @@
                                         <a href="{{ route('recruiter.detail', $row->slug) }}">
                                             {{-- @if ($row->user->banner != null) --}}
                                             @if ($row->user->banner != null)
-                                                <img src="{{ asset('public/storage/' . $row->user->banner) }}"
+                                                <img src="{{ asset('storage/' . $row->user->banner) }}"
                                                     alt="profile-img" class="user_banner img-fluid">
                                             @else
                                                 <img src="{{ asset('dashboard/images/RecruiterSM.png') }}" alt=""
@@ -145,7 +155,7 @@
                                             <a href="{{ route('recruiter.detail', $row->slug) }}">
                                                 {{-- @if ($row->avatar != null) --}}
                                                 @if ($row->avatar != null)
-                                                    <img src="{{ asset('public/storage/' . $row->avatar) }}"
+                                                    <img src="{{ asset('storage/' . $row->avatar) }}"
                                                         alt="profile-img" class="user_logo">
                                                 @else
                                                     <img src="{{ asset('adminpanel/images/avatar/dummy.png') }}"
@@ -279,7 +289,7 @@
             <div class="dashboard-card recruiters_box shadow">
                 <div class=" d-flex">
                     <div class="first text-center">
-                        <img class="recruiters_img" src="{{ asset('public/storage/' . $row->avatar) }} " />
+                        <img class="recruiters_img" src="{{ asset('storage/' . $row->avatar) }} " />
                     </div>
                     <div class="second ml-3">
                         <h5 class="recruiters_title">{{ $row->name }}</h5>
@@ -307,7 +317,7 @@
                         <div class="col-md-8">
                         <div class="row">
                             <div class="col-md-4">
-                                <img src="{{ asset('public/storage/' . $row->avatar) }}" width="70px" height="70px" style="border-radius: 70px;"/>
+                                <img src="{{ asset('storage/' . $row->avatar) }}" width="70px" height="70px" style="border-radius: 70px;"/>
                             </div>
                             <div class="col-md-6">
                                 <h4>{{ $row->name }}</h4>

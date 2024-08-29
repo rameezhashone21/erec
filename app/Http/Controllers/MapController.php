@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Posts;
 use App\Models\Candidate;
 use App\Models\JobCategory;
+use App\Models\ExamResult;
 use App\Models\QstQuestions;
 use Illuminate\Http\Request;
 use App\Models\JobApplications;
@@ -177,9 +178,21 @@ class MapController extends Controller
     
     public function smartSearch(Request $request)
     {
-        $jobApp = JobApplications::with('post', 'candidate', 'candidate.jobApplications', 'candidate.jobApplications.post', 'candidate.user', 'candidate.user.candidatePro', 'candidate.user.candidateEdu', 'candidateDocument', 'postComp')->whereHas('post', function ($query) {
-            $query->where('comp_id', auth()->user()->company->id);
-        });
+        $jobApp = JobApplications::with([
+    'examResult',
+    'post',
+    'candidate',
+    'candidate.jobApplications',
+    'candidate.jobApplications.post',
+    'candidate.user',
+    'candidate.user.candidatePro',
+    'candidate.user.candidateEdu',
+    'candidateDocument',
+    'postComp'
+])->whereHas('post', function ($query) {
+    $query->where('comp_id', auth()->user()->company->id);
+});
+        
         if ($request->has('post') && $request->post != null) {
             $post = $request->post;
             $jobApp = $jobApp->whereHas('post', function ($query) use ($post) {
@@ -250,35 +263,14 @@ class MapController extends Controller
                 });
             }
         }
-        // if ($request->has('percentage')) {
-        //     $data = $jobApp->where('qst_id','!=',0)->get();
-        //     $rangePercentage = (int)$request->percentage;
-        //     $ans_array = array();
-        //     foreach ($data as $key => $value) {
-        //         $sum = 0;
-        //         foreach ($value->qst_total_marks as $row) {
-        //             $sum = $sum + $row->value;
-        //         }
-        //     }
-        //     $filteredQuestions = $data->filter(function ($ans) use ($rangePercentage, $sum) {
-        //         if($ans->sec_qstSocre == null)
-        //         {
-        //             return false;
-        //         }
-        //         else
-        //         {
-        //             if ($ans->sec_qstSocre->mark != 0 || $ans->sec_qstSocre->mark != null) {
-        //                 $percentage = ($ans->sec_qstSocre->mark * 100 )/ $sum;
-        //             } else {
-        //                 return false;
-        //             }
-        //         }
-
-        //         return $percentage >= $rangePercentage;
-        //     });
-        //     $pluck_ids = $filteredQuestions->pluck('id')->toArray();
-        //     $jobApp = $jobApp->whereIn('id',$pluck_ids);
-        // }
+        if ($request->has('percentage') && $request->percentage != 0) {
+            $percentage = $request->percentage;
+            
+            $exam_result = ExamResult::select('job_application_id')->where('perentage',$percentage)->get();
+            
+            $jobApp = JobApplications::with('post', 'candidate', 'candidate.jobApplications', 'candidate.jobApplications.post', 'candidate.user', 'candidate.user.candidatePro', 'candidate.user.candidateEdu', 'candidateDocument', 'postComp')->whereIn('id', $exam_result);
+            
+        }
 
         if($request->has('lat') && $request->lat != null && $request->has('lng') && $request->lng != null) {
             $lat = $request->lat;
@@ -324,6 +316,7 @@ class MapController extends Controller
             $jobApp = $jobApp->take(10);
         }
         $jobApp = $jobApp->get();
+        
         return $jobApp;
 
     }

@@ -44,6 +44,56 @@ class CompanyDashboardController extends Controller
         // dd($user->company->features[1]);
         return view('companypanel.pages.profileSetup', compact('user', 'category', 'post'));
     }
+    
+    public function rejectRequest($id)
+    {
+        // dd($id);
+        $comp = CompanyRecRelation::where('rec_id',$id)->first();
+        
+        $company = Company::where('id',$comp->com_id)->value('user_id');
+        $recruiter = Recruiter::where('id',$comp->rec_id)->value('user_id');
+                
+        $company_user_id = User::where('id',$company)->value('id');
+        $recruiter_user_id = User::where('id',$recruiter)->value('id');
+        
+        //dd($recruiter_user_id);
+
+        $notification = ExamNotification::create([
+            'content' => auth()->user()->name . " has rejected Your Connection Request",
+            'status'       => "Recruiter Connection Request Rejected",
+            'receiver_id'       => $recruiter_user_id,
+            'sender_id'       => $company_user_id
+        ]);
+        
+        $comp->delete();
+                
+        return redirect()->back()->with('message', 'Request Ignored');
+    }
+    public function AcceptRequest($id)
+    {
+        $comp = CompanyRecRelation::where('rec_id',$id)->first();
+        $comp->status = 1;
+        $comp->save();
+        
+
+        $company = Company::where('id',$comp->com_id)->value('user_id');
+        $recruiter = Recruiter::where('id',$comp->rec_id)->value('user_id');
+                
+        $company_user_id = User::where('id',$company)->value('id');
+        $recruiter_user_id = User::where('id',$recruiter)->value('id');
+        
+        //dd($recruiter_user_id);
+
+        $notification = ExamNotification::create([
+            'content' => auth()->user()->name . " has accepted Your Connection Request",
+            'status'       => "Recruiter Connection Request Accepted",
+            'receiver_id'       => $recruiter_user_id,
+            'sender_id'       => $company_user_id
+        ]);
+        
+        return redirect()->back()->with('message', 'Request Accepted');
+    }
+    
     public function profileUpdate(Request $request)
     {
         // dd($request->toArray());
@@ -305,7 +355,7 @@ class CompanyDashboardController extends Controller
                 $post->expiry_date = \Carbon\Carbon::parse($data['expiry_date'])->format('Y-m-d');
                 $post->key_responsibility = $data['key_responsibility'];
                 $post->skill_exp = $data['skill_exp'];
-                if ($request->has('test_attached') && $request->test_attached == 1) {
+                if ($request->test_id != null) {
                     // Get exam id from slug
                     $exam = Exam::select('id')->where([
                         'id'       => $data['test_id'],
@@ -315,12 +365,12 @@ class CompanyDashboardController extends Controller
                     if ($request->has('test_id')) {
                         $post->test_id = $exam->id;
                     }
-                    if ($request->has('criteria')) {
-                        $post->criteria = $data['criteria'];
-                    }
+                    // if ($request->has('criteria')) {
+                    //     $post->criteria = $data['criteria'];
+                    // }
                 } else {
                     $post->test_id = null;
-                    $post->criteria = null;
+                    //$post->criteria = null;
                 }
                 $post->offer_salary = $data['offer_salary'];
                 $post->location = $data['address'];
@@ -403,7 +453,7 @@ class CompanyDashboardController extends Controller
         // $test = Http::get('https://api.e-rec.com.au/api/qst/to/classes', [
         //     'class_id' => $post->class_id,
         // ]);
-        $test = Exam::all();
+        $test = Exam::where('company_id',auth()->user()->company->id)->where('status',1)->get();
         $test_id = $test;
         // dd($test_id);
         $skill = Skills::all();
@@ -619,9 +669,9 @@ class CompanyDashboardController extends Controller
                 if ($request->has('test_id')) {
                     $post->test_id = $data['test_id'];
                 }
-                if ($request->has('criteria')) {
-                    $post->criteria = $data['criteria'];
-                }
+                // if ($request->has('criteria')) {
+                //     $post->criteria = $data['criteria'];
+                // }
                 $jobApp = JobApplications::where('post_id', $post->id)->get();
                 foreach ($jobApp as $row) {
                     $jobApp = JobApplications::find($row->id)->id;
@@ -640,7 +690,7 @@ class CompanyDashboardController extends Controller
                 }
             } else {
                 $post->test_id = null;
-                $post->criteria = null;
+                //$post->criteria = null;
             }
             // $post->test_attached = $data['test_attached'];
             // if ($request->has('criteria')) {
@@ -798,9 +848,10 @@ class CompanyDashboardController extends Controller
         $id = Posts::whereSlug($id)->first()->id;
         $post = Posts::with('jobAppRecComp', 'skills', 'company')->find($id);
         // dd($post->toArray());
-        $job = Posts::with('jobAppRecComp', 'skills', 'company')->whereHas('jobAppRecComp', function ($query) {
-            $query->whereIn('status', ["1","2"]);
-        })->find($id);
+        $job = Posts::with(['jobAppRecComp' => function ($query) {
+                $query->whereIn('status', ["1","2"]);
+                }, 'skills', 'company'])->find($id);
+        
         return view('companypanel.pages.jobs.jobs_shortlisted', compact('post', 'job'));
     }
     public function examResultComp($id)
@@ -885,35 +936,15 @@ class CompanyDashboardController extends Controller
                 });
             }
         }
-        // if ($request->has('percentage')) {
-        //     $data = $jobApp->where('qst_id','!=',0)->get();
-        //     $rangePercentage = (int)$request->percentage;
-        //     $ans_array = array();
-        //     foreach ($data as $key => $value) {
-        //         $sum = 0;
-        //         foreach ($value->qst_total_marks as $row) {
-        //             $sum = $sum + $row->value;
-        //         }
-        //     }
-        //     $filteredQuestions = $data->filter(function ($ans) use ($rangePercentage, $sum) {
-        //         if($ans->sec_qstSocre == null)
-        //         {
-        //             return false;
-        //         }
-        //         else
-        //         {
-        //             if ($ans->sec_qstSocre->mark != 0 || $ans->sec_qstSocre->mark != null) {
-        //                 $percentage = ($ans->sec_qstSocre->mark * 100 )/ $sum;
-        //             } else {
-        //                 return false;
-        //             }
-        //         }
-
-        //         return $percentage >= $rangePercentage;
-        //     });
-        //     $pluck_ids = $filteredQuestions->pluck('id')->toArray();
-        //     $jobApp = $jobApp->whereIn('id',$pluck_ids);
-        // }
+        
+        if ($request->has('percentage') && $request->percentage != 0) {
+            $percentage = $request->percentage;
+            
+            $exam_result = ExamResult::select('job_application_id')->where('perentage',$percentage)->get();
+            
+            $jobApp = JobApplications::whereIn('id', $exam_result);
+            
+        }
 
         if ($request->has('lat') && $request->lat != null && $request->has('lng') && $request->lng != null) {
             $lat = $request->lat;

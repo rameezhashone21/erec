@@ -19,6 +19,8 @@
           <span class="header-text-color header-text-bg" id="demo">00m 00s</span>
         </div>
         <button class="primary-button" id="startButton" onclick="hideInstruction()">START TEST</button>
+        <button id="triggerButton" class="primary-button d-none">SUBMIT TEST</button>
+
       </nav>
       <div class="col-md-1 text-end">
         <img src="{{ asset('assets/images/test/headerdesign2.png') }}" alt="" />
@@ -125,7 +127,7 @@
         @endforelse
         <input type="hidden" name="exam" value="{{ $exam->slug }}">
         <input type="hidden" name="jobApplicationId" value="{{ $jobApplicationId }}">
-        <button class="primary-button px-5 py-2 rounded-1 mt-5">
+        <button class="primary-button px-5 py-2 rounded-1 mt-5 main">
           SUBMIT TEST
         </button>
       </form>
@@ -231,6 +233,14 @@
     });
 
 function hideInstruction() {
+
+  var startbutton = document.getElementById('startButton');
+  startbutton.style.display = 'none'; // Hides the start button
+  
+  
+  var attemptbutton = document.getElementById('triggerButton');
+  attemptbutton.classList.remove("d-none"); // Show the Submit button
+  
   var show_test_instructions = document.getElementById("test_instructions");
   if (show_test_instructions.style.display === "none") {
     show_test_instructions.style.display = "block";
@@ -239,4 +249,13 @@ function hideInstruction() {
   }
 }
   </script>
+  
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // jQuery to handle the click event of the outside button
+        $('#triggerButton').on('click', function() {
+            // Trigger a click event on the button inside the form
+            $('#myForm .main').click();
+        });
+    </script>
 @endsection

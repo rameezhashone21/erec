@@ -437,9 +437,10 @@
                             {{-- </li>
                             </ul> --}}
                             @php
-                             $notifications = App\Models\ExamNotification::latest('id','asc')->where('user_id',Auth::user()->id)->take(5)->get();
-                             $unread_notifications_count = App\Models\ExamNotification::latest('id','asc')->where('read',0)->where('user_id',Auth::user()->id)->take(5)->get();
+                             $notifications = App\Models\ExamNotification::latest('id','asc')->where('receiver_id',Auth::user()->id)->take(5)->get();
+                             $unread_notifications_count = App\Models\ExamNotification::latest('id','asc')->where('read',0)->where('receiver_id',Auth::user()->id)->take(5)->get();
                             @endphp
+
                             <div class="dropdown d-none d-lg-block">
                                 <a class="text_dark_292929" href="#"
                                     role="button" id="notificationsDropdown" data-bs-toggle="dropdown"
@@ -458,31 +459,54 @@
                                             <a href={{route("company.markNotificationsRead")}} class='fs-14 text_primary onhover_text-decoration'> Mark as all read </a>
                                         </div> 
                                     </li>
+
                                     @if(!$notifications->isEmpty())
                                     @foreach($notifications as $notification)
                                     {{-- Unread Notifications --}}
+                                    
+                                    @php
+                                        $candidate_banner = App\Models\User::where('id',$notification->sender_id)->value('avatar');
+                                    @endphp
+                                    
                                     @if($notification->read == 0) 
                                     <li>
+                                        @if($notification->status == "exam_status" || $notification->status == "job_apply")
                                         <a class="dropdown-item fs-12 d-flex align-items-center" style="background-color: #f5f5f5;"
-                                            href="{{ route('company.job.applicantsById', ['id' => $notification->job_id, 'notification_id' => $notification->id]) }}">
-                                                <span>
-                                                    <img src='https://backend.hostingladz.com/webapp/erec/public/storage/companyLogo/img/2024-08-05_.84.142857142857_.jpg' alt='' class='profile_thumb me-2 rounded-50' />
-                                                </span>
-                                                <span style='white-space: normal;'>{{$notification->content}}
-                                                </span>
-                                        </a>
+                                            href="{{ route('company.job.applicantsById', ['id' => $notification->job_id , 'notification_id' => $notification->id]) }}">
+                                        <span>
+                                            <img src='{{asset('storage/'.$candidate_banner)}}' alt='' class='profile_thumb me-2 rounded-50' />
+                                        </span>
+                                        <span style='white-space: normal;'>{{$notification->content}}</span>   
+                                        @elseif($notification->status == "Company Connection Request Accepted" || $notification->status == "Company Connection Request Rejected" ||
+                                        $notification->status == "Recruiter Connection Request" || $notification->status == "Recruiter Connection Request" )
+                                        <a class="dropdown-item fs-12 d-flex align-items-center"
+                                            href="{{route('notificationRead', ['id' => $notification->id])}}" style="background-color: #f5f5f5;">
+                                        <span>
+                                            <img src='{{asset('storage/'.$candidate_banner)}}' alt='' class='profile_thumb me-2 rounded-50' />
+                                        </span>
+                                        <span style='white-space: normal;'>{{$notification->content}}</span>    
+                                        @endif
                                     </li>
                                     {{-- Read Notifications --}}
                                     @else
                                     <li>
+                                        @if($notification->status == "exam_status" || $notification->status == "job_apply")
                                         <a class="dropdown-item fs-12 d-flex align-items-center"
                                             href="{{ route('company.job.applicantsById', ['id' => $notification->job_id , 'notification_id' => $notification->id]) }}">
-                                                <span>
-                                                    <img src='https://backend.hostingladz.com/webapp/erec/public/storage/companyLogo/img/2024-08-05_.84.142857142857_.jpg' alt='' class='profile_thumb me-2 rounded-50' />
-                                                </span>
-                                                <span style='white-space: normal;'>{{$notification->content}}
-                                                </span>
-                                        </a>
+                                        <span>
+                                            <img src='{{asset('storage/'.$candidate_banner)}}' alt='' class='profile_thumb me-2 rounded-50' />
+                                        </span>
+                                        <span style='white-space: normal;'>{{$notification->content}}</span>   
+                                        @elseif($notification->status == "Company Connection Request Accepted" || $notification->status == "Company Connection Request Rejected" ||
+                                        $notification->status == "Recruiter Connection Request" || $notification->status == "Recruiter Connection Request")
+                                        <a class="dropdown-item fs-12 d-flex align-items-center"
+                                            href="{{route('notificationRead', ['id' => $notification->id])}}">
+                                        <span>
+                                            <img src='{{asset('storage/'.$candidate_banner)}}' alt='' class='profile_thumb me-2 rounded-50' />
+                                        </span>
+                                        <span style='white-space: normal;'>{{$notification->content}}</span>    
+
+                                        @endif
                                     </li>
                                     @endif
                                     @endforeach
@@ -494,7 +518,7 @@
                                     </li>
                                     @endif
                                     
-                                    <li class='p-2 mx-3 text-center'>
+                                    <li class='text-center'>
                                         <a href="{{route('company.allNotifications')}}" class='fs-14 text_primary onhover_text-decoration'> See all notifications </a>
                                     </li>
 

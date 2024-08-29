@@ -23,7 +23,7 @@
                 </li>
                 <li class='col'>
                     <a href="{{ route('recruiter.job.applicants', $post->slug) }}"
-                        @if (Route::is('recruiter.job.applicants', $post->slug)) class="active" @endif>Applicants</a>
+                        @if (Route::is('recruiter.job.applicants', $post->slug) || Route::is('recruiter.job.applicantsById', $post->slug)) class="active" @endif>Applicants</a>
                 </li>
                 <li class='col'>
                     <a href="{{ route('recruiter.job.shortlisted', $post->slug) }}"

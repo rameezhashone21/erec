@@ -5,14 +5,50 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use App\Models\Recruiter;
+use App\Models\ExamNotification;
 use App\Models\CompanyRecRelation;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ConnectionRequest;
+use DB;
 
 class RequestController extends Controller
 {
+    
+    public function markConnectionNotificationRead($id)
+    {
+        $notification = DB::table('exam_notifications')
+              ->where('id', $id)
+              ->first();
+              
+        $markRead = DB::table('exam_notifications')
+              ->where('id', $id)
+              ->update(['read' => 1]);
+        
+        //dd($notification->status);     
+        if($notification->status == "Company Connection Request Accepted" || $notification->status == "Company Connection Request Rejected"  ||
+        $notification->status == "Recruiter Connection Request" || $notification->status == "Recruiter Connection Request")
+        {
+            return redirect()->route('company.recruiters');
+        }
+        elseif($notification->status == "Recruiter Connection Request Accepted" || $notification->status == "Recruiter Connection Request Rejected" ||
+        $notification->status == "Company Connection Request" || $notification->status == "Company Connection Request"){
+            return redirect()->route('recruiter.companyIndex');
+
+        }
+              
+    }
+    
+    public function recruiterMarknotificationRead($id)
+    {
+
+        $markNotificationread = DB::table('exam_notifications')
+              ->where('id', $id)
+              ->update(['read' => 1]);
+        
+        return redirect()->route('company.recruiters');
+    }
     //
     public function recruiter()
     {
@@ -92,6 +128,19 @@ class RequestController extends Controller
         // $compId = auth()->user()->id;
         $confirm = $relation->id;
 
+        $company = Company::where('id',auth()->user()->company->id)->value('user_id');
+        $recruiter = Recruiter::where('id',$id)->value('user_id');
+                
+        $company_user_id = User::where('id',$company)->value('id');
+        $recruiter_user_id = User::where('id',$recruiter)->value('id');
+
+        $notification = ExamNotification::create([
+            'content' => auth()->user()->name . " has send You Connection Request",
+            'status'       => "Company Connection Request",
+            'receiver_id'       => $recruiter_user_id,
+            'sender_id'       =>  $company_user_id
+        ]);
+
         $mail = Mail::to($email)->send(new ConnectionRequest($sender, $reciever, $confirm));
 
         return redirect()->back();
@@ -112,6 +161,19 @@ class RequestController extends Controller
         $reciever = $comp->name;
         // $compId = auth()->user()->id;
         $confirm = $relation->id;
+        
+        $company = Company::where('id',$id)->value('user_id');
+        $recruiter = Recruiter::where('id',auth()->user()->recruiter->id)->value('user_id');
+                
+        $company_user_id = User::where('id',$company)->value('id');
+        $recruiter_user_id = User::where('id',$recruiter)->value('id');
+
+        $notification = ExamNotification::create([
+            'content' => auth()->user()->name . " has send You Connection Request",
+            'status'       => "Recruiter Connection Request",
+            'receiver_id'       => $company_user_id,
+            'sender_id'       =>   $recruiter_user_id
+        ]);
 
         $mail = Mail::to($email)->send(new ConnectionRequest($sender, $reciever, $confirm));
 

@@ -23,7 +23,7 @@
                         <div class="progress_card shadow p-4">
                             <div class="row">
                                 <div class="col-md-3 pe-0 text-center">
-                                    <img src="{{ asset('public/storage/' . $row->company->logo) }}" width="70px"
+                                    <img src="{{ asset('storage/' . $row->company->logo) }}" width="70px"
                                         height="70px" style="border-radius: 70px;" />
                                 </div>
                                 <div class="col-md-9">
@@ -83,14 +83,14 @@
                                 <div class="new-recruter-box d-flex flex-column">
                                     {{-- {{ dd($row->company->user->banner) }} --}}
                                     @if (isset($row->company->user->banner))
-                                        <img src="{{ asset('public/storage/' . $row->company->user->banner) }}"
+                                        <img src="{{ asset('storage/' . $row->company->user->banner) }}"
                                             alt="profile-img" class="user_banner img-fluid">
                                     @else
                                         <img src="{{ asset('dashboard/images/Company.png') }}" alt=""
                                             class="user_banner img-fluid">
                                     @endif
                                     @if ($row->company->logo != null)
-                                        <img src="{{ isset($row->company->logo) ? asset('public/storage/' . $row->company->logo) : asset('images/profile-img.png') }}"
+                                        <img src="{{ isset($row->company->logo) ? asset('storage/' . $row->company->logo) : asset('images/profile-img.png') }}"
                                             alt="profile-img" class="user_logo">
                                     @else
                                         <img src="{{ asset('adminpanel/images/avatar/dummy.png') }}" alt="profile-img"
@@ -213,14 +213,14 @@
                         <div class="new-recruter-box d-flex flex-column">
                             {{-- {{ dd($row->company->user->banner) }} --}}
                             @if (isset($row->company->user->banner))
-                                <img src="{{ asset('public/storage/' . $row->company->user->banner) }}" alt="profile-img"
+                                <img src="{{ asset('storage/' . $row->company->user->banner) }}" alt="profile-img"
                                     class="user_banner img-fluid">
                             @else
                                 <img src="{{ asset('dashboard/images/Company.png') }}" alt=""
                                     class="user_banner img-fluid">
                             @endif
                             @if ($row->company->logo != null)
-                                <img src="{{ isset($row->company->logo) ? asset('public/storage/' . $row->company->logo) : asset('images/profile-img.png') }}"
+                                <img src="{{ isset($row->company->logo) ? asset('storage/' . $row->company->logo) : asset('images/profile-img.png') }}"
                                     alt="profile-img" class="user_logo">
                             @else
                                 <img src="{{ asset('adminpanel/images/avatar/dummy.png') }}" alt="profile-img"
@@ -360,7 +360,7 @@
                                         <div class="col-md-8">
                                             <div class="row">
                                                 <div class="col-md-4">
-                                                    <img src="{{ asset('public/storage/'.$row->company->logo) }}" width="70px" height="70px" style="border-radius: 70px;"/>
+                                                    <img src="{{ asset('storage/'.$row->company->logo) }}" width="70px" height="70px" style="border-radius: 70px;"/>
                                                 </div>
                                                 <div class="col-md-8">
                                                     <h4 class="mb-2">{{ $row->company->name }}</h4>

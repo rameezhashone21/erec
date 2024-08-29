@@ -83,6 +83,7 @@
                                                 </p>
                                                 <p style="line-height: 140%;">
                                                     Best Regards, </br>
+                                                    <a href="mailto:support@mail.e-rec.com.au">Email Support</a></br>
                                                     E-REC Support Team
                                                 </p>
                                             </div>

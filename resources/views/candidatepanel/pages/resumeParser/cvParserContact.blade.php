@@ -48,7 +48,7 @@
                                     <div class="avatar-preview">
                                         @if ($contact->contact->cv_profile != null)
                                             <div id="imagePreview"
-                                                style="background-image: url({{ asset('public/storage/' . $contact->contact->cv_profile) }});">
+                                                style="background-image: url({{ asset('storage/' . $contact->contact->cv_profile) }});">
                                             </div>
                                         @else
                                             <div id="imagePreview"
@@ -145,10 +145,10 @@
                         </div>
                         <div class="cv-view-body position-relative">
                             @if ($contact->contact->cv_profile != null)
-                                <img src="{{ asset('storage/' . $contact->contact->cv_profile) }}" alt="profile"
+                                <img src="https://backend.hostingladz.com/webapp/erec/public/storage/candidateAvatar/img/2024-08-23_.66.428571428571_.png" alt="prof1"
                                     class="cv-view-profile-image">
                             @else
-                                <img src="{{ asset('/images/image_preview_noimage.png') }}" alt="profile"
+                                <img src="{{ asset('/images/image_preview_noimage.png') }}" alt="profile1"
                                     class="cv-view-profile-image">
                             @endif
                             <div class="row">

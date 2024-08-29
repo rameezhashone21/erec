@@ -16,6 +16,7 @@ class ExamNotification extends Model
         'content',
         'status',
         'read',
-        'user_id',
+        'receiver_id',
+        'sender_id'
     ];
 }

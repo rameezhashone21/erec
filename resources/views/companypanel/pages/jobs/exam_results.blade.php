@@ -55,7 +55,7 @@
                     <td>{{ ++$key }}. </td>
                     <td>{{ $row->candidate->first_name }} {{ $row->candidate->last_name }}</td>
                     <td>
-                      <a href="{{ asset('public/candidateDoc/doc/' . $row->candidateDocument->document) }}"
+                      <a href="{{ asset('candidateDoc/doc/' . $row->candidateDocument->document) }}"
                         target="_blank" class='text-decoration-underline d-flex text-dark'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="27.5" height="27.5" viewBox="0 0 27.5 27.5">
                           <g id="document-pdf" transform="translate(-2.25 -2.25)">
@@ -76,7 +76,7 @@
                         <span class='align-self-end ms-1'>
                           Click to view
                           {{-- <a class='px-4 py-2 progress_card d-block rounded-3'
-                                                        href="{{ asset('public/candidateDoc/doc/' . $item->document) }}"
+                                                        href="{{ asset('candidateDoc/doc/' . $item->document) }}"
                                                         target="_blank"> --}}
                         </span>
                       </a>

@@ -6,16 +6,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Select2 Custom No Results</title>
-  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/css/select2.min.css" rel="stylesheet" /> -->
-  <!-- <style>
-    .select2-results__option--add-new {
-      color: #007bff;
-      cursor: pointer;
+  <style>
+    .hidden {
+      display: none;
     }
-    .select2-results__option--add-new:hover {
-      text-decoration: underline;
-    }
-  </style> -->
+  </style>
 </head>
 
 @section('content')
@@ -729,20 +724,22 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group set-cross-icon d-none" id="criteria">
-                            <label for="criteria" class="form-label fs-14 text-theme-primary fw-bold">Test Passing
-                                Criteria</label>
-                            <select name="criteria" class="select2-multiple form-control fs-14 h-50px">
-                                <option selected disabled value="">Select Test Passing Criteria</option>
-                                <option value="50+">50+</option>
-                                <option value="60+">60+</option>
-                                <option value="70+">70+</option>
-                                <option value="80+">80+</option>
-                                <option value="90+">90+</option>
-                            </select>
-                        </div>
-                    </div> --}}
+                    sdasds
+                    <!--<div class="col-md-6">-->
+                    <!--    <div class="form-group set-cross-icon d-none" id="criteria">-->
+                    <!--        <label for="criteria" class="form-label fs-14 text-theme-primary fw-bold">Test Passing-->
+                    <!--            Criteria</label>-->
+                    <!--        <select name="criteria" class="select2-multiple form-control fs-14 h-50px">-->
+                    <!--            <option selected disabled value="">Select Test Passing Criteria</option>-->
+                    <!--            <option value="50+">50+</option>-->
+                    <!--            <option value="60+">60+</option>-->
+                    <!--            <option value="70+">70+</option>-->
+                    <!--            <option value="80+">80+</option>-->
+                    <!--            <option value="90+">90+</option>-->
+                    <!--        </select>-->
+                    <!--    </div>-->
+                    <!--</div> -->
+                    --}}
           <div class="col-md-6">
             <div class="form-group set-cross-icon">
               <label for="name" class="form-label fs-14 text-theme-primary fw-bold">Job Type*</label>
@@ -971,25 +968,28 @@
             <div class="form-group set-cross-icon d-none" id="testBox">
               <label for="test_id" class="form-label fs-14 text-theme-primary fw-bold">Attach a
                 test*</label>
-              <select name="test_id" class="select2-multiple form-control fs-14  h-50px">
+              <select name="test_id" id="assign_test" class="select2-multiple form-control fs-14  h-50px">
                 <option selected disabled value="">Select Test</option>
               </select>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="form-group set-cross-icon d-none" id="criteria">
-              <label for="criteria" class="form-label fs-14 text-theme-primary fw-bold">Test Passing
-                Criteria</label>
-              <select name="criteria" class="select2-multiple form-control fs-14 h-50px">
-                <option selected disabled value="">Select Test Passing Criteria</option>
-                <option value="50">50+</option>
-                <option value="60">60+</option>
-                <option value="70">70+</option>
-                <option value="80">80+</option>
-                <option value="90">90+</option>
-              </select>
-            </div>
+          <div id="createtest" class="hidden">
+              <a id="g" href="">Add a new test</a>
           </div>
+          <!--<div class="col-md-6">-->
+          <!--  <div class="form-group set-cross-icon d-none" id="criteria">-->
+          <!--    <label for="criteria" class="form-label fs-14 text-theme-primary fw-bold">Test Passing-->
+          <!--      Criteria</label>-->
+          <!--    <select name="criteria" class="select2-multiple form-control fs-14 h-50px">-->
+          <!--      <option selected disabled value="">Select Test Passing Criteria</option>-->
+          <!--      <option value="50">50+</option>-->
+          <!--      <option value="60">60+</option>-->
+          <!--      <option value="70">70+</option>-->
+          <!--      <option value="80">80+</option>-->
+          <!--      <option value="90">90+</option>-->
+          <!--    </select>-->
+          <!--  </div>-->
+          <!--</div>-->
           <div class="col-12">
             <div class="form-group">
               <button type="submit" class="btn_viewall fw-500 px-4 py-2 d-inline-block"> Post A Job
@@ -1030,12 +1030,46 @@
 
     function enableField() {
       
-      // console.log($('#test_attached').val());
       if ($('#test_attached').val() == '1') {
-
+          
+        // Make the test selection dropdow required
+        var dropdownElement = document.getElementById('assign_test');
+        dropdownElement.setAttribute('required', true);
+        
         $('#testBox').removeClass('d-none');
         $('#criteria').removeClass('d-none');
+
+        var id = $('#class_id').val();
+        var user_id = $('#user_id').val();
+     
+        
+            $.ajax({
+                url: '{{ route('company.get.testCreate') }}',
+                method: 'GET',
+                data: {
+                    id: id,  // Parameters to send along with the request
+                    user_id: user_id
+                },
+                success: function(response) {
+                    console.log("ll",response.length)
+                    if(response.length == 0)
+                    {
+                        console.log("ssss");
+                        document.getElementById('createtest').classList.remove('hidden');
+                        $('#g').html('<a href="{{route('company.exam.create')}}">Add a new test</a></div>')
+                    }
+                },
+            });
+
+        
       } else {
+          
+        // Make the test selection dropdow required
+        $('#assign_test').removeAttr('required');
+
+        document.getElementById('createtest').classList.add('hidden');
+
+        
         $('#testBox').addClass('d-none');
         $('#criteria').addClass('d-none');
 
@@ -1045,6 +1079,8 @@
         sorter: data => data.sort((a, b) => a.text.localeCompare(b.text)),
         // allowClear: true
       });
+      
+      
     }
 
     function testFillBox() {
@@ -1078,6 +1114,7 @@
             html += "<option value='" + value['id'] + "'>" + value['exam_title'] + "</option>";
           });
           html += "</select>";
+          
           $('#testBox').html('');
           $('#testBox').html(html);
         })

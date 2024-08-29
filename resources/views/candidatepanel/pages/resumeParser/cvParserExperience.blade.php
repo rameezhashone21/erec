@@ -216,10 +216,10 @@
                         </div>
                         <div class="cv-view-body position-relative">
                             @if ($exp->contact->cv_profile != null)
-                                <img src="{{ asset('storage/' . $exp->contact->cv_profile) }}" alt="profile"
+                                <img src="{{ asset('storage/' . $exp->contact->cv_profile) }}" alt="profile4"
                                     class="cv-view-profile-image">
                             @else
-                                <img src="{{ asset('/images/image_preview_noimage.png') }}" alt="profile"
+                                <img src="{{ asset('/images/image_preview_noimage.png') }}" alt="profile4"
                                     class="cv-view-profile-image">
                             @endif
                             <div class="row">

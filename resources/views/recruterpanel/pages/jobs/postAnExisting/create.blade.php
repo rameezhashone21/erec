@@ -870,9 +870,10 @@
                                 <option></option>
                                 @if ($data != null)
                                     @foreach ($data as $row)
-                                        <option value="{{ $row['class_id'] }}"
-                                            @if ($post->class_id == $row['class_id']) Selected @endif>
-                                            {{ $row['class_name'] }}
+                                        
+                                        <option value="{{ $row['id'] }}" 
+                                            {{ $row['id'] == $selected_job->id ? 'selected' : '' }}>
+                                            {{ $row['title'] }}
                                         </option>
                                     @endforeach
                                 @endif
