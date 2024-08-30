@@ -18,6 +18,7 @@ class Exam extends Model
    * @var array
    */
   protected $fillable = [
+    'recruiter_id',
     'company_id',
     'exam_title',
     'slug',

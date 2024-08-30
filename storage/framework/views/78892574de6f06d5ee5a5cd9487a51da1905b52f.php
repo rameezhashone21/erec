@@ -1,12 +1,9 @@
-@extends('companypanel.layout.app')
+<?php $__env->startSection('page_title', 'E-Rec Map'); ?>
 
-@section('page_title', 'E-Rec Map')
-
-@section('head_style')
+<?php $__env->startSection('head_style'); ?>
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <style>
-    
         #map_wrapper_div {
             height: 400px;
         }
@@ -20,21 +17,11 @@
             display: none;
         }
     </style>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
-<style>
-        .bg-theme-secondary1{
-            background-color: #f9f9f9 !important;
-            height: 40px !important;
-    }
+<?php $__env->startSection('content'); ?>
+
     
-    .edit_arrow{
-        padding-top:5px !important;
-        margin-top:5px !important;
-    }
-</style>
-    {{-- <div class="col-xl-9 col-lg-8 col-md-7"> --}}
     <div class="col-12">
         <div class="dashboard_content bg-white rounded_10 p-md-4 p-2">
             <form class="map-filter-form" id="smart-search">
@@ -45,10 +32,10 @@
                         </div>
                         <h3 class="primary-color fs-2 border-bottom-2-blue py-3 mb-3"></h3>
                         <div class="row row-cols-md-3 row-cols-1 gy-4 gx-2 pb-3 mb-3 border-bottom map__form__input">
-                            @csrf
+                            <?php echo csrf_field(); ?>
                             <div class="col">
                                 <label for="location" class="mb-2 fw-600">Location</label>
-                                {{-- <button id="myButton">My button</button> --}}
+                                
                                 <div class="position-relative">
                                     <div class="form__icon">
                                         <svg id="Group_2720" data-name="Group 2720" xmlns="http://www.w3.org/2000/svg"
@@ -64,63 +51,49 @@
                                         class="form-control input_with_icon fs-14 bg-theme-secondary">
                                     <input type="hidden" name="lat" id="lat" value="" />
                                     <input type="hidden" name="lng" id="lng" value="" />
-                                    {{-- <button type="button" class="resetVal1" id="clearInput">X</button> --}}
+                                    
                                 </div>
                             </div>
                             <div class="col">
                                 <label for="jobCategory" class="mb-2 fw-600">All Jobs</label>
                                 <div class="position-relative">
-                                    <!--<div class="form__icon">-->
-                                    <!--    <svg xmlns="http://www.w3.org/2000/svg" width="15.095" height="15.176"-->
-                                    <!--        viewBox="0 0 15.095 15.176">-->
-                                    <!--        <path id="Path_3283" data-name="Path 3283"-->
-                                    <!--            d="M103.032,78.4a1.361,1.361,0,0,0-1.174,1.476v.632H99.174A1.361,1.361,0,0,0,98,81.981V92.1a1.361,1.361,0,0,0,1.174,1.476H108.9a.456.456,0,0,0,.36-.182.752.752,0,0,0,0-.9.456.456,0,0,0-.36-.182H99.174c-.1,0-.168-.083-.168-.211V87.672h4.282a1.582,1.582,0,0,0,1.42,1.265h1.677a1.582,1.582,0,0,0,1.42-1.265h4.282V92.1c0,.128-.066.211-.168.211a.456.456,0,0,0-.36.182.752.752,0,0,0,0,.9.456.456,0,0,0,.36.182,1.361,1.361,0,0,0,1.174-1.476V81.981a1.361,1.361,0,0,0-1.174-1.476h-2.684v-.632a1.361,1.361,0,0,0-1.174-1.476Zm0,1.265h5.032c.1,0,.168.083.168.211v.632h-5.367v-.632c0-.128.066-.211.168-.211ZM99.174,81.77h12.747c.1,0,.168.083.168.211v4.426h-4.282a1.589,1.589,0,0,0-1.42-1.265h-1.677a1.589,1.589,0,0,0-1.42,1.265H99.007V81.981c0-.128.066-.211.168-.211Zm5.535,4.637h1.677a.649.649,0,0,1,0,1.265h-1.677a.649.649,0,0,1,0-1.265Zm5.7,5.9a.649.649,0,1,0,.5.632A.579.579,0,0,0,110.411,92.309Z"-->
-                                    <!--            transform="translate(-98 -78.398)" fill="#aba6ac" />-->
-                                    <!--    </svg>-->
-                                    <!--</div>-->
-                                    <select name="post" id="jobCategory" class="select2 form-select fs-14 bg-theme-secondary">
+                                    <select name="post" id="jobCategory" class="form-select fs-14 bg-theme-secondary">
                                         <option value="" disabled selected>-- Select Job Post --</option>
-                                        @foreach ($post as $row)
-                                            <option value="{{ $row->id }}">{{ $row->post }}</option>
-                                        @endforeach
+                                        <?php $__currentLoopData = $post; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($row->id); ?>"><?php echo e($row->post); ?></option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
-                                    <button type="button" class="resetVal1" id="jobCategoryclear" style="display: none;">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </button>
+                                    <button type="button" class="resetVal1" id="jobCategoryclear" style="display: none;"><i
+                                            class="fa-solid fa-xmark"></i></button>
                                 </div>
                             </div>
                             <div class="col">
                                 <label for="category" class="mb-2 fw-600">Category</label>
                                 <div class="position-relative">
-                                    <!--<div class="form__icon">-->
-                                    <!--    <svg xmlns="http://www.w3.org/2000/svg" width="15.095" height="15.176"-->
-                                    <!--        viewBox="0 0 15.095 15.176">-->
-                                    <!--        <path id="Path_3283" data-name="Path 3283"-->
-                                    <!--            d="M103.032,78.4a1.361,1.361,0,0,0-1.174,1.476v.632H99.174A1.361,1.361,0,0,0,98,81.981V92.1a1.361,1.361,0,0,0,1.174,1.476H108.9a.456.456,0,0,0,.36-.182.752.752,0,0,0,0-.9.456.456,0,0,0-.36-.182H99.174c-.1,0-.168-.083-.168-.211V87.672h4.282a1.582,1.582,0,0,0,1.42,1.265h1.677a1.582,1.582,0,0,0,1.42-1.265h4.282V92.1c0,.128-.066.211-.168.211a.456.456,0,0,0-.36.182.752.752,0,0,0,0,.9.456.456,0,0,0,.36.182,1.361,1.361,0,0,0,1.174-1.476V81.981a1.361,1.361,0,0,0-1.174-1.476h-2.684v-.632a1.361,1.361,0,0,0-1.174-1.476Zm0,1.265h5.032c.1,0,.168.083.168.211v.632h-5.367v-.632c0-.128.066-.211.168-.211ZM99.174,81.77h12.747c.1,0,.168.083.168.211v4.426h-4.282a1.589,1.589,0,0,0-1.42-1.265h-1.677a1.589,1.589,0,0,0-1.42,1.265H99.007V81.981c0-.128.066-.211.168-.211Zm5.535,4.637h1.677a.649.649,0,0,1,0,1.265h-1.677a.649.649,0,0,1,0-1.265Zm5.7,5.9a.649.649,0,1,0,.5.632A.579.579,0,0,0,110.411,92.309Z"-->
-                                    <!--            transform="translate(-98 -78.398)" fill="#aba6ac" />-->
-                                    <!--    </svg>-->
-                                    <!--</div>-->
+                                    <div class="form__icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="15.095" height="15.176"
+                                            viewBox="0 0 15.095 15.176">
+                                            <path id="Path_3283" data-name="Path 3283"
+                                                d="M103.032,78.4a1.361,1.361,0,0,0-1.174,1.476v.632H99.174A1.361,1.361,0,0,0,98,81.981V92.1a1.361,1.361,0,0,0,1.174,1.476H108.9a.456.456,0,0,0,.36-.182.752.752,0,0,0,0-.9.456.456,0,0,0-.36-.182H99.174c-.1,0-.168-.083-.168-.211V87.672h4.282a1.582,1.582,0,0,0,1.42,1.265h1.677a1.582,1.582,0,0,0,1.42-1.265h4.282V92.1c0,.128-.066.211-.168.211a.456.456,0,0,0-.36.182.752.752,0,0,0,0,.9.456.456,0,0,0,.36.182,1.361,1.361,0,0,0,1.174-1.476V81.981a1.361,1.361,0,0,0-1.174-1.476h-2.684v-.632a1.361,1.361,0,0,0-1.174-1.476Zm0,1.265h5.032c.1,0,.168.083.168.211v.632h-5.367v-.632c0-.128.066-.211.168-.211ZM99.174,81.77h12.747c.1,0,.168.083.168.211v4.426h-4.282a1.589,1.589,0,0,0-1.42-1.265h-1.677a1.589,1.589,0,0,0-1.42,1.265H99.007V81.981c0-.128.066-.211.168-.211Zm5.535,4.637h1.677a.649.649,0,0,1,0,1.265h-1.677a.649.649,0,0,1,0-1.265Zm5.7,5.9a.649.649,0,1,0,.5.632A.579.579,0,0,0,110.411,92.309Z"
+                                                transform="translate(-98 -78.398)" fill="#aba6ac" />
+                                        </svg>
+                                    </div>
                                     <select name="category" id="category"
-                                        class="select2 form-select fs-14 bg-theme-secondary">
-                                        <option value="" disabled selected>-- Select Job category --</option>
-                                        @if ($data != null)
-                                            @foreach ($data as $row)
-                                                <option value="{{ $row['id'] }}">{{ $row['title'] }}</option>
-                                            @endforeach
-                                        @endif
-                                        {{-- <option value="Category">Category</option>
-                                        <option value="Category1">Category1</option>
-                                        <option value="Category2">Category2</option>
-                                        <option value="Category3">Category3</option> --}}
+                                        class="form-select input_with_icon fs-14 bg-theme-secondary">
+                                        <option value="" disabled selected>Select Job category --</option>
+                                        <?php if($data != null): ?>
+                                            <?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($row['class_id']); ?>"><?php echo e($row['class_name']); ?></option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        <?php endif; ?>
+                                        
                                     </select>
-                                    <button type="button" class="resetVal1" id="categoryclear" style="display: none;">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </button>
+                                    <button type="button" class="resetVal1" id="categoryclear" style="display: none;"><i
+                                            class="fa-solid fa-xmark"></i></button>
                                 </div>
                             </div>
                         </div>
                         <div class="row row-cols-md-2 row-cols-1 gy-4 gx-2 pb-3 mb-3 border-bottom map__form__input">
-
                             <div class="col">
                                 <label for="candidateGender" class="mb-2 fw-600">Candidate Gender</label>
                                 <div class="position-relative">
@@ -156,33 +129,9 @@
                                     <i class="fa-solid fa-xmark"></i>
                                 </button>
 
-
-                                {{-- <div class="position-relative">
-                                    <input type="text" class="form-control fs-14 bg-theme-secondary map-datepicker"
-                                        id="valid-upto" name="posted_date" placeholder="DD/MM/YYYY" readonly />
-                                    <label class="calender-icon d-block" for="valid-upto">
-                                        <i class="far fa-calendar-alt" aria-hidden="true"></i>
-                                    </label>
-                                     <button type="button" class="resetVal1" id="postedDateClear"
-                                    style="display: none;">
-                                    <i class="fa-solid fa-xmark"></i>
-                                </button>
-                                </div> --}}
+                                
                             </div>
-                            {{-- <div class="col">
-                                <label for="valid-upto2" class="mb-2 fw-600">Job Expiry Date</label>
-                                <div class="position-relative">
-                                    <input type="test" class="form-control fs-14 bg-theme-secondary map-datepicker2"
-                                        id="valid-upto2" name="validity" placeholder="DD/MM/YYYY" readonly />
-                                    <button type="button" class="resetVal1" id="expiryDateClear"
-                                        style="display: none;">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </button>
-                                    <label class="calender-icon d-block" for="valid-upto2">
-                                        <i class="far fa-calendar-alt" aria-hidden="true"></i>
-                                    </label>
-                                </div>
-                            </div> --}}
+                            
                         </div>
                         <div class="row row-cols-md-3 row-cols-1 gy-4 gx-2 map__form__input">
                             <div class="col">
@@ -210,17 +159,8 @@
                                         class="form-select fs-14 bg-theme-secondary">
                                         <option value="" disabled selected>Select</option>
 
-                                        {{-- <option value="PHD">
-                                            PHD</option>
-                                        <option value="Masters">
-                                            Masters
-                                        </option>
-                                        <option value="Bachelors">
-                                            Bachelors
-                                        </option>
-                                        <option value="Undergrad">
-                                            Undergrad
-                                        </option> --}}
+                                        
+
                                         <option value="High School">High School</option>
                                         <option value="Tertiary">Tertiary</option>
                                         <option value="Diploma">Diploma</option>
@@ -233,36 +173,13 @@
                                         style="display: none;"><i class="fa-solid fa-xmark"></i></button>
                                 </div>
                             </div>
-                            {{-- <div class="col">
-                                <label for="testScore" class="mb-2 fw-600">Test Score</label>
-                                <div class="position-relative">
-                                    <select name="" id="testScore" class="form-select fs-14 bg-theme-secondary">
-                                        <option value="">51%-60%</option>
-                                        <option value="">61%-70%</option>
-                                        <option value="">71%-80%</option>
-                                        <option value="">81%-90%</option>
-                                        <option value="">90%-100%</option>
-                                    </select>
-                                    <button type="button" class="resetVal1" id="testScoreclear"
-                                        style="display: none;"><i class="fa-solid fa-xmark"></i></button>
-                                </div>
-                            </div> --}}
+                            
                             <div class="col ">
                                 <div class="map-filter-rangeslider">
                                     <p class="range-slider-text mb-2">Radius: <span><span id="rangeValue">5</span>
                                             km</span> </p>
                                     <input class="range" type="range" name="radius" value="5" min="1"
                                         max="50" id="new-range" onchange="rangeSlide(this.value)" />
-                                </div>
-                            </div>
-                            <div class="col ">
-                                <div class="map-filter-rangeslider">
-                                    <p class="range-slider-text mb-2">Score Range: <span><span
-                                                id="rangeValueScore">60</span>
-                                            %</span> </p>
-                                    <input class="range" type="range" name="percentage" value="0"
-                                        min="0" max="100" id="score-range"
-                                        onchange="rangeSlideScore(this.value)" />
                                 </div>
                             </div>
                         </div>
@@ -273,9 +190,10 @@
                     </div>
                     <div class="map-right-div d-none d-lg-block">
                         <p class="fs-14 px-2 mb-3">
-                            <a href="{{ route('company.dashboard') }}" class="text-primary">Dashboard</a>
+                            <a href="<?php echo e(route('company.dashboard')); ?>" class="text-primary">Dashboard</a>
                             <span>> Map </span>
                         </p>
+
                         <div class="position-relative pb-4 px-2">
                             <div class="search_map_icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="15.342" height="15.342"
@@ -285,117 +203,11 @@
                                         transform="translate(-3 -3)" fill="#aba6ac" />
                                 </svg>
                             </div>
-                            {{-- <a class="btn-btn" href="{{ route('company.dashboard') }}"> Back to dashboard</a> --}}
-
                             <input type="text" name="search" id="search-key" class="form-control"
                                 placeholder="Candidate title, keywords">
                         </div>
                         <ul class="map-user-list" id="cand-card">
-                            {{-- <li class="pb-4 px-2 popper" tabindex="0" role="button" data-bs-toggle="popover">
-                                <div class="map-page-userbox d-flex user">
-                                    <div class="border-end px-1 pt-1 text-center userbox-left">
-                                        <img src="https://check.hostingladz.com/webapp/Erec/storage/candidateAvatar/img/2022-11-25_.113.85714285714_.jpg"
-                                            alt="" class="img-fluid">
-                                        <a href="https://check.hostingladz.com/webapp/Erec/public/candidateDoc/doc/2022-11-22_.74.571428571429_.docx"
-                                            download="" class="d-block text-center download__cv pt-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="14.875" height="19.812"
-                                                viewBox="0 0 14.875 19.812">
-                                                <defs>
-                                                    <linearGradient id="linear-gradient" x1="0.5" x2="0.5"
-                                                        y2="1" gradientUnits="objectBoundingBox">
-                                                        <stop offset="0" stop-color="#2ec4bb"></stop>
-                                                        <stop offset="1" stop-color="#007ba7"></stop>
-                                                    </linearGradient>
-                                                </defs>
-                                                <g id="Group_2743" data-name="Group 2743" transform="translate(0 0)">
-                                                    <path id="Path_3281" data-name="Path 3281"
-                                                        d="M447.506,32.153h2.872a1.354,1.354,0,0,0-.1-.12L447.043,28.8a1.373,1.373,0,0,0-.12-.1v2.872a.582.582,0,0,0,.583.583Z"
-                                                        transform="translate(-435.767 -28.435)"
-                                                        fill="url(#linear-gradient)"></path>
-                                                    <path id="Path_3282" data-name="Path 3282"
-                                                        d="M167.892,26.354a1.411,1.411,0,0,1-1.409-1.409V21.809h-9.09a1.243,1.243,0,0,0-1.24,1.24V40.381a1.243,1.243,0,0,0,1.24,1.24h12.4a1.243,1.243,0,0,0,1.24-1.24V26.354Zm-4.3,10.383-2.556-2.556.584-.584,1.559,1.559V29.649H164v5.506l1.559-1.559.584.584Z"
-                                                        transform="translate(-156.154 -21.809)"
-                                                        fill="url(#linear-gradient)"></path>
-                                                </g>
-                                            </svg>
-                                            <div style="font-size: 12px; font-weight: 600">Download CV</div>
-                                        </a>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div class="p-3">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <h3>
-                                                    Kim Candy
-
-                                                </h3>
-                                                <div>
-
-                                                </div>
-                                            </div>
-                                            <p class="mb-0" style="font-size: 14px; color: #4dc1ba;">
-                                                Senior Software Engineer
-                                            </p>
-                                            <div class="d-flex align-items-center"
-                                                style="gap: 5px; color: #aba6ac; font-size: 14px;">
-                                                <span>
-                                                    <svg id="Group_2725" data-name="Group 2725"
-                                                        xmlns="http://www.w3.org/2000/svg" width="9.4" height="13.428"
-                                                        viewBox="0 0 9.4 13.428">
-                                                        <path id="Path_3268" data-name="Path 3268"
-                                                            d="M9.7,2A4.7,4.7,0,0,0,5,6.7c0,3.525,4.7,8.728,4.7,8.728s4.7-5.2,4.7-8.728A4.7,4.7,0,0,0,9.7,2ZM6.343,6.7a3.357,3.357,0,1,1,6.714,0c0,1.934-1.934,4.827-3.357,6.633C8.3,11.541,6.343,8.613,6.343,6.7Z"
-                                                            transform="translate(-5 -2)" fill="#aba6ac"></path>
-                                                        <circle id="Ellipse_3" data-name="Ellipse 3" cx="1.678"
-                                                            cy="1.678" r="1.678"
-                                                            transform="translate(3.021 3.021)" fill="#aba6ac">
-                                                        </circle>
-                                                    </svg>
-                                                </span>
-                                                <span>2867 Poplar Lane Bowling Green Virginia United States</span>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex border-top ">
-                                            <a href="https://check.hostingladz.com/webapp/Erec/candidates/kim"
-                                                class="primary-color d-flex align-items-center mx-3"
-                                                style="font-size: 12px; gap: 6px;" target="_blank">
-                                                <span>
-                                                    <svg id="profile" xmlns="http://www.w3.org/2000/svg" width="12.475"
-                                                        height="11.603" viewBox="0 0 12.475 11.603">
-                                                        <path id="Path_3280" data-name="Path 3280"
-                                                            d="M12.475,10.845a.312.312,0,0,1-.164.249,1.46,1.46,0,0,1-.506.187q-.341.074-.7.136a8.623,8.623,0,0,1-.92.1q-.56.034-.975.051t-1.066.028q-.652.011-.987.011H5.318l-.987-.011-1.066-.028-.975-.051-.92-.1-.7-.136-.506-.187L0,10.845a2.208,2.208,0,0,1,1.34-1.76A8.754,8.754,0,0,1,4.678,8.071V7.7a3.22,3.22,0,0,1-1.1-.736,3.544,3.544,0,0,1-.731-1.115,6.15,6.15,0,0,1-.39-1.37A9.609,9.609,0,0,1,2.339,2.9a2.68,2.68,0,0,1,.3-1.291A2.443,2.443,0,0,1,3.484.7,4.116,4.116,0,0,1,4.715.175,6.21,6.21,0,0,1,6.237,0,6.21,6.21,0,0,1,7.76.175,4.116,4.116,0,0,1,8.99.7a2.443,2.443,0,0,1,.841.911,2.68,2.68,0,0,1,.3,1.291q0,3.962-2.339,4.822v.351a8.754,8.754,0,0,1,3.338,1.013A2.208,2.208,0,0,1,12.475,10.845Z"
-                                                            fill="#007ba7"></path>
-                                                    </svg>
-                                                </span>
-                                                <span>
-                                                    View Profile
-                                                </span>
-                                            </a>
-                                            <div>
-                                            <open-box :openBoxFunction="openBox":id="{{ 1 }}"></open-box>
-                                            </div>
-                                            <a href="" class="text-grey d-flex align-items-center"
-                                                style="font-size: 12px; gap: 6px;">
-                                                <span>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="11.641"
-                                                        height="11.641" viewBox="0 0 11.641 11.641">
-                                                        <path id="Path_3279" data-name="Path 3279"
-                                                            d="M12.477,2H3.164A1.167,1.167,0,0,0,2,3.164V13.641l2.328-2.328h8.148a1.167,1.167,0,0,0,1.164-1.164V3.164A1.167,1.167,0,0,0,12.477,2Z"
-                                                            transform="translate(-2 -2)" fill="#c7c7cd"></path>
-                                                    </svg>
-                                                </span>
-                                                <span>
-                                                    Message
-                                                </span>
-                                            </a>
-                                            <select class="form-select status-select ms-auto">
-                                                <option value="">Pending</option>
-                                                <option value="">Pending</option>
-                                                <option value="">Pending</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li> --}}
+                            
 
                         </ul>
                     </div>
@@ -416,20 +228,14 @@
                         <option value="">Select Test</option>
                     </select>
                 </div>
-                {{-- <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div> --}}
+                
             </div>
         </div>
     </div>
     <div class="modal fade" id="hire" tabindex="-1" aria-labelledby="hireLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                {{-- <div class="modal-header">
-              <h5 class="modal-title" id="hireLabel">Modal title</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div> --}}
+                
                 <div class="modal-body text-center">
                     Are You Sure You want to hire this candidate
                 </div>
@@ -442,9 +248,9 @@
         </div>
     </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('bottom_script')
+<?php $__env->startSection('bottom_script'); ?>
 
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
@@ -472,22 +278,16 @@
             $('#smart-search').trigger('submit');
 
         });
-        
-        $(document).ready(function() {
-            $('#jobCategory').select2();
-            $('#category').select2();
-          $('.select2-selection.select2-selection--single').addClass('bg-theme-secondary1');
-          $('.select2-selection__rendered').css({'height': '100%','margin': '5px'});
-          //$('.select2-selection.select2-selection--single').addClass('form-control');
-        //   $('.select2-selection.select2-selection--single').addClass('input_with_icon');
-          $('.select2-selection__arrow').addClass('edit_arrow');
-          $('.select2.select2-container.select2-container--default').removeAttr('style');
-
-          //$('.select2.select2-container.select2-container--default.bg-theme-secondary').removeClass('select2-container--default');
-          //$('.select2-selection.select2-selection--single').addClass('bg-theme-secondary');
-        });
-
         $('#candidateGender').on('change', function() {
+            $('#smart-search').trigger('submit');
+            $(this).find("option:selected").each(function() {
+                var optionValue = $(this).attr("value");
+                if (optionValue) {
+                    $(this).parent().siblings('button').show()
+                } else {}
+            });
+        });
+        $('#category').on('change', function() {
             $('#smart-search').trigger('submit');
             $(this).find("option:selected").each(function() {
                 var optionValue = $(this).attr("value");
@@ -523,33 +323,17 @@
                 } else {}
             });
         });
-        $('#category').on('change', function() {
+        $('#valid-upto').on('change', function() {
             $('#smart-search').trigger('submit');
-            $(this).find("option:selected").each(function() {
-                var optionValue = $(this).attr("value");
-                if (optionValue) {
-                    $(this).parent().siblings('button').show()
-                } else {}
-            });
         });
-        // $('#valid-upto').on('change', function() {
-        //     $('#smart-search').trigger('submit');
+        $('#valid-upto2').on('change', function() {
+            $('#smart-search').trigger('submit');
+        });
+        // $('#rangeSlide').on('change', function() {
+        //   $('#smart-search').trigger('submit');
         // });
-        // $('#valid-upto2').on('change', function() {
-        //     $('#smart-search').trigger('submit');
-        // });
-        // $('#dateRangePicker').on('change', function() {
-        //     $('#smart-search').trigger('submit');
-        // });
-
         function rangeSlide(range_value) {
             $('#rangeValue').html(range_value);
-            $('#smart-search').trigger('submit');
-
-        }
-
-        function rangeSlideScore(range_value) {
-            $('#rangeValueScore').html(range_value);
             $('#smart-search').trigger('submit');
 
         }
@@ -566,19 +350,19 @@
             $("#cand-card").html("<p>Loading...</p>");
             e.preventDefault();
             var userFormData = $(this).serializeArray();
-            console.log("formdata",userFormData)
+            // console.log(userFormData);
             $.ajax({
                 type: "POST",
-                url: "{{ route('smartSearch.candidate') }}",
+                url: "<?php echo e(route('recruiter.smartSearch.candidate')); ?>",
                 data: userFormData,
                 dataType: "json",
                 encode: true,
             }).done(function(data) {
-                console.log("llpa",data);
+                // console.log(data);
                 var html = "";
                 var newhtml = "";
                 if (data.length == 0) {
-                    // $("#cand-card").html('No one has applied on the job');
+                    //   $("#cand-card").html("No one has applied on the job");
                     $("#cand-card").html("No Record Found");
                 } else {
                     $.each(data, function(index, val) {
@@ -593,19 +377,19 @@
                         if (val['candidate']['user']['avatar'] != null) {
                             html += "<img class='user_map_hover'";
                             html +=
-                                "src='{{ asset('storage/') }}/" + val['candidate']['user'][
+                                "src='<?php echo e(asset('storage/')); ?>/" + val['candidate']['user'][
                                     'avatar'
                                 ] + "'";
                             html += "alt=''>";
                         } else {
-                            html += "<img src='{{ asset('adminpanel/images/avatar/dummy.png') }}'";
+                            html += "<img src='<?php echo e(asset('adminpanel/images/avatar/dummy.png')); ?>'";
                             html += "alt='' class='user_map_hover'>";
                         }
                         html += "</div>";
                         html += "<div>";
                         html += "<h2 class='fw-500 fs-3'>";
                         html +=
-                            "<a href='{{ route('candidate.detail', '') }}/" + val['candidate'][
+                            "<a href='<?php echo e(route('candidate.detail', '')); ?>/" + val['candidate'][
                                 'slug'
                             ] +
                             "'";
@@ -627,7 +411,7 @@
                                 "<a href='" + val['candidate']['facbookLink'] +
                                 "' target='_blank'>";
                             html += "<img";
-                            html += "src='{{ asset('dashboard/images/facebook.svg') }}'alt=''>";
+                            html += "src='<?php echo e(asset('dashboard/images/facebook.svg')); ?>'alt=''>";
                             html += "</a>";
                             html += "</li>";
                         }
@@ -638,7 +422,7 @@
                                 "<a href='" + val['candidate']['twitterLink'] +
                                 "' target='_blank'>";
                             html += "<img";
-                            html += "src='{{ asset('dashboard/images/instagram.svg') }}'alt=''>";
+                            html += "src='<?php echo e(asset('dashboard/images/instagram.svg')); ?>'alt=''>";
                             html += "</a>";
                             html += "</li>";
                         }
@@ -650,7 +434,7 @@
                                 "' target='_blank'>";
                             html += "<img";
                             html +=
-                                "src='{{ asset('dashboard/images/youtube-play.svg') }}'alt=''>";
+                                "src='<?php echo e(asset('dashboard/images/youtube-play.svg')); ?>'alt=''>";
                             html += "</a>";
                             html += "</li>";
                         }
@@ -661,7 +445,7 @@
                                 "<a href='" + val['candidate']['linkdinLink'] +
                                 "' target='_blank'>";
                             html += "<img";
-                            html += "src='{{ asset('dashboard/images/linkedIn.svg') }}'alt=''>";
+                            html += "src='<?php echo e(asset('dashboard/images/linkedIn.svg')); ?>'alt=''>";
                             html += "</a>";
                             html += "</li>";
                         }
@@ -673,7 +457,7 @@
                         html += "<div>";
                         html += "<a target='_blank'";
                         html +=
-                            "href='{{ route('candidate.detail', '') }}/" + val['candidate'][
+                            "href='<?php echo e(route('candidate.detail', '')); ?>/" + val['candidate'][
                                 'slug'
                             ] +
                             "'";
@@ -682,8 +466,11 @@
                         html += "</div>";
                         html += "<div>";
                         html +=
-                            "<a href='{{ asset('candidateDoc/doc') }}/" + val[
-                                'candidate_document']['document'] + "'";
+                            "<a href='<?php echo e(asset('candidateDoc/doc')); ?>/" + val[
+                                'candidate_document'][
+                                'document'
+                            ] +
+                            "'";
                         html += "target='_blank' class='fw-500 px-4 py-2 d-inline-block'";
                         html += "download=''>Download CV";
                         html += "</a>";
@@ -697,13 +484,13 @@
                             "class='pophover_inf_box d-flex flex-wrap align-items-center justify-content-between'>";
                         html += "<div class='d-flex'>";
                         html += "<span class='me-1'>";
-                        html += "<img src='{{ asset('dashboard/images/map-pin.svg') }}'alt=''>";
+                        html += "<img src='<?php echo e(asset('dashboard/images/map-pin.svg')); ?>'alt=''>";
                         html += "</span>";
                         html += "<span class='mt-0'>" + val['candidate']['address'] + "</span>";
                         html += "</div>";
                         html += "<div class='d-flex'>";
                         html += "<span class='me-1'>";
-                        html += "<img src='{{ asset('dashboard/images/phone.svg') }}'alt=''>";
+                        html += "<img src='<?php echo e(asset('dashboard/images/phone.svg')); ?>'alt=''>";
                         html += "</span>";
                         html += "<span class='mt-0'>" + val['candidate']['country_code'] + "";
                         html += val['candidate']['number'] + "</span>";
@@ -713,7 +500,7 @@
                             html += "<span class='me-1'>";
                             html += "<img";
                             html +=
-                                "src='{{ asset('dashboard/images/ic_relationship.svg') }}'alt=''>";
+                                "src='<?php echo e(asset('dashboard/images/ic_relationship.svg')); ?>'alt=''>";
                             html += "</span>";
                             html +=
                                 "<span class='mt-0'>" + val['candidate']['marital_status'] +
@@ -725,7 +512,7 @@
                             html += "<div class='d-flex'>";
                             html += "<span class='me-1'>";
                             html += "<img";
-                            html += "src='{{ asset('dashboard/images/ic_Working.svg') }}'alt=''>";
+                            html += "src='<?php echo e(asset('dashboard/images/ic_Working.svg')); ?>'alt=''>";
                             html += "</span>";
                             html += "<span";
                             html +=
@@ -736,7 +523,7 @@
                             html += "<div class='d-flex'>";
                             html += "<span class='me-1'>";
                             html += "<img";
-                            html += " src='{{ asset('dashboard/images/ic_date.svg') }}'alt=''>";
+                            html += " src='<?php echo e(asset('dashboard/images/ic_date.svg')); ?>'alt=''>";
                             html += "</span>";
                             html += "<span class='mt-0'>Joined";
                             html += val['candidate']['user']['candidate_pro'][0]['month_exp'] +
@@ -748,7 +535,7 @@
                         html += "<div>";
                         if (val['candidate']['user']['candidate_pro'] != null) {
                             html +=
-                                "<p class='text-primary fw-600 mt-4 mb-2'>Professional Experience</p>";
+                                "<p class='text-primary fw-600 mb-2 mt-4'>Professional Experience</p>";
                         } else {
                             html += "<p class='text-primary fw-600 my-2'>Eduction Details</p>";
                         }
@@ -818,23 +605,23 @@
                         html +=
                             "<li class='pb-4 px-2 popper-content-header' data-template='popper-content-" +
                             val['id'] + "' id='" + val['id'] + "' data-bs-toggle='popover'>";
-                        html += "<div class='map-page-userbox d-flex'>";
-                        html += "<div class='border-end px-1 pt-1 text-center  '>";
+                        html += "<div class='map-page-userbox d-flex  '>";
+                        html += "<div class='border-end px-1 pt-1 text-center'>";
                         // html +=
-                        //     "<img src='{{ asset('public/storage/') }}/" + val['candidate']['user']['avatar'] +
+                        //     "<img src='<?php echo e(asset('storage/')); ?>/" + val['candidate']['user']['avatar'] +
                         //     "'";
                         // html += "alt='' class='img-fluid'>";
                         if (val['candidate']['user']['avatar'] != null) {
-                            html += "<img src='{{ asset('storage/') }}/" + val['candidate'][
+                            html += "<img src='<?php echo e(asset('storage/')); ?>/" + val['candidate'][
                                 'user'
                             ]['avatar'] + "' alt='' class='img-fluid'>";
                         } else {
                             html +=
-                                "<img src='{{ asset('adminpanel/images/avatar/dummy.png') }}'";
+                                "<img src='<?php echo e(asset('adminpanel/images/avatar/dummy.png')); ?>'";
                             html += " alt='' class='img-fluid'>";
                         }
                         html +=
-                            "<a href='{{ asset('candidateDoc/doc') }}/" + val[
+                            "<a href='<?php echo e(asset('/candidateDoc/doc')); ?>/" + val[
                                 'candidate_document'][
                                 'document'
                             ] +
@@ -933,7 +720,7 @@
                         html +=
                             "style='gap: 5px; color: #aba6ac; font-size: 14px;'>";
                         html +=
-                            "<span >";
+                            "<span>";
                         html +=
                             "<svg id='Group_2725' data-name='Group 2725'";
                         html +=
@@ -964,10 +751,9 @@
                             "</div>";
                         html += "</div>";
                         html += "<div class='d-flex border-top '>";
-                        html += "<a href='{{ route('candidate.detail', '') }}/" + val['candidate'][
-                                'slug'
-                            ] +
-                            "' class='primary-color d-flex align-items-center mx-3'";
+                        html += "<a href='<?php echo e(route('candidate.detail', '')); ?>/" + val['candidate'][
+                            'slug'
+                        ] + "' class='primary-color d-flex align-items-center mx-3'";
                         html +=
                             "style='font-size: 12px; gap: 6px;' style='font-weight: 500' target='_blank'>";
                         html +=
@@ -989,12 +775,13 @@
                         html += "View Profile";
                         html += "</span>";
                         html += "</a>";
-                        html += "<a href='#' class='text-grey d-flex align-items-center'";
-                        // html += "<a href='{{ route('candidate.company.chat', '') }}/" + val[
+                        html += "<a href='javascript:void(0);' onclick='openBoxNew(" + val[
+                                'candidate']['user']['id'] +
+                            ")' class='text-grey d-flex align-items-center'";
+                        // html += "<a href='<?php echo e(route('candidate.recruiter.chat', '')); ?>/" + val[
                         //         'candidate']['slug'] +
                         //     "' class='text-grey d-flex align-items-center'";
                         html += "style='font-size: 12px; gap: 6px;' style='font-weight: 500'>";
-                        html += "'<div><open-box':openBoxFunction='openBox':id='1'></open-box></div>"
                         html +=
                             "<span>";
                         html +=
@@ -1012,16 +799,32 @@
                         html += "</span>";
                         html += "<span>";
                         html +=
-                            "Messasssge";
+                            "Message";
                         html += "</span>";
                         html += "</a>";
                         html += "<div class='ms-auto' id='testIsPending-" + val['id'] + "'>";
-                        if(val['exam_result']){
-                            html += + val['exam_result']['perentage'] + "%";
+                        if (val['status'] == 2) {
+                            html +=
+                                "<p class='bg-success text-white' style='padding: 10px;'>Hired</p>";
+                        } else if (val['status'] == 1 || val['status'] == 0) {
+                            html += "<select class='form-select status-select'";
+                            html += "onchange='statusPending(" + val['id'] + ")'";
+                            html += "id='pendingSelect-" + val['id'] + "'>";
+                            html += "<option value='0'";
+                            if (val['status'] == 0) {
+                                html += "selected";
+                            } else if (val['status'] == 1 || val['status'] == 2) {
+                                html += "disabled";
+                            }
+                            html += ">Pending</option>";
+                            html += "<option value='1'";
+                            if (val['status'] == 1) {
+                                html += "selected";
+                            }
+                            html += ">Shortlist</option>";
+                            html += "<option value='2'>Hire</option>";
+                            html += "</select>";
                         }
-                        else{
-                            html += "N/A";
-                        }    
                         html += "</div>";
                         html += "</div>";
                         html += "</div>";
@@ -1043,7 +846,7 @@
                         //             const new_user_id = val['candidate']['user']['new_user_id'];
                         //             $.ajax({
                         //                 type: "GET",
-                        //                 url: "{{ route('find.qst') }}",
+                        //                 url: "<?php echo e(route('find.qst')); ?>",
                         //                 data: {
                         //                     qst: qst,
                         //                     new_user_id: new_user_id,
@@ -1156,17 +959,16 @@
 
 
                 }
-                var lat = "{{ auth()->user()->company->lat }}";
-                var lng = "{{ auth()->user()->company->lng }}";
-                
+                var lat = "<?php echo e(auth()->user()->recruiter->lat); ?>";
+                var lng = "<?php echo e(auth()->user()->recruiter->lng); ?>";
                 if ($("#lat").val() != '') {
                     lat = $("#lat").val();
                 }
                 if ($("#lng").val() != '') {
                     lng = $("#lng").val();
                 }
-                console.log("as",lat, lng, userFormData);
-                initialize(lat, lng, userFormData);
+                console.log(lat, lng);
+                initialize(lat, lng);
             }).fail(function(error) {
                 var errors = error.responseJSON;
                 console.log(errors);
@@ -1197,7 +999,6 @@
             $("#lat").val(lat);
             $("#lng").val(lng);
             initialize(lat, lng);
-
             // $('#smart-search').trigger('submit');
         }
 
@@ -1214,11 +1015,10 @@
 
         function initMap() {
             $.ajax({
-                url: "{{ route('company.marker.candidate') }}",
+                url: "<?php echo e(route('recruiter.marker.candidate')); ?>",
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(markers) {
-                    // console.log('marker', markers);
                     var map;
                     var bounds = new google.maps.LatLngBounds();
                     var mapOptions = {
@@ -1230,13 +1030,13 @@
                     // Display multiple markers on a map
                     var infoWindow = new google.maps.InfoWindow(),
                         marker, i;
-                    // Loop through our array of markers & place each one on the map
                     if (markers.length == 0) {
                         console.log("han khali h");
                         var position = new google.maps.LatLng(-25.274398, 133.775136);
 
                         bounds.extend(position);
                     } else {
+                        // Loop through our array of markers & place each one on the map
                         for (i = 0; i < markers.length; i++) {
                             var position = new google.maps.LatLng(markers[i]['candidate']['latitude'],
                                 markers[i][
@@ -1247,7 +1047,7 @@
                                 position: position,
                                 map: map,
                                 title: markers[i]['candidate']['first_name'],
-                                icon: "{{ asset('/imgs/candidate.png') }}",
+                                icon: "<?php echo e(asset('/imgs/candidate.png')); ?>",
 
                             });
                             // Each marker to have an info window
@@ -1263,9 +1063,9 @@
                                     infoWindow.open(map, marker);
                                 }
                             })(marker, i));
+                            // Automatically center the map fitting all markers on the screen
                         }
                     }
-                    // Automatically center the map fitting all markers on the screen
                     map.fitBounds(bounds);
                     // Override our map zoom level once our fitBounds function runs (Make sure it only runs once)
                     var boundsListener = google.maps.event.addListener((map), 'bounds_changed',
@@ -1294,21 +1094,19 @@
             });
         }
 
-        function initialize(lat, lng, data) {
-            console.log("hdabc", lat, lng, data)
+        function initialize(lat, lng) {
+            console.log(lat, lng);
             $.ajax({
-                url: "{{ route('company.marker.candidate') }}",
+                url: "<?php echo e(route('recruiter.marker.candidate')); ?>",
                 type: 'GET',
-                dataType: 'json',
-                data: data,// added data type
+                dataType: 'json', // added data type
                 success: function(markers) {
-                    
                     var map;
-                    var latlng = { lat: parseInt(lat), lng: parseInt(lng) };
+                    var latlng = new google.maps.LatLng(lat, lng);
 
                     var mapOptions = {
                         center: latlng,
-                        zoom: 4,
+                        zoom: 13,
                         mapTypeId: google.maps.MapTypeId.ROADMAP
                     };
                     var el = document.getElementById("map");
@@ -1317,7 +1115,6 @@
                         map: map,
                         position: latlng
                     });
-
                     // Display multiple markers on a map
                     // Loop through our array of markers & place each one on the map
                     // console.log(markers.length );
@@ -1331,17 +1128,19 @@
                         var infoWindow = new google.maps.InfoWindow(),
                             marker, i;
                         for (i = 0; i < markers.length; i++) {
-                            var position = new google.maps.LatLng(markers[i]['candidate']['latitude'], markers[i]['candidate']['longitude']);
-                            console.log("pos",position);
+                            var position = new google.maps.LatLng(markers[i]['candidate']['latitude'],
+                                markers[
+                                    i][
+                                    'candidate'
+                                ]['longitude']);
+                            // bounds.extend(position);
                             marker = new google.maps.Marker({
                                 position: position,
                                 map: map,
                                 title: markers[i]['candidate']['first_name'],
-                                icon: "{{ asset('/imgs/candidate.png') }}",
+                                icon: "<?php echo e(asset('/imgs/candidate.png')); ?>",
 
                             });
-                                                                                                        console.log("dd",position);
-
                             // Each marker to have an info window
                             google.maps.event.addListener(marker, 'click', (function(marker, i) {
                                 return function() {
@@ -1360,7 +1159,7 @@
 
                     }
                     console.log(latlng);
-                    NewrangeSlide = $("#new-range").val();
+                    var new_radius = document.getElementById("new-range").value;
                     var sunCircle = {
                         strokeColor: "#c3fc49",
                         strokeOpacity: 0.8,
@@ -1369,7 +1168,7 @@
                         fillOpacity: 0.35,
                         map: map,
                         center: latlng,
-                        radius: NewrangeSlide * 1000 // in meters
+                        radius: new_radius * 1000 // in meters
                     };
                     cityCircle = new google.maps.Circle(sunCircle)
                     cityCircle.bindTo('center', marker2, 'position');
@@ -1413,7 +1212,6 @@
             $("#jobCategory option[value='" + selectVal + "']").attr("selceted", false);
             $(this).hide();
             $('#smart-search').trigger('submit');
-
         });
         $('#experienceclear').click(function() {
             $('#experience').prop('selectedIndex', 0);
@@ -1451,10 +1249,6 @@
             $('#smart-search').trigger('submit');
         });
 
-        // $('#locationInp').click(function(){
-        //     console.log('click clear search')
-        // })
-
         $('#locationInp').on('search', function() {
             // search logic here
             // this function will be executed on click of X (clear button)
@@ -1470,7 +1264,7 @@
         function statusPending(id) {
             var pendingSelect = $("#pendingSelect-" + id).val();
             console.log(id);
-            var href = '{{ route('company.get.test', ':id') }}';
+            var href = '<?php echo e(route('recruiter.get.test', ':id')); ?>';
             href = href.replace(':id', id);
             $.ajax({
                 type: 'GET',
@@ -1479,6 +1273,7 @@
                 console.log(data);
                 if (pendingSelect == "1") {
                     assign_test(id);
+
                     // console.log('1 selected');
                     // $('#shortList').modal('show');
                     // $.each(data, function(index, value) {
@@ -1494,7 +1289,7 @@
                     $('#hire').modal('show');
                     $('.hireCandidate').click(() => {
                         // console.log('hireCandidate');
-                        var href = '{{ route('changeJobAppStatus', '') }}';
+                        var href = '<?php echo e(route('changeJobAppStatus', '')); ?>';
                         newhref = href + '/' + id;
                         console.log(newhref);
                         $.ajax({
@@ -1506,7 +1301,7 @@
                             $('#testIsPending-' + id).html('');
                             var html = "";
                             html +=
-                                "<p class='bg-primary text-white' style='padding: 10px;>Hired</p>";
+                                "<p class='bg-success text-white' style='padding: 10px;'>Hired</p>";
                             $('#testIsPending-' + id).html(html);
                         });
                     })
@@ -1519,7 +1314,7 @@
             console.log(id);
             // var selectedId = document.getElementById("assign_test" + id).value;
             // console.log(selectedId);
-            url = "{{ route('company.job.assign') }}";
+            url = "<?php echo e(route('recruiter.job.assign')); ?>";
             $.ajax({
                     type: 'GET',
                     url: url,
@@ -1529,7 +1324,7 @@
                     },
                     crossDomain: true,
                 }).done(function(data) {
-                    console.log(data);
+                    // console.log(data);
                     // $('#testIsPending-' + id).html('');
                     // html = "<p class='bg-secondary text-white' style='padding: 10px;'>Test is pending</p>";
                     // $('#testIsPending-' + id).html(html);
@@ -1569,4 +1364,6 @@
         });
         // end datepicker
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('recruterpanel.layout.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\Rameez Ali\Pictures\erec\resources\views/recruterpanel/pages/map/index.blade.php ENDPATH**/ ?>

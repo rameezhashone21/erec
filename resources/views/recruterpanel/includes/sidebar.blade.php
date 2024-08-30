@@ -64,6 +64,14 @@
                     <span>My Job Posts</span>
                 </a>
             </li>
+            <li @if (Route::is('recruiter.exam.*')) class="active" @endif>
+                <a href="{{ route('recruiter.exam.listing') }}"
+                @if (Route::is('recruiter.exam.listing')) class="d-flex align-items-center active" @else class="d-flex align-items-center" @endif>
+                <img src="{{ asset('/dashboard/images/suitcase.png') }}" alt="" class="me-4 one">
+                <img src="{{ asset('/dashboard/images/suitcase-white.png') }}" alt="" class="me-4 two">
+                <span>My Exams</span>
+                </a>
+            </li>
             <li class="collapse_button_parent d-flex justify-content-between align-items-center">
                 <a href="javascript:void(0)" class="d-flex align-items-center">
                     <img src="{{ asset('dashboard/images/Connection.png') }}" alt="" class="me-4 one">

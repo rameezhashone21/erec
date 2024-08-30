@@ -5,9 +5,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\Company\ShowExams;
+use App\Http\Livewire\Recruiter\RecruiterShowExams;
+use App\Http\Controllers\Recruiter\RecruiterExamQuestionAnswerController;
 use App\Http\Controllers\Company\ExamController;
+use App\Http\Controllers\Recruiter\RecruiterExamController;
 use App\Http\Livewire\Company\ShowQuestionAnswers;
 use App\Http\Livewire\Company\ShowQuestionAnswersAfterUpdate;
+use App\Http\Livewire\Recruiter\RecruiterShowQuestionAnswers;
+use App\Http\Livewire\Recruiter\RecruiterShowQuestionAnswersAfterUpdate;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\Company\ExamQuestionAnswerController;
 
@@ -467,7 +472,7 @@ Route::middleware(['auth', 'check_status'])->group(function () {
 
                 Route::get('/jobs', [App\Http\Controllers\RecruiterDashboardController::class, 'jobs'])->name('recruiter.jobs');
                 Route::get('/jobs/create', [App\Http\Controllers\RecruiterDashboardController::class, 'createJobs'])->middleware(['packageCheck'])->name('recruiter.jobs.create');
-                Route::post('/jobs/store', [App\Http\Controllers\RecruiterDashboardController::class, 'StoreJob'])->middleware(['packageCheck'])->name('recruiter.jobs.store');
+                Route::post('/jobs/store', [App\Http\Controllers\RecruiterDashboardController::class, 'StoreJob'])->name('recruiter.jobs.store');
                 Route::get('/jobs/{id}', [App\Http\Controllers\RecruiterDashboardController::class, 'editJobs'])->name('recruiter.jobs.edit');
                 Route::post('/jobs/update', [App\Http\Controllers\RecruiterDashboardController::class, 'updateJob'])->name('recruiter.jobs.update');
                 Route::get('/all/applications', [App\Http\Controllers\RecruiterDashboardController::class, 'jobApplications'])->name('recruiter.jobApplications');
@@ -500,6 +505,40 @@ Route::middleware(['auth', 'check_status'])->group(function () {
                 //Candidate Rel Chat
                 Route::get('/create/chat/{id}', [App\Http\Controllers\CandidateRoleRelationshipController::class, 'create'])->name('candidate.recruiter.chat');
 
+                // Exam section
+                Route::get('/exams', RecruiterShowExams::class)
+                    //->middleware(['packageCheck'])
+                    ->name('recruiter.exam.listing');
+
+                Route::get('/exams/questions/update/{id}', RecruiterShowQuestionAnswersAfterUpdate::class)
+                    //->middleware(['packageCheck'])
+                    ->name('recruiter.exam.question.update.listing');
+
+                Route::get('/exams/questions/{id}', RecruiterShowQuestionAnswers::class)
+                    //->middleware(['packageCheck'])
+                    ->name('recruiter.exam.question.listing');
+
+                //Recruiter Exam
+                Route::controller(RecruiterExamController::class)->group(function () {
+                    Route::get('/exams/add', 'create')->name('recruiter.exam.create');
+                    Route::post('/exams/add', 'store');
+                    Route::post('/csv/add', 'uploadCSV')->name('recruiter.exam.uploadCSV');
+                    Route::get('/exams/edit/{id}', 'edit')->name('recruiter.exam.update');
+                    Route::put('/exams/edit/{id}', 'update');
+                    Route::get('/exams/delete/{id}', 'destroy')->name('recruiter.exam.delete');
+                    Route::post('/exams/remove', 'remove')->name('recruiter.exam.remove');
+                });
+
+                Route::controller(RecruiterExamQuestionAnswerController::class)->group(function () {
+                    Route::get('/exams/question/add/{id}', 'create')->name('recruiter.exam.question.create');
+                    Route::post('/exams/question/add/{id}', 'store');
+                    Route::get('/exams/question/edit/{id}', 'edit')->name('recruiter.exam.question.update');
+                    Route::put('/exams/question/edit/{id}', 'update');
+                    Route::get('/exams/question/delete/{id}', 'destroy')->name('recruiter.exam.question.delete');
+                    Route::post('/exams/question/remove', 'remove')->name('recruiter.exam.question.remove');
+
+                });
+
                 //Recruiter Skills Get Edit
                 Route::get('/getRecCategory', [App\Http\Controllers\RecruiterDashboardController::class, 'getRecCategory'])->name('recruiter.getRecCategory');
 
@@ -509,7 +548,7 @@ Route::middleware(['auth', 'check_status'])->group(function () {
                 Route::get('/hire/candidate/{id}', [App\Http\Controllers\CompanyDashboardController::class, 'hirecandidate'])->name('hire.candidate.rec');
 
                 //Get Test by Categories
-                Route::get('/test/{id}', [App\Http\Controllers\CompanyDashboardController::class, 'getTest'])->name('recruiter.get.testCreate');
+                Route::get('/test', [App\Http\Controllers\RecruiterDashboardController::class, 'getTest'])->name('recruiter.get.testCreate');
                 
                 Route::get('/allNotifications', [App\Http\Controllers\RecruiterDashboardController::class, 'allNotifications'])->name('recruiter.allNotifications');
 

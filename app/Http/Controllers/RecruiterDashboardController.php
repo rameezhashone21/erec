@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Posts;
 use App\Models\Skills;
+use App\Models\Exam;
 use App\Models\Company;
 use App\Models\ExamNotification;
 use App\Mail\ShortListed;
@@ -66,6 +67,21 @@ class RecruiterDashboardController extends Controller
               ->update(['read' => 1]);
               
         return redirect()->route('recruiter.allNotifications')->with('message', 'Marked All Notifitions Read');
+    }
+
+    public function getTest(Request $request)
+    {
+        // $response = Http::get('https://api.e-rec.com.au/api/qst/to/classes', [
+        //     'class_id' => $id,
+        // ]);
+        // $data = $response->json();
+        //$datas = Exam::with('questions')->get()->toArray();
+        $recruiter_id = Recruiter::where('user_id' , $request->user_id)->value('id');
+        
+        $data = Exam::where('recruiter_id' , $recruiter_id)->where('status',1)->has('questions')->with('questions')->get();
+
+        return $data;
+
     }
     
     public function jobApplicantsRecById($id, $notification_id)
@@ -556,10 +572,14 @@ class RecruiterDashboardController extends Controller
         $recruiter = CompanyRecRelation::where('rec_id', auth()->user()->recruiter->id)->where('status', 1)->get();
         $skill = Skills::all();
         $data = JobCategory::orderby('title', 'asc')->get();
-        $test = Http::get('https://api.e-rec.com.au/api/qst/to/classes', [
-            'class_id' => $post->class_id,
-        ]);
-        $test_id = $test->json();
+        // $test = Http::get('https://api.e-rec.com.au/api/qst/to/classes', [
+        //     'class_id' => $post->class_id,
+        // ]);
+        // $test_id = $test->json();
+
+        $test = Exam::where('recruiter_id',auth()->user()->recruiter->id)->where('status',1)->get();
+        $test_id = $test;
+        $postSkills = PostSkill::where('post_id', $post->id)->get();
         return view('recruterpanel.pages.jobs.edit', compact('recruiter', 'skill', 'post', 'data', 'test_id'));
     }
     public function updateJob(Request $request)

@@ -6,8 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recruiter</title>
-    <link rel="icon" type="image/x-icon" href="{{ asset('imgs/fav-icon.png') }}">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" type="image/x-icon" href="<?php echo e(asset('imgs/fav-icon.png')); ?>">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap"
@@ -17,7 +17,7 @@
         integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- font-awesome/6.1.1 -->
-    <link rel="stylesheet" href="{{ asset('/dashboard/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="<?php echo e(asset('/dashboard/css/bootstrap.min.css')); ?>">
     <!-- DataTable -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.2.4/css/fixedHeader.bootstrap5.min.css">
@@ -33,60 +33,58 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-    <link rel="stylesheet" href="{{ asset('/dashboard/css/theme.css') }}">
+    <link rel="stylesheet" href="<?php echo e(asset('/dashboard/css/theme.css')); ?>">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
-    @livewireStyles
+    <?php echo \Livewire\Livewire::styles(); ?>
+
 </head>
 
 <body>
     <a id="backToTop"><i class="fa-solid fa-arrow-up-long"></i></a>
-    {{-- Header --}}
-    @include('recruterpanel.includes.header')
-    {{-- Header end --}}
+    
+    <?php echo $__env->make('recruterpanel.includes.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    
 
     <main class="bg-light position-relative">
         <div class="site__div"></div>
         <form id="msform" class="avatar-form" name="change_avatar" enctype="multipart/form-data">
             <div class="cover-edit-box global_cover">
                 <div class="cover_picture ">
-                    {{-- <label class="-label" for="file">
-                    <i class="fa-solid fa-camera"></i>
-                </label>
-                <input id="file" type="file" onchange="loadFile(event)" class="file-upload" name="banner" />
-                <img src="{{ asset('dashboard/images/Recruiter.png') }}" id="output" /> --}}
-                    @csrf
+                    
+                    <?php echo csrf_field(); ?>
                     <input type="hidden" name="source" value="api" />
                     <label class="-label" for="file">
                         <i class="fa-solid fa-camera"></i>
                     </label>
                     <input id="file" type="file" onchange="loadFile(event)" class="file-upload"
                         name="banner" />
-                    {{-- <img src="{{ asset('dashboard/images/candidate.png') }}" id="output" /> --}}
-                    @if (isset(auth()->user()->banner))
-                        <img src="{{ asset('storage/' . auth()->user()->banner) }}" alt="profile-img"
+                    
+                    <?php if(isset(auth()->user()->banner)): ?>
+                        <img src="<?php echo e(asset('storage/' . auth()->user()->banner)); ?>" alt="profile-img"
                             id="output">
-                    @else
-                        <img src="{{ asset('dashboard/images/Recruiter.png') }}" id="output" />
-                    @endif
+                    <?php else: ?>
+                        <img src="<?php echo e(asset('dashboard/images/Recruiter.png')); ?>" id="output" />
+                    <?php endif; ?>
                 </div>
             </div>
         </form>
         <div class="container margin-top-minus-all position-relative">
             <div class="row">
 
-                {{-- Sidebar --}}
-                @include('recruterpanel.includes.sidebar')
-                {{-- Sidebar end --}}
+                
+                <?php echo $__env->make('recruterpanel.includes.sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                
 
-                {{-- Main Content --}}
-                @yield('content', $slot ?? '')
-                @livewireScripts
+                
+                <?php echo $__env->yieldContent('content', $slot ?? ''); ?>
+                <?php echo \Livewire\Livewire::scripts(); ?>
 
-                {{-- Main Content end --}}
+
+                
 
             </div>
         </div>
@@ -102,11 +100,11 @@
                         </div>
                     </div>
                     <div class="modal-body">
-                        @php
+                        <?php
                             $post = \App\Models\Posts::where('rec_id', auth()->user()->recruiter->id)
                                 ->orderBy('post')
                                 ->get();
-                        @endphp
+                        ?>
                         <p class="text-dark fs-14 mb-3 fw-600">How Would You Like To Post Your Job?</p>
                         <div class="position-relative mb-4">
                             <input type="checkbox" onchange="disabledDiv()" id="newPost" name="jobPost"
@@ -116,7 +114,7 @@
                                 <div class="fs-14 text_grey_999">Use our posting tool to create your job.</div>
                             </label>
                         </div>
-                        @if (count($post) > 0)
+                        <?php if(count($post) > 0): ?>
                             <div class="position-relative">
                                 <input type="checkbox" onchange="enableDiv()" id="previousTemplate" name="jobPost"
                                     class="post-job-radio">
@@ -125,7 +123,7 @@
                                     <div class="fs-14 text_grey_999">Copy a past job post and edit as needed.</div>
                                 </label>
                             </div>
-                        @endif
+                        <?php endif; ?>
 
                         <div style="border: 1px dotted #ececec;" class="my-4"></div>
                         <div class="table-responsive table_height modal-table disable-div" disabled="disabled">
@@ -140,50 +138,36 @@
                                     </tr>
                                 </thead>
                                 <tbody id="existingJobTr">
-                                    {{-- <tr id="existingJobTr">
-                                        <td>
-                                            <input type="checkbox" class="check-box-table" id="jobpost1"
-                                                name="jobPostTable">
-                                        </td>
-                                        <td>
-                                            Product Manager
-                                        </td>
-                                        <td>
-                                            09 January 2023
-                                        </td>
-                                        <td>
-                                            La Quinta, California 92253USA La Quinta, California 92253, USA
-                                        </td>
-                                    </tr> --}}
+                                    
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <div class="modal-footer" id="postExisting">
                         <a class="btn_viewall btn_viewall fw-500 px-4 py-2 d-inline-block ms-auto"
-                            href="{{ route('recruiter.jobs.create') }}">Next</a>
+                            href="<?php echo e(route('recruiter.jobs.create')); ?>">Next</a>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Modal Post job end -->
-        <div id="app2" data-fetch-route="{{ route('fetch.messages') }}"
-            data-connected="{{ route('company.connectedRecruiter') }}" data-send="{{ route('send.messages') }}">
-            <global-chat :connected="connected" :messages="messages" :user="{{ Auth::user() }}"
-                :route_fetch="'{{ route('fetch.messages') }}'"
-                :route_fetch_indivisual="'{{ route('fetch.messages.individual') }}'"
-                :route_send_messages="'{{ route('send.messages') }}'"
-                :route_company_connectedRecruiter="'{{ route('company.connectedRecruiter') }}'"
+        <div id="app2" data-fetch-route="<?php echo e(route('fetch.messages')); ?>"
+            data-connected="<?php echo e(route('company.connectedRecruiter')); ?>" data-send="<?php echo e(route('send.messages')); ?>">
+            <global-chat :connected="connected" :messages="messages" :user="<?php echo e(Auth::user()); ?>"
+                :route_fetch="'<?php echo e(route('fetch.messages')); ?>'"
+                :route_fetch_indivisual="'<?php echo e(route('fetch.messages.individual')); ?>'"
+                :route_send_messages="'<?php echo e(route('send.messages')); ?>'"
+                :route_company_connectedRecruiter="'<?php echo e(route('company.connectedRecruiter')); ?>'"
                 v-on:messagesent="addMessage"></global-chat>
         </div>
     </main>
 
-    {{-- Footer --}}
-    @include('recruterpanel.includes.footer')
-    {{-- Footer end --}}
-    <script src="{{ asset('js/app.js') }}"></script>
+    
+    <?php echo $__env->make('recruterpanel.includes.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    
+    <script src="<?php echo e(asset('js/app.js')); ?>"></script>
 
-    <script src=" {{ asset('/dashboard/js/jquery-3.6.0.min.js') }}"></script>
+    <script src=" <?php echo e(asset('/dashboard/js/jquery-3.6.0.min.js')); ?>"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput-jquery.min.js"
         integrity="sha512-9WaaZVHSw7oRWH7igzXvUExj6lHGuw6GzMKW7Ix7E+ELt/V14dxz0Pfwfe6eZlWOF5R6yhrSSezaVR7dys6vMg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -279,7 +263,7 @@
             var frmData = new FormData($(".avatar-form")[0]);
             $.ajax({
                     type: "POST",
-                    url: "{{ route('recruiter.profile.update') }}",
+                    url: "<?php echo e(route('recruiter.profile.update')); ?>",
                     data: frmData,
                     dataType: "json",
                     encode: true,
@@ -299,7 +283,7 @@
         function existingJobs() {
             // console.log(id);
             $.ajax({
-                    url: "{{ route('fetch.recExisting.jobs') }}",
+                    url: "<?php echo e(route('fetch.recExisting.jobs')); ?>",
                     type: "GET",
                     // data: {
                     //     id: id,
@@ -348,7 +332,7 @@
         function checkExistingId(id) {
             var html = "";
             html += "<a class = 'btn_viewall btn_viewall fw-500 px-4 py-2 d-inline-block ms-auto'";
-            html += "href='{{ route('recruiter.existing.job', '') }}/" + id + "'>Next</a>";
+            html += "href='<?php echo e(route('recruiter.existing.job', '')); ?>/" + id + "'>Next</a>";
             $('#postExisting').html(html);
             // console.log(html);
         }
@@ -388,7 +372,7 @@
                 // alert("newPost");
                 var html = "";
                 html += "<a class='btn_viewall btn_viewall fw-500 px-4 py-2 d-inline-block ms-auto'";
-                html += "href='{{ route('recruiter.jobs.create') }}'>Next</a>";
+                html += "href='<?php echo e(route('recruiter.jobs.create')); ?>'>Next</a>";
                 $('.modal-footer').html('');
                 $('.modal-footer').html(html);
             }
@@ -463,8 +447,7 @@
             $('[data-bs-toggle="tooltip"]').tooltip();
         });
     </script>
-    {{-- <script src="{{ asset('/dashboard/js/popper.min.js') }}"></script>
-    <script src="{{ asset('/dashboard/js/bootstrap.min.js') }}"></script> --}}
+    
 
     <!-- select2 -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -482,7 +465,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <!-- DataTable -->
-    <script src="{{ asset('/dashboard/js/theme.js') }}"></script>
+    <script src="<?php echo e(asset('/dashboard/js/theme.js')); ?>"></script>
     <script>
         // start sidebar collapse functionality
         $('.not_collapsed').click(function() {
@@ -539,9 +522,10 @@
         // end date range for mapview page
     </script>
 
-    @yield('bottom_script')
-    @livewireScripts
-    {{-- maps --}}
+    <?php echo $__env->yieldContent('bottom_script'); ?>
+    <?php echo \Livewire\Livewire::scripts(); ?>
+
+    
     <script type="text/javascript"
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCR1isoqhNQsmPszCB5uW0kE_nCcmTbyw8&libraries=places&language=en">
     </script>
@@ -694,9 +678,7 @@
             });
         };
     </script>
-    {{-- <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDe_fLxQFXdTRd7JsWf2MiHzwjMhIupJ0A&libraries=places&callback=initAutocomplete"
-        async defer></script> --}}
+    
 </body>
 
 <script>
@@ -864,7 +846,7 @@
         $('#search_job input[type=checkbox]').prop('checked', false);
         $('#search_job input[type=text]').val('');
 
-        let url = "{{ route('recruiter.map') }}";
+        let url = "<?php echo e(route('recruiter.map')); ?>";
         document.location.href = url;
     })
 
@@ -921,7 +903,7 @@
         // console.log(formData);
         $.ajax({
             type: "GET",
-            url: "{{ route('search.Keyword') }}",
+            url: "<?php echo e(route('search.Keyword')); ?>",
             data: {
                 value: $('#search-title').val(),
                 for: $('#for').val(),
@@ -953,9 +935,9 @@
                 if (data['can'] != null) {
                     $.each(data['can'], function(index, value) {
                         html +=
-                            "<div class='d-flex align-items-center border-bottom py-2' style='gap:0 6px;'> <img src='{{ asset('public/storage/') }}/" +
+                            "<div class='d-flex align-items-center border-bottom py-2' style='gap:0 6px;'> <img src='<?php echo e(asset('public/storage/')); ?>/" +
                             value['user']['avatar'] +
-                            "' style='width: 40px; height: 40px; border-raduis: 50%; object-fit: cover;' /><a href='{{ route('candidate.detail', '') }}/" +
+                            "' style='width: 40px; height: 40px; border-raduis: 50%; object-fit: cover;' /><a href='<?php echo e(route('candidate.detail', '')); ?>/" +
                             value['slug'] + "' id='para-" +
                             value['id'] + "' onclick='fitTextTitle(" + value['id'] +
                             ")''>" +
@@ -965,9 +947,9 @@
                 if (data['rec'] != null) {
                     $.each(data['rec'], function(index, value) {
                         html +=
-                            "<div class='d-flex align-items-center border-bottom py-2' style='gap:0 6px;'> <img src='{{ asset('public/storage/') }}/" +
+                            "<div class='d-flex align-items-center border-bottom py-2' style='gap:0 6px;'> <img src='<?php echo e(asset('public/storage/')); ?>/" +
                             value['avatar'] +
-                            "' style='width: 40px; height: 40px; border-raduis: 50%; object-fit: cover;' /><a href='{{ route('recruiter.detail', '') }}/" +
+                            "' style='width: 40px; height: 40px; border-raduis: 50%; object-fit: cover;' /><a href='<?php echo e(route('recruiter.detail', '')); ?>/" +
                             value['slug'] + "' id='para-" +
                             value['id'] + "' onclick='fitTextTitle(" + value['id'] +
                             ")''>" +
@@ -977,9 +959,9 @@
                 if (data['comp'] != null) {
                     $.each(data['comp'], function(index, value) {
                         html +=
-                            "<div class='d-flex align-items-center border-bottom py-2' style='gap:0 6px;'> <img src='{{ asset('public/storage/') }}/" +
+                            "<div class='d-flex align-items-center border-bottom py-2' style='gap:0 6px;'> <img src='<?php echo e(asset('public/storage/')); ?>/" +
                             value['logo'] +
-                            "' style='width: 40px; height: 40px; border-raduis: 50%; object-fit: cover;' /><a href='{{ route('job.details', '') }}/" +
+                            "' style='width: 40px; height: 40px; border-raduis: 50%; object-fit: cover;' /><a href='<?php echo e(route('job.details', '')); ?>/" +
                             value['slug'] + "' id='para-" +
                             value['id'] + "' onclick='fitTextTitle(" + value['id'] +
                             ")''>" +
@@ -989,9 +971,9 @@
                 if (data['job'] != null) {
                     $.each(data['job'], function(index, value) {
                         html +=
-                            "<div class='d-flex align-items-center border-bottom py-2' style='gap:0 6px;'> <img src='{{ asset('public/storage/') }}/" +
+                            "<div class='d-flex align-items-center border-bottom py-2' style='gap:0 6px;'> <img src='<?php echo e(asset('public/storage/')); ?>/" +
                             value['banner'] +
-                            "' style='width: 40px; height: 40px; border-raduis: 50%; object-fit: cover;' /><a href='{{ route('job.listing.details', '') }}/" +
+                            "' style='width: 40px; height: 40px; border-raduis: 50%; object-fit: cover;' /><a href='<?php echo e(route('job.listing.details', '')); ?>/" +
                             value['slug'] + "' id='para-" +
                             value['id'] + "' onclick='fitTextTitle(" + value['id'] +
                             ")''>" +
@@ -1027,3 +1009,4 @@
 </script>
 
 </html>
+<?php /**PATH C:\Users\Rameez Ali\Pictures\erec\resources\views/recruterpanel/layout/app.blade.php ENDPATH**/ ?>
