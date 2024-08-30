@@ -170,7 +170,7 @@
 
 
                                 {{-- <div class="position-relative">
-                                    <input type="text" class="form-control fs-14 bg-theme-secondary map-datepicker"
+                                    <input type="text" class="form-cfontrol fs-14 bg-theme-secondary map-datepicker"
                                         id="valid-upto" name="posted_date" placeholder="DD/MM/YYYY" readonly />
                                     <label class="calender-icon d-block" for="valid-upto">
                                         <i class="far fa-calendar-alt" aria-hidden="true"></i>
@@ -267,7 +267,7 @@
                                         max="50" id="new-range" onchange="rangeSlide(this.value)" />
                                 </div>
                             </div>
-                            <div class="col ">
+                            {{-- <div class="col ">
                                 <div class="map-filter-rangeslider">
                                     <p class="range-slider-text mb-2">Score Range: <span><span
                                                 id="rangeValueScore">60</span>
@@ -275,6 +275,27 @@
                                     <input class="range" type="range" name="percentage" value="0"
                                         min="0" max="100" id="score-range"
                                         onchange="rangeSlideScore(this.value)" />
+                                </div>
+                            </div> --}}
+                            <div class="col">
+                                <div class="double_range_slider_wrapper position-relative">
+                                    <p class="range-slider-text mb-2">
+                                        Radius:
+                                        <span id="range1">
+                                            0
+                                        </span>
+                                        <span> &dash; </span>
+                                        <span id="range2">
+                                            100
+                                        </span>
+                                    </p>
+                                    <div>
+                                        <div class="slider-track"></div>
+                                        <input type="range" min="0" max="100" value="30"
+                                            id="slider-1" oninput="slideOne()">
+                                        <input type="range" min="0" max="100" value="70"
+                                            id="slider-2" oninput="slideTwo()">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -460,6 +481,43 @@
 
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
+    <script>
+        window.onload = function() {
+            slideOne();
+            slideTwo();
+        };
+
+        let sliderOne = document.getElementById("slider-1");
+        let sliderTwo = document.getElementById("slider-2");
+        let displayValOne = document.getElementById("range1");
+        let displayValTwo = document.getElementById("range2");
+        let minGap = 0;
+        let sliderTrack = document.querySelector(".slider-track");
+        let sliderMaxValue = document.getElementById("slider-1").max;
+
+        function slideOne() {
+            if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
+                sliderOne.value = parseInt(sliderTwo.value) - minGap;
+            }
+            displayValOne.textContent = sliderOne.value;
+            fillColor();
+        }
+
+        function slideTwo() {
+            if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
+                sliderTwo.value = parseInt(sliderOne.value) + minGap;
+            }
+            displayValTwo.textContent = sliderTwo.value;
+            fillColor();
+        }
+
+        function fillColor() {
+            percent1 = (sliderOne.value / sliderMaxValue) * 100;
+            percent2 = (sliderTwo.value / sliderMaxValue) * 100;
+            sliderTrack.style.background =
+                `linear-gradient(to right, #007ba7 ${percent1}% , #004d68 ${percent1}% , #004d68 ${percent2}%, #007ba7 ${percent2}%)`;
+        }
+    </script>
     <script>
         const tippyFunction = tippy('.popper-content-header', {
             content(reference) {

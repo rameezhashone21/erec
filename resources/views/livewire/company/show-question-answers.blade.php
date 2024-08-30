@@ -94,7 +94,8 @@
                                         <div class="position-absolute end-0 top-0">
                                             <a id="removeFileButton" type="button" data-bs-toggle="tooltip"
                                                 data-bs-placement="top" title=""
-                                                class="btn btn_viewall delete-exam-btn" data-bs-original-title="Delete">
+                                                class="btn btn_viewall delete-exam-btn delete_csv"
+                                                data-bs-original-title="Delete">
                                                 <i class="fas fa-trash"></i>
                                             </a>
                                         </div>
