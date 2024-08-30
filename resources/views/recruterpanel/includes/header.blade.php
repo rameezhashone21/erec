@@ -420,7 +420,7 @@
                             </div>
                             @if (isset(auth()->user()->package))
                                 <a href="" class="d-flex btn-subcription {{ auth()->user()->package->class }}"
-                                    style="font-size: 10px !importaant">
+                                    style="font-size: 10px !important">
                                     {{-- @if (auth()->user()->posts_count > auth()->user()->package->no_of_posts)
                                         {{ auth()->user()->package->no_of_posts + auth()->user()->posts_count - auth()->user()->package->no_of_posts }} /
                                         jobs Posts left

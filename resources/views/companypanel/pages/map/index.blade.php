@@ -6,7 +6,6 @@
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <style>
-    
         #map_wrapper_div {
             height: 400px;
         }
@@ -23,17 +22,28 @@
 @endsection
 
 @section('content')
-<style>
-        .bg-theme-secondary1{
+    <style>
+        .bg-theme-secondary1 {
             background-color: #f9f9f9 !important;
             height: 40px !important;
-    }
-    
-    .edit_arrow{
-        padding-top:5px !important;
-        margin-top:5px !important;
-    }
-</style>
+        }
+
+        .edit_arrow {
+            padding-top: 5px !important;
+            margin-top: 5px !important;
+        }
+
+        .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+            background-color: #5897fb;
+            color: white;
+            font-size: 12px;
+        }
+
+        .select2-results__option--selectable {
+            cursor: pointer;
+            font-size: 12px;
+        }
+    </style>
     {{-- <div class="col-xl-9 col-lg-8 col-md-7"> --}}
     <div class="col-12">
         <div class="dashboard_content bg-white rounded_10 p-md-4 p-2">
@@ -69,7 +79,7 @@
                             </div>
                             <div class="col">
                                 <label for="jobCategory" class="mb-2 fw-600">All Jobs</label>
-                                <div class="position-relative">
+                                <div class="position-relative bg-theme-secondary select-2">
                                     <!--<div class="form__icon">-->
                                     <!--    <svg xmlns="http://www.w3.org/2000/svg" width="15.095" height="15.176"-->
                                     <!--        viewBox="0 0 15.095 15.176">-->
@@ -78,20 +88,21 @@
                                     <!--            transform="translate(-98 -78.398)" fill="#aba6ac" />-->
                                     <!--    </svg>-->
                                     <!--</div>-->
-                                    <select name="post" id="jobCategory" class="select2 form-select fs-14 bg-theme-secondary">
-                                        <option value="" disabled selected>-- Select Job Post --</option>
+                                    <select name="post" id="jobCategory" class="select2-multiple form-select fs-14"
+                                        data-placeholder="-- Select Job Post --">
+                                        <option></option>
                                         @foreach ($post as $row)
                                             <option value="{{ $row->id }}">{{ $row->post }}</option>
                                         @endforeach
                                     </select>
-                                    <button type="button" class="resetVal1" id="jobCategoryclear" style="display: none;">
+                                    {{-- <button type="button" class="resetVal1" id="jobCategoryclear" style="display: none;">
                                         <i class="fa-solid fa-xmark"></i>
-                                    </button>
+                                    </button> --}}
                                 </div>
                             </div>
                             <div class="col">
                                 <label for="category" class="mb-2 fw-600">Category</label>
-                                <div class="position-relative">
+                                <div class="position-relative bg-theme-secondary select-2">
                                     <!--<div class="form__icon">-->
                                     <!--    <svg xmlns="http://www.w3.org/2000/svg" width="15.095" height="15.176"-->
                                     <!--        viewBox="0 0 15.095 15.176">-->
@@ -101,8 +112,9 @@
                                     <!--    </svg>-->
                                     <!--</div>-->
                                     <select name="category" id="category"
-                                        class="select2 form-select fs-14 bg-theme-secondary">
-                                        <option value="" disabled selected>-- Select Job category --</option>
+                                        class="select2-multiple form-select fs-14 bg-theme-secondary"
+                                        data-placeholder="-- Select Job category --">
+                                        <option></option>
                                         @if ($data != null)
                                             @foreach ($data as $row)
                                                 <option value="{{ $row['id'] }}">{{ $row['title'] }}</option>
@@ -113,9 +125,9 @@
                                         <option value="Category2">Category2</option>
                                         <option value="Category3">Category3</option> --}}
                                     </select>
-                                    <button type="button" class="resetVal1" id="categoryclear" style="display: none;">
+                                    {{-- <button type="button" class="resetVal1" id="categoryclear" style="display: none;">
                                         <i class="fa-solid fa-xmark"></i>
-                                    </button>
+                                    </button> --}}
                                 </div>
                             </div>
                         </div>
@@ -158,7 +170,7 @@
 
 
                                 {{-- <div class="position-relative">
-                                    <input type="text" class="form-control fs-14 bg-theme-secondary map-datepicker"
+                                    <input type="text" class="form-cfontrol fs-14 bg-theme-secondary map-datepicker"
                                         id="valid-upto" name="posted_date" placeholder="DD/MM/YYYY" readonly />
                                     <label class="calender-icon d-block" for="valid-upto">
                                         <i class="far fa-calendar-alt" aria-hidden="true"></i>
@@ -255,7 +267,7 @@
                                         max="50" id="new-range" onchange="rangeSlide(this.value)" />
                                 </div>
                             </div>
-                            <div class="col ">
+                            {{-- <div class="col ">
                                 <div class="map-filter-rangeslider">
                                     <p class="range-slider-text mb-2">Score Range: <span><span
                                                 id="rangeValueScore">60</span>
@@ -263,6 +275,27 @@
                                     <input class="range" type="range" name="percentage" value="0"
                                         min="0" max="100" id="score-range"
                                         onchange="rangeSlideScore(this.value)" />
+                                </div>
+                            </div> --}}
+                            <div class="col">
+                                <div class="double_range_slider_wrapper position-relative">
+                                    <p class="range-slider-text mb-2">
+                                        Radius:
+                                        <span id="range1">
+                                            0
+                                        </span>
+                                        <span> &dash; </span>
+                                        <span id="range2">
+                                            100
+                                        </span>
+                                    </p>
+                                    <div>
+                                        <div class="slider-track"></div>
+                                        <input type="range" min="0" max="100" value="30"
+                                            id="slider-1" oninput="slideOne()">
+                                        <input type="range" min="0" max="100" value="70"
+                                            id="slider-2" oninput="slideTwo()">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -449,6 +482,43 @@
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
     <script>
+        window.onload = function() {
+            slideOne();
+            slideTwo();
+        };
+
+        let sliderOne = document.getElementById("slider-1");
+        let sliderTwo = document.getElementById("slider-2");
+        let displayValOne = document.getElementById("range1");
+        let displayValTwo = document.getElementById("range2");
+        let minGap = 0;
+        let sliderTrack = document.querySelector(".slider-track");
+        let sliderMaxValue = document.getElementById("slider-1").max;
+
+        function slideOne() {
+            if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
+                sliderOne.value = parseInt(sliderTwo.value) - minGap;
+            }
+            displayValOne.textContent = sliderOne.value;
+            fillColor();
+        }
+
+        function slideTwo() {
+            if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
+                sliderTwo.value = parseInt(sliderOne.value) + minGap;
+            }
+            displayValTwo.textContent = sliderTwo.value;
+            fillColor();
+        }
+
+        function fillColor() {
+            percent1 = (sliderOne.value / sliderMaxValue) * 100;
+            percent2 = (sliderTwo.value / sliderMaxValue) * 100;
+            sliderTrack.style.background =
+                `linear-gradient(to right, #007ba7 ${percent1}% , #004d68 ${percent1}% , #004d68 ${percent2}%, #007ba7 ${percent2}%)`;
+        }
+    </script>
+    <script>
         const tippyFunction = tippy('.popper-content-header', {
             content(reference) {
                 // console.log({
@@ -472,19 +542,22 @@
             $('#smart-search').trigger('submit');
 
         });
-        
-        $(document).ready(function() {
-            $('#jobCategory').select2();
-            $('#category').select2();
-          $('.select2-selection.select2-selection--single').addClass('bg-theme-secondary1');
-          $('.select2-selection__rendered').css({'height': '100%','margin': '5px'});
-          //$('.select2-selection.select2-selection--single').addClass('form-control');
-        //   $('.select2-selection.select2-selection--single').addClass('input_with_icon');
-          $('.select2-selection__arrow').addClass('edit_arrow');
-          $('.select2.select2-container.select2-container--default').removeAttr('style');
 
-          //$('.select2.select2-container.select2-container--default.bg-theme-secondary').removeClass('select2-container--default');
-          //$('.select2-selection.select2-selection--single').addClass('bg-theme-secondary');
+        $(document).ready(function() {
+            // $('#jobCategory').select2();
+            // $('#category').select2();
+            // $('.select2-selection.select2-selection--single').addClass('bg-theme-secondary1');
+            // $('.select2-selection__rendered').css({
+            //     'height': '100%',
+            //     'margin': '5px'
+            // });
+            //$('.select2-selection.select2-selection--single').addClass('form-control');
+            //   $('.select2-selection.select2-selection--single').addClass('input_with_icon');
+            // $('.select2-selection__arrow').addClass('edit_arrow');
+            // $('.select2.select2-container.select2-container--default').removeAttr('style');
+
+            //$('.select2.select2-container.select2-container--default.bg-theme-secondary').removeClass('select2-container--default');
+            //$('.select2-selection.select2-selection--single').addClass('bg-theme-secondary');
         });
 
         $('#candidateGender').on('change', function() {
@@ -498,12 +571,12 @@
         });
         $('#jobCategory').on('change', function() {
             $('#smart-search').trigger('submit');
-            $(this).find("option:selected").each(function() {
-                var optionValue = $(this).attr("value");
-                if (optionValue) {
-                    $(this).parent().siblings('button').show()
-                } else {}
-            });
+            // $(this).find("option:selected").each(function() {
+            //     var optionValue = $(this).attr("value");
+            //     if (optionValue) {
+            //         $(this).parent().siblings('button').show()
+            //     } else {}
+            // });
         });
         $('#experience').on('change', function() {
             $('#smart-search').trigger('submit');
@@ -525,12 +598,12 @@
         });
         $('#category').on('change', function() {
             $('#smart-search').trigger('submit');
-            $(this).find("option:selected").each(function() {
-                var optionValue = $(this).attr("value");
-                if (optionValue) {
-                    $(this).parent().siblings('button').show()
-                } else {}
-            });
+            // $(this).find("option:selected").each(function() {
+            //     var optionValue = $(this).attr("value");
+            //     if (optionValue) {
+            //         $(this).parent().siblings('button').show()
+            //     } else {}
+            // });
         });
         // $('#valid-upto').on('change', function() {
         //     $('#smart-search').trigger('submit');
@@ -566,7 +639,7 @@
             $("#cand-card").html("<p>Loading...</p>");
             e.preventDefault();
             var userFormData = $(this).serializeArray();
-            console.log("formdata",userFormData)
+            console.log("formdata", userFormData)
             $.ajax({
                 type: "POST",
                 url: "{{ route('smartSearch.candidate') }}",
@@ -574,7 +647,7 @@
                 dataType: "json",
                 encode: true,
             }).done(function(data) {
-                console.log("llpa",data);
+                console.log("llpa", data);
                 var html = "";
                 var newhtml = "";
                 if (data.length == 0) {
@@ -818,7 +891,7 @@
                         html +=
                             "<li class='pb-4 px-2 popper-content-header' data-template='popper-content-" +
                             val['id'] + "' id='" + val['id'] + "' data-bs-toggle='popover'>";
-                        html += "<div class='map-page-userbox d-flex'>";
+                        html += "<div class='map-page-userbox d-flex border'>";
                         html += "<div class='border-end px-1 pt-1 text-center  '>";
                         // html +=
                         //     "<img src='{{ asset('public/storage/') }}/" + val['candidate']['user']['avatar'] +
@@ -959,15 +1032,16 @@
                                 'latitude'
                             ] + "' data-lng='" + val['candidate']['longitude'] +
                             "' onclick='submitLoc(" + val['id'] + ")'>" + val['candidate'][
-                                'address'] + "</span>";
+                                'address'
+                            ] + "</span>";
                         html +=
                             "</div>";
                         html += "</div>";
-                        html += "<div class='d-flex border-top '>";
+                        html += "<div class='d-flex pt-2 border-top justify-content-between px-3'>";
                         html += "<a href='{{ route('candidate.detail', '') }}/" + val['candidate'][
                                 'slug'
                             ] +
-                            "' class='primary-color d-flex align-items-center mx-3'";
+                            "' class='primary-color d-flex align-items-center'";
                         html +=
                             "style='font-size: 12px; gap: 6px;' style='font-weight: 500' target='_blank'>";
                         html +=
@@ -994,7 +1068,8 @@
                         //         'candidate']['slug'] +
                         //     "' class='text-grey d-flex align-items-center'";
                         html += "style='font-size: 12px; gap: 6px;' style='font-weight: 500'>";
-                        html += "'<div><open-box':openBoxFunction='openBox':id='1'></open-box></div>"
+                        html +=
+                            "'<div><open-box':openBoxFunction='openBox':id='1'></open-box></div>"
                         html +=
                             "<span>";
                         html +=
@@ -1012,7 +1087,7 @@
                         html += "</span>";
                         html += "<span>";
                         html +=
-                            "Messasssge";
+                            "Messages";
                         html += "</span>";
                         html += "</a>";
                         html += "<div class='ms-auto' id='testIsPending-" + val['id'] + "'>";
@@ -1158,14 +1233,14 @@
                 }
                 var lat = "{{ auth()->user()->company->lat }}";
                 var lng = "{{ auth()->user()->company->lng }}";
-                
+
                 if ($("#lat").val() != '') {
                     lat = $("#lat").val();
                 }
                 if ($("#lng").val() != '') {
                     lng = $("#lng").val();
                 }
-                console.log("as",lat, lng, userFormData);
+                console.log("as", lat, lng, userFormData);
                 initialize(lat, lng, userFormData);
             }).fail(function(error) {
                 var errors = error.responseJSON;
@@ -1300,11 +1375,14 @@
                 url: "{{ route('company.marker.candidate') }}",
                 type: 'GET',
                 dataType: 'json',
-                data: data,// added data type
+                data: data, // added data type
                 success: function(markers) {
-                    
+
                     var map;
-                    var latlng = { lat: parseInt(lat), lng: parseInt(lng) };
+                    var latlng = {
+                        lat: parseInt(lat),
+                        lng: parseInt(lng)
+                    };
 
                     var mapOptions = {
                         center: latlng,
@@ -1331,8 +1409,9 @@
                         var infoWindow = new google.maps.InfoWindow(),
                             marker, i;
                         for (i = 0; i < markers.length; i++) {
-                            var position = new google.maps.LatLng(markers[i]['candidate']['latitude'], markers[i]['candidate']['longitude']);
-                            console.log("pos",position);
+                            var position = new google.maps.LatLng(markers[i]['candidate']['latitude'], markers[
+                                i]['candidate']['longitude']);
+                            console.log("pos", position);
                             marker = new google.maps.Marker({
                                 position: position,
                                 map: map,
@@ -1340,7 +1419,7 @@
                                 icon: "{{ asset('/imgs/candidate.png') }}",
 
                             });
-                                                                                                        console.log("dd",position);
+                            console.log("dd", position);
 
                             // Each marker to have an info window
                             google.maps.event.addListener(marker, 'click', (function(marker, i) {
@@ -1400,21 +1479,21 @@
             $(this).hide();
             $('#smart-search').trigger('submit');
         });
-        $('#categoryclear').click(function() {
-            $('#category').prop('selectedIndex', 0);
-            const selectVal = $('#category').val();
-            $("#category option[value='" + selectVal + "']").attr("selceted", false);
-            $(this).hide();
-            $('#smart-search').trigger('submit');
-        });
-        $('#jobCategoryclear').click(function() {
-            $('#jobCategory').prop('selectedIndex', 0);
-            const selectVal = $('#jobCategory').val();
-            $("#jobCategory option[value='" + selectVal + "']").attr("selceted", false);
-            $(this).hide();
-            $('#smart-search').trigger('submit');
+        // $('#categoryclear').click(function() {
+        //     $('#category').prop('selectedIndex', 0);
+        //     const selectVal = $('#category').val();
+        //     $("#category option[value='" + selectVal + "']").attr("selceted", false);
+        //     $(this).hide();
+        //     $('#smart-search').trigger('submit');
+        // });
+        // $('#jobCategoryclear').click(function() {
+        //     $('#jobCategory').prop('selectedIndex', 0);
+        //     const selectVal = $('#jobCategory').val();
+        //     $("#jobCategory option[value='" + selectVal + "']").attr("selceted", false);
+        //     $(this).hide();
+        //     $('#smart-search').trigger('submit');
 
-        });
+        // });
         $('#experienceclear').click(function() {
             $('#experience').prop('selectedIndex', 0);
             const selectVal = $('#experience').val();

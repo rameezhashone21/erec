@@ -1,58 +1,58 @@
 @section('page_title', 'E-Rec')
 
 @section('head_style')
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 @endsection
 
 <div class="col-xl-9 col-lg-8">
-  <button class="mobile_menu_trigger d-lg-none btn_theme border-0 py-2 px-4 mb-3">
-    <i class="fa-solid fa-right-left me-3"></i><span>Side Menu</span>
-  </button>
-  <div class="dashboard_content bg-white rounded_10 p-4">
-      
-     @if(session('message'))
-    <div class="alert alert-success">{{ session('message') }}</div>
-    @endif
-    
-    @if (session('error'))
-      <div class="alert alert-danger" role="alert">
-        {{ session('error') }}
-      </div>
-    @endif
+    <button class="mobile_menu_trigger d-lg-none btn_theme border-0 py-2 px-4 mb-3">
+        <i class="fa-solid fa-right-left me-3"></i><span>Side Menu</span>
+    </button>
+    <div class="dashboard_content bg-white rounded_10 p-4">
 
-    @if (session('success'))
-      <div class="alert alert-success" role="alert">
-        {{ session('success') }}
-      </div>
-    @endif
-    
-    @php
-    use App\Models\User;
-        $package_id = User::where('id', Auth::user()->id)->value('package_id');
-    @endphp
+        @if (session('message'))
+            <div class="alert alert-success">{{ session('message') }}</div>
+        @endif
 
-    <div class="d-md-flex aling-items-center mb-3">
-      <div>
-        <h2 class="fw-500 text_primary fs-3 mb-2">
-          {{ $exam->exam_title }}
-        </h2>
-        <h3 class="fw-500 text_primary fs-5 mb-4">
-          Question & Answers
-        </h3>
-      </div>
-      <div class="ms-auto">
-      <button id="importButton" type="button" 
-        class="btn_viewall fw-500 px-4 py-2 d-inline-block" data-value={{$package_id}}>
-          Import Question
-        </button>
-        <a href="{{ route('company.exam.question.create', ['id' => $exam->id]) }}" role="button"
-          class="btn_viewall fw-500 px-4 py-2 d-inline-block ">
-          Add New
-        </a>
-      </div>
-    </div>
-    {{-- start modal upload questions --}}
+        @if (session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @php
+            use App\Models\User;
+            $package_id = User::where('id', Auth::user()->id)->value('package_id');
+        @endphp
+
+        <div class="d-md-flex aling-items-center mb-3">
+            <div>
+                <h2 class="fw-500 text_primary fs-3 mb-2">
+                    {{ $exam->exam_title }}
+                </h2>
+                <h3 class="fw-500 text_primary fs-5 mb-4">
+                    Question & Answers
+                </h3>
+            </div>
+            <div class="ms-auto">
+                <button id="importButton" type="button" class="btn_viewall fw-500 px-4 py-2 d-inline-block"
+                    data-value={{ $package_id }}>
+                    Import Question
+                </button>
+                <a href="{{ route('company.exam.question.create', ['id' => $exam->id]) }}" role="button"
+                    class="btn_viewall fw-500 px-4 py-2 d-inline-block ">
+                    Add New
+                </a>
+            </div>
+        </div>
+        {{-- start modal upload questions --}}
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content p-4">
@@ -65,9 +65,10 @@
                         {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
                     </div>
                     <div class="modal-body ">
-                        <form method="post" action="{{ route('company.exam.uploadCSV') }}" enctype="multipart/form-data">
-                        @csrf    
-                        <div class="row align-items-center justify-content-center">
+                        <form method="post" action="{{ route('company.exam.uploadCSV') }}"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <div class="row align-items-center justify-content-center">
                                 <div class="col-12" id="uploadWrapper">
                                     <label class="upload__wrapper d-block" for="cvFile">
                                         <div class="mb-4">
@@ -82,13 +83,22 @@
                                                 style="cursor: pointer;">Browse</span>
                                         </p>
                                         <input type="text" id="cvFile1" accept=".pdf, .doc, .docx" required=""
-                                          name="exam_id" style="display: none;" value="{{$exam->id}}">
+                                            name="exam_id" style="display: none;" value="{{ $exam->id }}">
                                         <input type="file" id="cvFile" accept=".csv" required=""
                                             name="csv_file" style="display: none;">
                                     </label>
                                 </div>
                                 <div class="col-lg-6" id="uploadContainer" style="display: none;">
-                                    <div class="d-flex w-100 gap-3">
+                                    <div class="d-flex w-100 gap-3 position-relative">
+                                        {{-- <button type="button" class="">close</button> --}}
+                                        <div class="position-absolute end-0 top-0">
+                                            <a id="removeFileButton" type="button" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title=""
+                                                class="btn btn_viewall delete-exam-btn delete_csv"
+                                                data-bs-original-title="Delete">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
                                         <div>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="41.211" height="54.73"
                                                 viewBox="0 0 41.211 54.73">
@@ -107,9 +117,10 @@
                                                             stroke-linejoin="round" stroke-width="3">
                                                         </path>
                                                     </g>
-                                                    <text id="PDF" transform="translate(8 39.865)" fill="#007ba7"
-                                                        font-size="12" font-family="SegoeUI-Bold, Segoe UI"
-                                                        font-weight="700" letter-spacing="0.05em">
+                                                    <text id="PDF" transform="translate(8 39.865)"
+                                                        fill="#007ba7" font-size="12"
+                                                        font-family="SegoeUI-Bold, Segoe UI" font-weight="700"
+                                                        letter-spacing="0.05em">
                                                         <tspan x="0" y="0">PDF</tspan>
                                                     </text>
                                                 </g>
@@ -129,9 +140,10 @@
                                 </div>
                             </div>
                             <div class="text-center mt-4">
-                                <p class="fw-bold mb-3">Download Sample Question Paper</p>
+                                <p class="fw-bold mb-3" id="textDownloadSample">Download Sample Question Paper</p>
                                 <a href="{{ route('downloadCSV') }}"
-                                    class="btn_viewall bg-black fw-500 px-4 py-2 d-inline-flex align-items-center">
+                                    class="btn_viewall bg-black fw-500 px-4 py-2 d-inline-flex align-items-center"
+                                    id="downloadSample">
                                     <span class="me-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="15.994" height="14.763"
                                             viewBox="0 0 15.994 14.763">
@@ -156,123 +168,134 @@
             </div>
         </div>
         {{-- end modal upload questions --}}
-    <div>
-        
-            
-    @include('modals.example-modal-6')
-        
+        <div>
 
-      <div class="accordion" id="accordionExample">
-        @forelse ($qa as $key => $row)
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="heading-{{ $key + 1 }}">
-              <div class="d-flex ">
-                <button
-                  class="accordion-button question-title  @if ($key + 1 > 1) {{ __('collapsed') }} @endif"
-                  type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ $key + 1 }}"
-                  aria-expanded="true" aria-controls="collapse-{{ $key + 1 }}">
-                  <span class="pe-5">
-                    {{ $loop->iteration }}. {{ $row['question'] }}
-                  </span>
-                </button>
-                <div class="dropdown me-3 align-self-center">
-                  <button class="bg-transparent border-0" type="button" id="dropdownMenuButton1"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    <svg id="three-dots-vertical" xmlns="http://www.w3.org/2000/svg" width="4" height="17.334"
-                      viewBox="0 0 4 17.334">
-                      <g id="Group_2837" data-name="Group 2837" transform="translate(0 0)">
-                        <path id="Path_3306" data-name="Path 3306"
-                          d="M23.5,19.834a2,2,0,1,1-2-2A2,2,0,0,1,23.5,19.834Zm0-6.667a2,2,0,1,1-2-2A2,2,0,0,1,23.5,13.167Zm0-6.667a2,2,0,1,1-2-2A2,2,0,0,1,23.5,6.5Z"
-                          transform="translate(-19.5 -4.5)" fill="#92929d" />
-                      </g>
-                    </svg>
-                  </button>
-                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li class="px-3 pb-2 pt-2">
-                      @if($row['type'] == "multiple")
-                      <a data-bs-placement="top" title="Edit" data-id={{$row['id']}}
-                        class="btn btn_viewall d-block w-100 hello" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal6">
-                        Edit
-                      </a>
-                      @elseif($row['type'] == "single")
-                      <a data-bs-placement="top" title="Edit" data-id={{$row['id']}}
-                        class="btn btn_viewall d-block w-100 hello" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal6">
-                        Edit
-                      </a>
-                      @elseif($row['type'] == "text")
-                      <a data-bs-placement="top" title="Edit" data-id={{$row['id']}}
-                        class="btn btn_viewall d-block w-100 hello" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal6">
-                        Edit
-                      </a>
-                      @elseif($row['type'] == "boolean")
-                      <a data-bs-placement="top" title="Edit" data-id={{$row['id']}}
-                        class="btn btn_viewall d-block w-100 hello" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal6">
-                        Edit
-                      </a>
-                      @endif
-                    </li>
-                    <li class="px-3 pb-3">
-                    <form action="{{ route('company.exam.question.remove') }}" method="post">
-                        @csrf
-                        <input type="hidden" name="exam_id" value={{$row['exam_id']}}> 
-                        <input type="hidden" name="id" value={{$row['id']}}>
-                        <a type="button" data-bs-toggle="tooltip"
-                            data-bs-placement="top" title="Delete" class="btn btn_viewall delete-exam-btn1 d-block w-100"> 
-                        Delete
-                        </a>
-                    </form>
-                    
-                    
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <p class="text_primary question-type">Question Type: @if ($row['type'] == 'boolean')
-                  {{ 'True/False' }}
-                @else
-                  {{ ucfirst($row['type']) }}
-                @endif
-              </p>
-            </h2>
-            <div id="collapse-{{ $key + 1 }}"
-              class="accordion-collapse collapse @if ($key + 1 == 1) {{ __('show') }} @endif"
-              aria-labelledby="heading-{{ $key + 1 }}" data-bs-parent="#accordionExample">
 
-              @php($a = 'A')
-              @foreach ($row->answers as $answer)
-                <div class="accordion-body pt-0">
-                  <p class="answer_wrap">
-                    @if ($row['type'] == 'boolean')
-                      <span class="fw-bold">Correct Answer : @if ($answer->is_correct == 'yes')
-                          {{ 'True' }}
-                        @else
-                          {{ 'False' }}
-                        @endif
-                      </span>
-                    @elseif($row['type'] == 'multiple' || $row['type'] == 'single')
-                      <span class="fw-bold">{{ $a }}) </span>
-                      {{ $answer['answer'] }} @if ($answer->is_correct == 'yes')
-                        {{ '(Correct)' }}
-                      @endif
-                    @else
-                      <span class="fw-bold">{{ $a }}) </span>
-                      {{ $answer['answer'] }}
-                    @endif
-                  </p>
-                </div>
-                @php($a++)
-              @endforeach
+            @include('modals.example-modal-6')
 
+
+            <div class="accordion" id="accordionExample">
+                @forelse ($qa as $key => $row)
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading-{{ $key + 1 }}">
+                            <div class="d-flex ">
+                                <button
+                                    class="accordion-button question-title  @if ($key + 1 > 1) {{ __('collapsed') }} @endif"
+                                    type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse-{{ $key + 1 }}" aria-expanded="true"
+                                    aria-controls="collapse-{{ $key + 1 }}">
+                                    <span class="pe-5">
+                                        {{ $loop->iteration }}. {{ $row['question'] }}
+                                    </span>
+                                </button>
+                                <div class="dropdown me-3 align-self-center">
+                                    <button class="bg-transparent border-0" type="button" id="dropdownMenuButton1"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <svg id="three-dots-vertical" xmlns="http://www.w3.org/2000/svg"
+                                            width="4" height="17.334" viewBox="0 0 4 17.334">
+                                            <g id="Group_2837" data-name="Group 2837" transform="translate(0 0)">
+                                                <path id="Path_3306" data-name="Path 3306"
+                                                    d="M23.5,19.834a2,2,0,1,1-2-2A2,2,0,0,1,23.5,19.834Zm0-6.667a2,2,0,1,1-2-2A2,2,0,0,1,23.5,13.167Zm0-6.667a2,2,0,1,1-2-2A2,2,0,0,1,23.5,6.5Z"
+                                                    transform="translate(-19.5 -4.5)" fill="#92929d" />
+                                            </g>
+                                        </svg>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li class="px-3 pb-2 pt-2">
+                                            @if ($row['type'] == 'multiple')
+                                                <a data-bs-placement="top" title="Edit" data-id={{ $row['id'] }}
+                                                    class="btn btn_viewall d-block w-100 hello"
+                                                    class="btn btn-info btn-lg" data-toggle="modal"
+                                                    data-target="#myModal6">
+                                                    Edit
+                                                </a>
+                                            @elseif($row['type'] == 'single')
+                                                <a data-bs-placement="top" title="Edit" data-id={{ $row['id'] }}
+                                                    class="btn btn_viewall d-block w-100 hello"
+                                                    class="btn btn-info btn-lg" data-toggle="modal"
+                                                    data-target="#myModal6">
+                                                    Edit
+                                                </a>
+                                            @elseif($row['type'] == 'text')
+                                                <a data-bs-placement="top" title="Edit" data-id={{ $row['id'] }}
+                                                    class="btn btn_viewall d-block w-100 hello"
+                                                    class="btn btn-info btn-lg" data-toggle="modal"
+                                                    data-target="#myModal6">
+                                                    Edit
+                                                </a>
+                                            @elseif($row['type'] == 'boolean')
+                                                <a data-bs-placement="top" title="Edit" data-id={{ $row['id'] }}
+                                                    class="btn btn_viewall d-block w-100 hello"
+                                                    class="btn btn-info btn-lg" data-toggle="modal"
+                                                    data-target="#myModal6">
+                                                    Edit
+                                                </a>
+                                            @endif
+                                        </li>
+                                        <li class="px-3 pb-3">
+                                            <form action="{{ route('company.exam.question.remove') }}"
+                                                method="post">
+                                                @csrf
+                                                <input type="hidden" name="exam_id" value={{ $row['exam_id'] }}>
+                                                <input type="hidden" name="id" value={{ $row['id'] }}>
+                                                <a type="button" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Delete"
+                                                    class="btn btn_viewall delete-exam-btn1 d-block w-100">
+                                                    Delete
+                                                </a>
+                                            </form>
+
+
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <p class="text_primary question-type">Question Type: @if ($row['type'] == 'boolean')
+                                    {{ 'True/False' }}
+                                @else
+                                    {{ ucfirst($row['type']) }}
+                                @endif
+                            </p>
+                        </h2>
+                        <div id="collapse-{{ $key + 1 }}"
+                            class="accordion-collapse collapse @if ($key + 1 == 1) {{ __('show') }} @endif"
+                            aria-labelledby="heading-{{ $key + 1 }}" data-bs-parent="#accordionExample">
+
+                            @php($a = 'A')
+                            @foreach ($row->answers as $answer)
+                                <div class="accordion-body pt-0">
+                                    <p class="answer_wrap">
+                                        @if ($row['type'] == 'boolean')
+                                            <span class="fw-bold">Correct Answer : @if ($answer->is_correct == 'yes')
+                                                    {{ 'True' }}
+                                                @else
+                                                    {{ 'False' }}
+                                                @endif
+                                            </span>
+                                        @elseif($row['type'] == 'multiple' || $row['type'] == 'single')
+                                            <span class="fw-bold">{{ $a }}) </span>
+                                            {{ $answer['answer'] }} @if ($answer->is_correct == 'yes')
+                                                {{ '(Correct)' }}
+                                            @endif
+                                        @else
+                                            <span class="fw-bold">{{ $a }}) </span>
+                                            {{ $answer['answer'] }}
+                                        @endif
+                                    </p>
+                                </div>
+                                @php($a++)
+                            @endforeach
+
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-center">
+                        You didn't add any questions & answers yet
+                    </p>
+                @endforelse
             </div>
-          </div>
-        @empty
-          <p class="text-center">
-            You didn't add any questions & answers yet
-          </p>
-        @endforelse
-      </div>
-    </div>
-    {{-- <div class="table-responsive table_height scrollbar">
+        </div>
+        {{-- <div class="table-responsive table_height scrollbar">
       <table class="table table-striped table-payment display nowrap" style="width:100%">
         <thead>
           <tr>
@@ -322,18 +345,18 @@
         </tbody>
       </table>
     </div> --}}
-    {{ $qa->links() }}
-  </div>
+        {{ $qa->links() }}
+    </div>
 </div>
 
 
 <script>
-$(document).on("click", ".hello", function () {
-     var eventId = $(this).data('id');
-     console.log("question_id",eventId);
-     $('#idHolder').html(eventId)
-     
-     var url = "{{ route('get-question-data') }}";
+    $(document).on("click", ".hello", function() {
+        var eventId = $(this).data('id');
+        console.log("question_id", eventId);
+        $('#idHolder').html(eventId)
+
+        var url = "{{ route('get-question-data') }}";
         var params = {
             id: eventId
         };
@@ -344,28 +367,27 @@ $(document).on("click", ".hello", function () {
             method: 'GET',
             data: params,
             success: function(response) {
-                
+
                 // Handle successful response
-                
+
                 question_type = response['question_type']['type'];
                 question = response['question_type']['question'];
                 exam_id = response['question_type']['exam_id'];
 
-                console.log("sda",question_type)
-
-                
-                if(question_type == 'multiple')
-                {
-                  document.getElementById('multiple-section').classList.remove('d-none')
-                  document.getElementById('text-section').classList.add('d-none')
-                  document.getElementById('true-false-section').classList.add('d-none');
-                  document.getElementById('single-section').classList.add('d-none')
+                console.log("sda", question_type)
 
 
-                  var answer_option = document.getElementById('multiple');
-                  answer_option.checked = true;
+                if (question_type == 'multiple') {
+                    document.getElementById('multiple-section').classList.remove('d-none')
+                    document.getElementById('text-section').classList.add('d-none')
+                    document.getElementById('true-false-section').classList.add('d-none');
+                    document.getElementById('single-section').classList.add('d-none')
 
-                  console.log("jj",response['answers'][0]['answer']);
+
+                    var answer_option = document.getElementById('multiple');
+                    answer_option.checked = true;
+
+                    console.log("jj", response['answers'][0]['answer']);
                     $('.is-answer-m-1').val(response['answers'][0]['answer']);
                     $('.is-answer-m-2').val(response['answers'][1]['answer']);
                     $('.is-answer-m-3').val(response['answers'][2]['answer']);
@@ -374,32 +396,31 @@ $(document).on("click", ".hello", function () {
                     $('.question_type').val("multiple");
                     $('.question').val(question);
                     $('.exam_id').val(exam_id);
-                    
+
                     //Check or uncheck checkbox based on data.checkboxValue
-                    if (response['answers'][0]['is_correct']=='yes') {
-                      $('.is-correct-m-1').prop('checked', true);
-                    } 
-                    if(response['answers'][1]['is_correct']=='yes') {
-                      $('.is-correct-m-2').prop('checked', true);
+                    if (response['answers'][0]['is_correct'] == 'yes') {
+                        $('.is-correct-m-1').prop('checked', true);
                     }
-                    if(response['answers'][2]['is_correct']=='yes') {
-                      $('.is-correct-m-3').prop('checked', true);
+                    if (response['answers'][1]['is_correct'] == 'yes') {
+                        $('.is-correct-m-2').prop('checked', true);
                     }
-                    if(response['answers'][3]['is_correct']=='yes') {
-                      $('.is-correct-m-4').prop('checked', true);
+                    if (response['answers'][2]['is_correct'] == 'yes') {
+                        $('.is-correct-m-3').prop('checked', true);
                     }
-                }
-                else if(question_type == 'single'){
+                    if (response['answers'][3]['is_correct'] == 'yes') {
+                        $('.is-correct-m-4').prop('checked', true);
+                    }
+                } else if (question_type == 'single') {
 
-                  document.getElementById('single-section').classList.remove('d-none')
-                  document.getElementById('text-section').classList.add('d-none')
-                  document.getElementById('true-false-section').classList.add('d-none');
-                  document.getElementById('multiple-section').classList.add('d-none')
-                  
-                  var answer_option = document.getElementById('single');
-                  answer_option.checked = true;
+                    document.getElementById('single-section').classList.remove('d-none')
+                    document.getElementById('text-section').classList.add('d-none')
+                    document.getElementById('true-false-section').classList.add('d-none');
+                    document.getElementById('multiple-section').classList.add('d-none')
 
-                    
+                    var answer_option = document.getElementById('single');
+                    answer_option.checked = true;
+
+
                     $('.is-answer-s-1').val(response['answers'][0]['answer']);
                     $('.is-answer-s-2').val(response['answers'][1]['answer']);
                     $('.is-answer-s-3').val(response['answers'][2]['answer']);
@@ -408,37 +429,33 @@ $(document).on("click", ".hello", function () {
                     $('.question_type').val("single");
                     $('.question').val(question);
                     $('.exam_id').val(exam_id);
-                    
-                     //Check or uncheck checkbox based on data.checkboxValue
-                    if (response['answers'][0]['is_correct']=='yes') {
+
+                    //Check or uncheck checkbox based on data.checkboxValue
+                    if (response['answers'][0]['is_correct'] == 'yes') {
                         var answer_option = document.getElementById('is-correct-s-1');
                         answer_option.checked = true;
-                    } 
-                    else if(response['answers'][1]['is_correct']=='yes') {
+                    } else if (response['answers'][1]['is_correct'] == 'yes') {
                         console.log("cond 22 executed");
                         var answer_option = document.getElementById('is-correct-s-2');
                         answer_option.checked = true;
-                        
-                    }
-                    else if(response['answers'][2]['is_correct']=='yes') {
+
+                    } else if (response['answers'][2]['is_correct'] == 'yes') {
                         var answer_option = document.getElementById('is-correct-s-3');
                         answer_option.checked = true;
-                    }
-                    else if(response['answers'][3]['is_correct']=='yes') {
+                    } else if (response['answers'][3]['is_correct'] == 'yes') {
                         var answer_option = document.getElementById('is-correct-s-4');
                         answer_option.checked = true;
                     }
-                }
-                else if(question_type == 'text'){
+                } else if (question_type == 'text') {
 
-                  document.getElementById('text-section').classList.remove('d-none')
-                  document.getElementById('true-false-section').classList.add('d-none');
-                  document.getElementById('multiple-section').classList.add('d-none')
-                  document.getElementById('single-section').classList.add('d-none')
+                    document.getElementById('text-section').classList.remove('d-none')
+                    document.getElementById('true-false-section').classList.add('d-none');
+                    document.getElementById('multiple-section').classList.add('d-none')
+                    document.getElementById('single-section').classList.add('d-none')
 
 
-                  var answer_option = document.getElementById('text');
-                  answer_option.checked = true;
+                    var answer_option = document.getElementById('text');
+                    answer_option.checked = true;
 
                     console.log('Response:', response['answers']['0']['answer'], params['id']);
                     $('.question_id').val(params['id']);
@@ -447,30 +464,28 @@ $(document).on("click", ".hello", function () {
                     $('.exam_id').val(exam_id);
                     $('.is-answer-text').val(response['answers'][0]['answer']);
 
-                    
+
                     $('.f').val(response['answers'][0]['answer']);
-                }
-                else if(question_type == 'boolean'){
+                } else if (question_type == 'boolean') {
 
-                  document.getElementById('true-false-section').classList.remove('d-none');
-                  document.getElementById('text-section').classList.add('d-none')
-                  document.getElementById('multiple-section').classList.add('d-none');
-                  document.getElementById('single-section').classList.add('d-none')
+                    document.getElementById('true-false-section').classList.remove('d-none');
+                    document.getElementById('text-section').classList.add('d-none')
+                    document.getElementById('multiple-section').classList.add('d-none');
+                    document.getElementById('single-section').classList.add('d-none')
 
-                  var answer_option = document.getElementById('boolean');
-                  answer_option.checked = true;
-                    
+                    var answer_option = document.getElementById('boolean');
+                    answer_option.checked = true;
+
                     console.log("r1", response['answers'][0]['is_correct']);
-                    if (response['answers'][0]['is_correct']=='yes') {
+                    if (response['answers'][0]['is_correct'] == 'yes') {
                         console.log("asd")
                         var answer_option = document.getElementById('is-correct-b-1');
                         answer_option.checked = true;
-                    } 
-                    else{
-                      var answer_option = document.getElementById('is-correct-b-2');
+                    } else {
+                        var answer_option = document.getElementById('is-correct-b-2');
                         answer_option.checked = true;
                     }
-                    
+
                     $('.question_id').val(params['id']);
                     $('.question_type').val("boolean");
                     $('.question').val(question);
@@ -487,31 +502,31 @@ $(document).on("click", ".hello", function () {
                 $('#result').html('<p>Error occurred: ' + error + '</p>');
             }
         });
-});
+    });
 
-$(document).ready(function() {
-    $('.delete-exam-btn1').click(function() {
-        var recordId = $(this).data('record-id');
-        
-        console.log("rec",recordId)
-        $('#record_id').val(recordId); // Set the record ID in the hidden input field
-        
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Submit the form if user confirms
-                $(this).closest('form').submit();
-            }
+    $(document).ready(function() {
+        $('.delete-exam-btn1').click(function() {
+            var recordId = $(this).data('record-id');
+
+            console.log("rec", recordId)
+            $('#record_id').val(recordId); // Set the record ID in the hidden input field
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit the form if user confirms
+                    $(this).closest('form').submit();
+                }
+            });
         });
     });
-});
 </script>
 
 <script>
@@ -548,28 +563,37 @@ $(document).ready(function() {
         });
 
         // Function to handle file upload
+        $('#removeFileButton').on('click', function() {
+            // Clear file input
+            $('#cvFile').val('');
+
+            // Reset the file upload UI
+            $('#file__name').text('');
+            $('#file__size').text('');
+            $('#file-progress .progress-bar').css('width', '0%');
+            $('#file-progress').hide();
+            $('#uploadContainer').hide();
+            $('#uploadWrapper').show();
+            $('#uploadButton').hide();
+            $('#downloadSample').removeClass('d-none').addClass('d-inline-flex');
+            $('#textDownloadSample').removeClass('d-none');
+        });
+
         async function handleFileUpload(files) {
             if (files.length > 0) {
                 var file = files[0];
                 if (file.type === 'text/csv') {
-
-                    // File is a CSV, proceed with upload
                     var fileName = file.name;
                     var fileSize = file.size;
                     $('#file__name').text(fileName);
                     $('#file__size').text(formatBytes(fileSize));
                     $('#uploadContainer').show();
-                    $('#uploadWrapper').addClass('col-lg-6');
-                    $('#uploadWrapper').removeClass('col-12');
+                    $('#uploadWrapper').hide();
                     $('#file-progress').show();
-
-                    // const textContent = await file.text(); // Get text content from CSV file
-                    // document.getElementById("extracted_text").value = textContent;
-                    // document.getElementById("res-perser").submit();
-
                     $('#uploadButton').show();
+                    $('#downloadSample').addClass('d-none');
+                    $('#textDownloadSample').addClass('d-none');
 
-                    // Simulating file upload progress
                     var percentComplete = 0;
                     var interval = setInterval(function() {
                         percentComplete += 5;
@@ -578,18 +602,15 @@ $(document).ready(function() {
                         if (percentComplete >= 100) {
                             clearInterval(interval);
                             $('#file-progress .progress-bar').text('100%');
-                            // File upload complete
                         }
                     }, 200);
 
                 } else {
-                    // File is not a CSV, show error message
                     alert('Only CSV files are allowed.');
                 }
             }
         }
 
-        // Format bytes function
         function formatBytes(bytes, decimals = 2) {
             if (bytes === 0) return '0 Bytes';
             const k = 1024;
@@ -602,36 +623,35 @@ $(document).ready(function() {
 </script>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var importButton = document.getElementById('importButton');
-    var exampleModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+    document.addEventListener('DOMContentLoaded', function() {
+        var importButton = document.getElementById('importButton');
+        var exampleModal = new bootstrap.Modal(document.getElementById('exampleModal'));
 
-    importButton.addEventListener('click', function(event) {
-      // Replace this with your actual condition
-      var condition = true; // Change this to your condition
-      
-      var value = importButton.getAttribute('data-value');
+        importButton.addEventListener('click', function(event) {
+            // Replace this with your actual condition
+            var condition = true; // Change this to your condition
 
-console.log("va",value);
+            var value = importButton.getAttribute('data-value');
 
-      if(value == "12" || value == "13") {
-        // Prevent the modal from opening
-        Swal.fire({
-            title: 'Upgrade Package Alert',
-            text: "Sorry, You cant use import questions functionality please upgrade your package",
-            icon: 'warning',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Submit the form if user confirms
-                $(this).closest('form').submit();
+            console.log("va", value);
+
+            if (value == "12" || value == "13") {
+                // Prevent the modal from opening
+                Swal.fire({
+                    title: 'Upgrade Package Alert',
+                    text: "Sorry, You cant use import questions functionality please upgrade your package",
+                    icon: 'warning',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Submit the form if user confirms
+                        $(this).closest('form').submit();
+                    }
+                });
+            } else {
+                exampleModal.show(); // Open the modal
             }
         });
-      }
-      else{
-        exampleModal.show(); // Open the modal
-      }
     });
-  });
 </script>
 @section('bottom_script')
 @endsection
