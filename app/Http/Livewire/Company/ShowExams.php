@@ -29,7 +29,7 @@ class ShowExams extends Component
       ->first();
 
     $exams = Exam::orderBy('id', 'desc')
-      ->where('recruiter_id', 248)
+      ->where('company_id', $company->id)
       ->paginate(10);
 
     return view('livewire.company.show-exams', compact('exams'))

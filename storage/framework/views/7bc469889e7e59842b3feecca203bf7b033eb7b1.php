@@ -1,46 +1,47 @@
-@extends('recruterpanel.layout.app')
 
-@section('page_title', 'E-Rec')
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Job</title>
-  <style>
+<?php $__env->startSection('page_title', 'E-Rec'); ?>
+
+<?php $__env->startSection('head_style'); ?>
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+<style>
     .hidden {
       display: none;
     }
   </style>
-</head>
+    <div class="col-xl-9 col-lg-8 col-md-7">
+        <button class="mobile_menu_trigger d-md-none btn_theme border-0 py-2 px-4 mb-3">
+            <i class="fa-solid fa-right-left me-3"></i><span>Side Menu</span>
+        </button>
+        <div class="dashboard_content bg-white rounded_10 p-4">
+            <div class="heading">
+                <h3 class="fw-500 text_primary fs-5 mb-4">Edit New Job</h3>
+                <?php if(session($key ?? 'error')): ?>
+                    <div class="alert alert-danger" role="alert">
+                        <?php echo session($key ?? 'error'); ?>
 
-@section('content')
-  <div class="col-xl-9 col-lg-8">
-    <button class="mobile_menu_trigger d-lg-none btn_theme border-0 py-2 px-4 mb-3">
-      <i class="fa-solid fa-right-left me-3"></i><span>Side Menu</span>
-    </button>
-    <div class="dashboard_content bg-white rounded_10 p-4">
-      <div class="heading">
-        <h3 class="fw-500 text_primary fs-5 mb-4">Add New Job</h3>
-        @if (session($key ?? 'error'))
-          <div class="alert alert-danger" role="alert">
-            {!! session($key ?? 'error') !!}
-          </div>
-        @endif
-      </div>
-      <form class="dashboard-form needs-validation" method="post" action="{{ route('recruiter.jobs.store') }}"
-        enctype="multipart/form-data">
-        @csrf
-        <div class="row gy-4">
-          <div class="col-md-6">
-            <div class="form-group position-relative">
-              <label for="name" class="form-label fs-14 text-theme-primary fw-bold">Title*</label>
-              <input type="text" autocomplete="off" class="form-control fs-14 h-50px" id="title__search" name="post"
-                required>
-              <div class="invalid-feedback">
-                Please enter title.
-              </div>
-              <div class="title_suggetion border shadow imran" id="title_suggetion">
-                <ol id="sortedListTitleSugg">
+                    </div>
+                <?php endif; ?>
+            </div>
+            <form class="dashboard-form needs-validation" method="post" action="<?php echo e(route('company.jobs.store')); ?>"
+                enctype="multipart/form-data" novalidate>
+                <?php echo csrf_field(); ?>
+                <input type="hidden" name="post_id" value="<?php echo e($post->id); ?>">
+                <div class="row gy-4">
+                    <div class="col-md-6">
+                        <div class="form-group position-relative">
+                            <label for="name" class="form-label fs-14 text-theme-primary fw-bold">Title*</label>
+                            <input type="text" autocomplete="off" class="form-control" value="<?php echo e($post->post); ?>"
+                                id="title__search" name="post" required>
+                            <div class="invalid-feedback">
+                                Please enter title.
+                            </div>
+                            <div class="title_suggetion border shadow" id="title_suggetion">
+                                <ol id="sortedListTitleSugg">
                   <li class="title_text_sugg">911 Dispatcher</li>
                   <li class="title_text_sugg">AI (Artificial Intelligence) Engineer</li>
                   <li class="title_text_sugg">AI Engineer</li>
@@ -665,389 +666,362 @@
                   <li class="title_text_sugg">Yoga Instructor</li>
                   <li class="title_text_sugg">Zookeeper</li>
                 </ol>
-
-
-
-                {{-- <p class="title_text_sugg">title 1</p>
-                                <p class="title_text_sugg">title 2</p>
-                                <p class="title_text_sugg">title 3</p>
-                                <p class="title_text_sugg">title 4</p>
-                                <p class="title_text_sugg">title 5</p> --}}
-              </div>
-            </div>
-          </div>
-
-          <!-- <select id="mySelect2" class="form-control fs-14  h-50px" style="">
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-            <option value="3">Option 3</option>
-          </select> -->
-
-          <div class="col-md-6">
-            <div class="form-group set-cross-icon">
-              <label for="class_id" class="form-label fs-14 text-theme-primary fw-bold">Category*</label>
-              <input type="hidden" name="user_id" id="user_id" value="{{Auth::user()->id}}">
-              <select data-placeholder="Please select category" name="category" onchange="testFillBox()"
-                id="mySelect2" class="select2 form-control fs-14  h-50px" required>
-                <option></option>
-                {{-- {{ dd($data) }} --}}
-                @if ($data != null)
-                  @foreach ($data as $row)
-                    <option value="{{ $row['id'] }}">{{ $row['title'] }}</option>
-                  @endforeach
-                @endif
-              </select>
-              <div class="invalid-feedback">
-                Please select Category.
-              </div>
-            </div>
-          </div>
-          {{-- <div class="col-md-6">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
                         <div class="form-group set-cross-icon">
-                            <label for="increment" class="form-label fs-14 text-theme-primary fw-bold">If you would like
-                                to attach a
-                                test with it?</label>
-                            <select class="form-select select2-multiple fs-14 h-50px" onchange="enableField()"
-                                data-placeholder="Please Select Option" name="test_attached" id="test_attached" required>
+                            <label for="" class="form-label fs-14 text-theme-primary fw-bold">Category*</label>
+                            <select name="category" id="mySelect2" data-placeholder='Please Select Category'
+                                class="select2-multiple form-control fs-14  h-50px" required onchange="testFillBox()">
                                 <option></option>
-                                <option value="1">Yes</option>
-                                <option value="0">No</option>
+                                <?php if($data != null): ?>
+                                    <?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        
+                                        <option value="<?php echo e($row['id']); ?>" 
+                                            <?php echo e($row['id'] == $selected_job->id ? 'selected' : ''); ?>>
+                                            <?php echo e($row['title']); ?>
 
+                                        </option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php endif; ?>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select Category.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="form-group set-cross-icon">
+                            <label for="name" class="form-label fs-14 text-theme-primary fw-bold">Job Type*</label>
+                            <select class="form-select select2-multiple" data-placeholder='Please Select Job Type'
+                                name="job_type" required>
+                                <option></option>
+                                <option value="Apprenticeship" <?php if($post->job_type == 'Apprenticeship'): ?> selected <?php endif; ?>>
+                                    Apprenticeship</option>
+                                <option value="Casual" <?php if($post->job_type == 'Casual'): ?> selected <?php endif; ?>>Casual</option>
+                                <option value="Contract" <?php if($post->job_type == 'Contract'): ?> selected <?php endif; ?>>Contract
+                                </option>
+                                <option value="Full Time" <?php if($post->job_type == 'Full Time'): ?> selected <?php endif; ?>>Full Time
+                                </option>
+                                <option value="Internship" <?php if($post->job_type == 'Internship'): ?> selected <?php endif; ?>>Internship
+                                </option>
+                                <option value="Part Time" <?php if($post->job_type == 'Part Time'): ?> selected <?php endif; ?>>Part Time
+                                </option>
+                                <option value="Trainee" <?php if($post->job_type == 'Trainee'): ?> selected <?php endif; ?>>Trainee</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select Job Type.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group set-cross-icon">
+                            <label for="experience"
+                                class="form-label fs-14 text-theme-primary fw-bold">Experience*</label>
+                            
+                            <select class="form-select select2-multiple" data-placeholder='Please Select Experience'
+                                name="experience" required>
+                                <option value="6 Months" <?php if($post->experience == '6 Months'): ?> selected <?php endif; ?>>6 Months
+                                </option>
+                                <option value="1+ Year" <?php if($post->experience == '1+ Year'): ?> selected <?php endif; ?>>1+ Year
+                                </option>
+                                <option value="2+ Years" <?php if($post->experience == '2+ Years'): ?> selected <?php endif; ?>>2+ Years
+                                </option>
+                                <option value="3+ Years" <?php if($post->experience == '3+ Years'): ?> selected <?php endif; ?>>3+ Years
+                                </option>
+                                <option value="4+ Years" <?php if($post->experience == '4+ Years'): ?> selected <?php endif; ?>>4+ Years
+                                </option>
+                                <option value="5+ Years" <?php if($post->experience == '5+ Years'): ?> selected <?php endif; ?>>5+ Years
+                                </option>
+                                <option value="6+ Years" <?php if($post->experience == '6+ Years'): ?> selected <?php endif; ?>>6+ Years
+                                </option>
+                                <option value="More than 10 Years" <?php if($post->experience == 'More than 10 Years'): ?> selected <?php endif; ?>>More
+                                    then 10 Years
+                                </option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select Experience.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group gender-labels">
+                            <label for="gender" class="form-label fs-14 text-theme-primary fw-bold">Gender*</label>
+                            <br>
+                            <input type="radio" class="btn-check" name="gender" id="others" value="Others"
+                                autocomplete="off" <?php if($post->gender == 'Others'): ?> checked <?php endif; ?>>
+                            <label class="btn btn-outline-primary fs-14" for="others">Nonbinary</label>
+
+                            <input type="radio" class="btn-check" name="gender" id="male" value="Male"
+                                autocomplete="off" <?php if($post->gender == 'Male'): ?> checked <?php endif; ?>>
+                            <label class="btn btn-outline-primary fs-14" for="male">Male</label>
+
+                            <input type="radio" class="btn-check" name="gender" id="female" value="Female"
+                                autocomplete="off" <?php if($post->gender == 'Female'): ?> checked <?php endif; ?>>
+                            <label class="btn btn-outline-primary fs-14" for="female">Female</label>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="offer_salary" class="form-label fs-14 text-theme-primary fw-bold"> Base
+                                Salary*</label>
+                            <input type="number" class="form-control" name="offer_salary"
+                                value="<?php echo e($post->offer_salary); ?>" required>
+                            <div class="invalid-feedback">
+                                Please enter Base Salary.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="expiry_date" class="form-label fs-14 text-theme-primary fw-bold">Job Closing
+                                Date*</label>
+                            <div class="position-relative">
+                                <input type="text" class="form-control fs-14 h-50px datepickerJob readonly"
+                                    name="expiry_date" id="expiry_date"
+                                    value="<?php echo e(\Carbon\Carbon::parse($post->expiry_date)->isoFormat('DD-MM-YYYY')); ?>"
+                                    required>
+                                <label class="calender-icon d-block" for="expiry_date"> <i class="far fa-calendar-alt"
+                                        aria-hidden="true"></i> </label>
+                                <div class="invalid-feedback">
+                                    Please select Job Closing Date
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="location" class="form-label fs-14 text-theme-primary fw-bold">Location*</label>
+                            
+                            <input id="searchInput" value="<?php echo e($post->location); ?>"
+                                class="controls form-control input-login searchInput" name="address" type="text"
+                                placeholder="" required autocomplete="off">
+                            <input type="hidden" id="latitude" value="" name="lat" />
+                            <input type="hidden" id="longitude" value="" name="lng" />
+                            <input type="hidden" id="country" value="" name="country" />
+                            <input type="hidden" id="city" value="" name="city" />
+                            <input type="hidden" id="zip_code" value="" name="zip_code" />
+                            <div class="invalid-feedback">
+                                Please enter Location.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group set-cross-icon">
+                            <label for="qualification"
+                                class="form-label fs-14 text-theme-primary fw-bold">Qualification*</label>
+                            
+                            <select class="form-select select2-multiple fs-14 h-50px"
+                                data-placeholder="Please Select Qualification" name="qualification" required>
+                                <option></option>
+                                <option value="High School" <?php if($post->qualification == 'High School'): ?> selected <?php endif; ?>>High School
+                                </option>
+                                <option value="Tertiary" <?php if($post->qualification == 'Tertiary'): ?> selected <?php endif; ?>>Tertiary
+                                </option>
+                                <option value="Diploma" <?php if($post->qualification == 'Diploma'): ?> selected <?php endif; ?>>Diploma
+                                </option>
+                                <option value="Under Graduate" <?php if($post->qualification == 'Under Graduate'): ?> selected <?php endif; ?>>Under
+                                    Graduate</option>
+                                <option value="Post Graduate" <?php if($post->qualification == 'Post Graduate'): ?> selected <?php endif; ?>>Post
+                                    Graduate</option>
+                                <option value="Masters" <?php if($post->qualification == 'Masters'): ?> selected <?php endif; ?>>Masters
+                                </option>
+                                <option value="Doctorate" <?php if($post->qualification == 'Doctorate'): ?> selected <?php endif; ?>>Doctorate
+                                </option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select Qualification.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="key_responsibility" class="form-label fs-14 text-theme-primary fw-bold">Key
+                                Responsibility*</label>
+                            <textarea class="form-control" id="key_responsibility" name="key_responsibility" required><?php echo $post->key_responsibility; ?></textarea>
+                            <div class="invalid-feedback">
+                                Please enter Key Responsibility
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="skill_exp" class="form-label fs-14 text-theme-primary fw-bold">Skills &
+                                Experience*</label>
+                            <textarea class="form-control" name="skill_exp" required><?php echo $post->skill_exp; ?></textarea>
+                            <div class="invalid-feedback">
+                                Please enter Skills & Experience
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="description" class="form-label fs-14 text-theme-primary fw-bold">Job
+                                Description*</label>
+                            <textarea class="form-control" name="description" required><?php echo $post->description; ?></textarea>
+                            <div class="invalid-feedback">
+                                Please enter Job Description
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group set-cross-icon">
+                            <label for="" class="form-label fs-14 text-theme-primary fw-bold">Job
+                                Duties*</label>
+                            <select name="skill[]" id="skill" class="editSkillsJob form-control fs-14  h-50px"
+                                required multiple>
+                                <option disabled>Please Select Skills</option>
+                                <?php $__currentLoopData = $skill; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($row->id); ?>"
+                                        <?php if($postSkills != null): ?> <?php $__currentLoopData = $postSkills; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ps): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if($row->id == $ps->skill_id): ?>
+                                                selected <?php endif; ?>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php endif; ?>><?php echo e($row->name); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please enter Job Duties
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="banner" class="form-label fs-14 text-theme-primary fw-bold">Job
+                                Banner*</label>
+                            <input type="hidden" value="<?php echo e($post->banner); ?>" name="existingBanner">
+                            <input type="file" class="form-control " name="banner" accept=".png, .jpg, .jpeg">
+                            <div style="font-size: 12px;">please upload 840 x 200 size image</div>
+                            <div class="invalid-feedback">
+                                Please upload Job Banner
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <?php if($post->banner != null): ?>
+                                <img src="<?php echo e(asset('storage/' . $post->banner)); ?>" alt=""
+                                    width="150px" style="" height="70px">
+                            <?php else: ?>
+                                
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group set-cross-icon">
+                            <label for="" class="form-label fs-14 text-theme-primary fw-bold">Assign
+                                Recruiter</label>
+                            <select name="rec_id" id="recruiter" data-placeholder="Please Select Recruiter"
+                                class="select2-multiple form-control fs-14  h-50px">
+                                <option></option>
+                                <?php $__currentLoopData = $recruiter; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($row->recruiter->id); ?>"
+                                        <?php if($row->recruiter->id == $post->rec_id): ?> selected <?php endif; ?>>
+                                        <?php echo e($row->recruiter->name); ?>
+
+                                    </option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group set-cross-icon d-none" id="testBox">
-                            <label for="test_id" class="form-label fs-14 text-theme-primary fw-bold">Attacsh a test</label>
+                        <div class="form-group set-cross-icon">
+                            <label for="increment" class="form-label fs-14 text-theme-primary fw-bold">Will this Job
+                                require testing by the candidate?</label>
+                            <select class="form-select select2-multiple fs-14 h-50px" onchange="enableField()"
+                                data-placeholder="Please Select Option" name="test_attached" id="test_attached"
+                                required>
+                                <option></option>
+                                <option value="1" <?php if($post->test_attached == '1'): ?> Selected <?php endif; ?>>Yes</option>
+                                <option value="0" <?php if($post->test_attached == '0'): ?> Selected <?php endif; ?>>No</option>
+
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select require test
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group set-cross-icon" id="testBox">
+                            <label for="test_id" class="form-label fs-14 text-theme-primary fw-bold">Attacdh a
+                                test*</label>
                             <select name="test_id" class="select2-multiple form-control fs-14  h-50px">
                                 <option selected disabled value="">Select Test</option>
+                                <?php if($test_id != null): ?>
+                                    <?php $__currentLoopData = $test_id; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <!--<option value="<?php echo e($row['number']); ?>"-->
+                                        <!--    <?php if($post->test_id == $row['number']): ?> Selected <?php endif; ?>>-->
+                                        <!--    <?php echo e($row['name']); ?>-->
+                                        <!--</option>-->
+                                        
+                                        <option value="<?php echo e($row['id']); ?>" 
+                                            <?php echo e(($selected_exam && $row['id'] == $selected_exam->id) ? 'selected' : ''); ?>>
+                                            <?php echo e($row['exam_title']); ?>
+
+                                        </option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php endif; ?>
                             </select>
                         </div>
                     </div>
-                    sdasds
+                    <div id="createtest" class="hidden">
+                        <a id="g" href="">Add a new test</a>
+                    </div>
                     <!--<div class="col-md-6">-->
-                    <!--    <div class="form-group set-cross-icon d-none" id="criteria">-->
+                    <!--    <div class="form-group set-cross-icon" id="criteria">-->
                     <!--        <label for="criteria" class="form-label fs-14 text-theme-primary fw-bold">Test Passing-->
                     <!--            Criteria</label>-->
                     <!--        <select name="criteria" class="select2-multiple form-control fs-14 h-50px">-->
-                    <!--            <option selected disabled value="">Select Test Passing Criteria</option>-->
-                    <!--            <option value="50+">50+</option>-->
-                    <!--            <option value="60+">60+</option>-->
-                    <!--            <option value="70+">70+</option>-->
-                    <!--            <option value="80+">80+</option>-->
-                    <!--            <option value="90+">90+</option>-->
+                    <!--            <option disabled value="">Select Test Passing Criteria</option>-->
+                    <!--            <option value="50+" <?php if($post->criteria == '50+'): ?> Selected <?php endif; ?>>50+</option>-->
+                    <!--            <option value="60+" <?php if($post->criteria == '60+'): ?> Selected <?php endif; ?>>60+</option>-->
+                    <!--            <option value="70+" <?php if($post->criteria == '70+'): ?> Selected <?php endif; ?>>70+</option>-->
+                    <!--            <option value="80+" <?php if($post->criteria == '80+'): ?> Selected <?php endif; ?>>80+</option>-->
+                    <!--            <option value="90+" <?php if($post->criteria == '90+'): ?> Selected <?php endif; ?>>90+</option>-->
                     <!--        </select>-->
                     <!--    </div>-->
-                    <!--</div> -->
-                    --}}
-          <div class="col-md-6">
-            <div class="form-group set-cross-icon">
-              <label for="name" class="form-label fs-14 text-theme-primary fw-bold">Job Type*</label>
-              <select class="form-select select2-multiple fs-14 h-50px" data-placeholder="Please Select Job Type"
-                name="job_type" required>
-                {{-- <option disabled selected></option> --}}
-                <option></option>
-                <option value="Full Time">Full Time</option>
-                <option value="Part Time">Part Time</option>
-                <option value="Contract">Contract</option>
-                <option value="Casual">Casual</option>
-                <option value="Graduate">Graduate</option>
-                <option value="Trainee">Trainee</option>
-                <option value="Apprenticeship">Apprenticeship</option>
-                {{-- <option value="Internship">Internship</option> --}}
-                {{-- <option value="Vacation">Vacation</option>
-                                <option value="Volunteer">Volunteer</option> --}}
-              </select>
-              <div class="invalid-feedback">
-                Please select Job Type.
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group set-cross-icon">
-              <label for="experience" class="form-label fs-14 text-theme-primary fw-bold">Experience*</label>
-              {{-- <input type="text" class="form-control fs-14 h-50px" name="experience" required> --}}
-              <select class="form-select select2-multiple fs-14 h-50px" data-placeholder="Please Select Experience"
-                name="experience" required>
-                <option></option>
-                <option value="6 Months">6 Months</option>
-                <option value="1+ Year">1+ Year</option>
-                <option value="2+ Years">2+ Years</option>
-                <option value="3+ Years">3+ Years</option>
-                <option value="4+ Years">4+ Years</option>
-                <option value="5+ Years">5+ Years</option>
-                <option value="6+ Years">6+ Years</option>
-                <option value="More than 10 Years">More than 10 Years</option>
-              </select>
-              <div class="invalid-feedback">
-                Please select Experience.
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group gender-labels">
-              <label for="gender" class="form-label fs-14 text-theme-primary fw-bold">Gender*</label>
-              <br>
-              <input type="radio" class="btn-check" name="gender" id="others" value="Others"
-                autocomplete="off" checked>
-              <label class="btn btn-outline-primary fs-14" for="others">Nonbinary</label>
-              <input type="radio" class="btn-check" name="gender" id="male" value="Male"
-                autocomplete="off">
-              <label class="btn btn-outline-primary fs-14" for="male">Male</label>
-
-              <input type="radio" class="btn-check" name="gender" id="female" value="Female"
-                autocomplete="off">
-              <label class="btn btn-outline-primary fs-14" for="female">Female</label>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="offer_salary" class="form-label fs-14 text-theme-primary fw-bold">Base
-                Salary*</label>
-              <input type="number" class="form-control fs-14 h-50px" name="offer_salary"
-                onkeypress='return isNumberKey(event)' required>
-              <div class="invalid-feedback">
-                Please enter Base Salary.
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="expiry_date" class="form-label fs-14 text-theme-primary fw-bold">Job Closing
-                Date*</label>
-              <div class="position-relative">
-                <input type="text" class="form-control fs-14 h-50px datepickerJob readonly" name="expiry_date"
-                  id="expiry_date" placeholder="dd/mm/yy" required>
-                <label class="calender-icon d-block" for="expiry_date"> <i class="far fa-calendar-alt"
-                    aria-hidden="true"></i> </label>
-                <div class="invalid-feedback">
-                  Please select Job Closing Date
+                    <!--</div>-->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="submit" class="btn_viewall fw-500 px-4 py-2 d-inline-block"> Post A Job
+                            </button>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="location" class="form-label fs-14 text-theme-primary fw-bold">Location*</label>
-              {{-- <input type="text" class="form-control fs-14 h-50px" name="location" required> --}}
-              <input id="searchInput" value="" class="controls form-control input-login searchInput"
-                name="address" type="text" placeholder="" required autocomplete="off">
-              <input type="hidden" id="latitude" value="" name="lat" />
-              <input type="hidden" id="longitude" value="" name="lng" />
-              <input type="hidden" id="country" value="" name="country" />
-              <input type="hidden" id="city" value="" name="city" />
-              <input type="hidden" id="zip_code" value="" name="zip_code" />
-              <div class="invalid-feedback">
-                Please enter Location.
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group set-cross-icon">
-              <label for="qualification" class="form-label fs-14 text-theme-primary fw-bold">Qualification*</label>
-              {{-- <input type="text" class="form-control fs-14 h-50px" name="qualification" required> --}}
-              <select class="form-select select2-multiple fs-14 h-50px" data-placeholder="Please Select Qualification"
-                name="qualification" required>
-                <option></option>
-                <option value="High School">High School</option>
-                <option value="Tertiary">Tertiary</option>
-                <option value="Diploma">Diploma</option>
-                <option value="Under Graduate">Under Graduate</option>
-                <option value="Post Graduate">Post Graduate</option>
-                <option value="Masters">Masters</option>
-                <option value="Doctorate">Doctorate</option>
-              </select>
-              <div class="invalid-feedback">
-                Please select Qualification.
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="key_responsibility" class="form-label fs-14 text-theme-primary fw-bold">Key
-                Responsibility*</label>
-              <textarea class="form-control fs-14 h-50px" id="key_responsibility" name="key_responsibility" required></textarea>
-              <div class="invalid-feedback">
-                Please enter Key Responsibility
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="skill_exp" class="form-label fs-14 text-theme-primary fw-bold">Skills &
-                Experience*</label>
-              <textarea class="form-control fs-14 h-50px" name="skill_exp" required></textarea>
-              <div class="invalid-feedback">
-                Please enter Skills & Experience
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="description" class="form-label fs-14 text-theme-primary fw-bold">Job
-                Description*</label>
-              <textarea class="form-control fs-14 h-50px" name="description" required></textarea>
-              <div class="invalid-feedback">
-                Please enter Job Description
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group ">
-              <label for="" class="form-label fs-14 text-theme-primary fw-bold">Job
-                Duties*</label>
-              <select name="skill[]" id="skill" class="editSkillsJob form-select fs-14 h-50px" required
-                multiple>
-                <option disabled>Please Select Skills</option>
-                @foreach ($skill as $row)
-                  <option value="{{ $row->id }}">{{ $row->name }}</option>
-                @endforeach
-              </select>
-              <div class="invalid-feedback">
-                Please enter Job Duties
-              </div>
-            </div>
-          </div>
-          {{-- <div class="col-md-6">
-                        <div class="form-group set-cross-icon">
-                            <label for="increment" class="form-label fs-14 text-theme-primary fw-bold">
-                                Increments*</label>
-                            <select class="form-select select2-multiple fs-14 h-50px"
-                                data-placeholder="Please Select Increments" name="increment" required>
-                                <option></option>
-                                <option value="50k">50k</option>
-                                <option value="100k">100k</option>
-                                <option value="200k">200k</option>
-                                <option value="300k">300k</option>
-                                <option value="400k">400k</option>
-                                <option value="500k">500k</option>
-                            </select>
-                        </div>
-                    </div> --}}
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="banner" class="form-label fs-14 text-theme-primary fw-bold">Job
-                Banner</label>
-              <input type="file" class="form-control fs-14 h-50px" name="banner" accept=".png, .jpg, .jpeg">
-              <div style='font-size: 12px;'>please upload 840 x 200 size image</div>
-              <div class="invalid-feedback">
-                Please upload Job Banner
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-                        <div class="form-group set-cross-icon">
-                            <label for="company" class="form-label fs-14 text-theme-primary fw-bold">Company
-                                Name</label>
-                            <select data-placeholder="Please Select Company" name="comp_id" id="company"
-                                class="form-select fs-14 select2-multiple h-50px">
-                                <option></option>
-                                @foreach ($recruiter as $row)
-                                    <option value="{{ $row->company->id }}">{{ $row->company->name }}</option>
-                                @endforeach
-                            </select>
-                            <div class="invalid-feedback">
-                                Please provide Company Name
-                            </div>
-                        </div>
-         </div>
-          <div class="col-md-6">
-            <div class="form-group set-cross-icon">
-              <label for="increment" class="form-label fs-14 text-theme-primary fw-bold">Will this Job
-                require testing by the candidate?</label>
-              <select class="form-select select2-multiple fs-14 h-50px" onchange="enableField()"
-                data-placeholder="Please Select Option" name="test_attached" id="test_attached" required>
-                <option></option>
-                <option value="1">Yes</option>
-                <option value="0">No</option>
-
-              </select>
-              <div class="invalid-feedback">
-                Please select require test
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group set-cross-icon d-none" id="testBox">
-              <label for="test_id" class="form-label fs-14 text-theme-primary fw-bold">Attsach a
-                test*</label>
-              <select name="test_id" id="assign_test" class="select2-multiple form-control fs-14  h-50px">
-                <option selected disabled value="">Select Test</option>
-              </select>
-            </div>
-          </div>
-          <div id="createtest" class="hidden">
-              <a id="g" href="">Add a new test</a>
-          </div>
-          <!--<div class="col-md-6">-->
-          <!--  <div class="form-group set-cross-icon d-none" id="criteria">-->
-          <!--    <label for="criteria" class="form-label fs-14 text-theme-primary fw-bold">Test Passing-->
-          <!--      Criteria</label>-->
-          <!--    <select name="criteria" class="select2-multiple form-control fs-14 h-50px">-->
-          <!--      <option selected disabled value="">Select Test Passing Criteria</option>-->
-          <!--      <option value="50">50+</option>-->
-          <!--      <option value="60">60+</option>-->
-          <!--      <option value="70">70+</option>-->
-          <!--      <option value="80">80+</option>-->
-          <!--      <option value="90">90+</option>-->
-          <!--    </select>-->
-          <!--  </div>-->
-          <!--</div>-->
-          <div class="col-12">
-            <div class="form-group">
-              <button type="submit" class="btn_viewall fw-500 px-4 py-2 d-inline-block"> Post A Job
-              </button>
-            </div>
-          </div>
+            </form>
         </div>
-      </form>
     </div>
-  </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('bottom_script')
+<?php $__env->startSection('bottom_script'); ?>
 
-  
-  <script>
-    var last_valid_selection = null;
+    <script>
+        if ($('#test_attached').val() == '1') {
 
-    $('#skill').change(function(event) {
+            $('#testBox').removeClass('d-none');
+            $('#criteria').removeClass('d-none');
+        } else {
+            $('#testBox').addClass('d-none');
+            $('#criteria').addClass('d-none');
 
-      if ($(this).val().length > 10) {
+        }
 
-        $(this).val(last_valid_selection);
-      } else {
-        last_valid_selection = $(this).val();
-      }
-    });
+        function enableField() {
+            // console.log($('#test_attached').val());
+            if ($('#test_attached').val() == '1') {
 
-    if ($('#test_attached').val() == '1') {
-
-      $('#testBox').removeClass('d-none');
-      $('#criteria').removeClass('d-none');
-    } else {
-      $('#testBox').addClass('d-none');
-      $('#criteria').addClass('d-none');
-
-    }
-
-    function enableField() {
-      
-      if ($('#test_attached').val() == '1') {
-          
-        // Make the test selection dropdow required
-        var dropdownElement = document.getElementById('assign_test');
-        dropdownElement.setAttribute('required', true);
-        
-        $('#testBox').removeClass('d-none');
-        $('#criteria').removeClass('d-none');
-
-        var id = $('#class_id').val();
-        var user_id = $('#user_id').val();
+                $('#testBox').removeClass('d-none');
+                $('#criteria').removeClass('d-none');
+                
+                var id = $('#class_id').val();
+                var user_id = $('#user_id').val();
      
         
             $.ajax({
-                url: '{{ route('recruiter.get.testCreate') }}',
+                url: '<?php echo e(route('company.get.testCreate')); ?>',
                 method: 'GET',
                 data: {
                     id: id,  // Parameters to send along with the request
@@ -1059,163 +1033,94 @@
                     {
                         console.log("ssss");
                         document.getElementById('createtest').classList.remove('hidden');
-                        $('#g').html('<a href="{{route('recruiter.exam.create')}}">Add a new test</a></div>')
+                        $('#g').html('<a href="<?php echo e(route('company.exam.create')); ?>">Add a new test</a></div>')
                     }
                 },
             });
+            
+            } else {
+                
+                document.getElementById('createtest').classList.add('hidden');
 
-        
-      } else {
-          
-        // Make the test selection dropdow required
-        $('#assign_test').removeAttr('required');
+                $('#testBox').addClass('d-none');
+                $('#criteria').addClass('d-none');
 
-        document.getElementById('createtest').classList.add('hidden');
+            }
+        }
 
-        
-        $('#testBox').addClass('d-none');
-        $('#criteria').addClass('d-none');
+        function testFillBox() {
+            var id = $('#class_id').val();
+            var href = "<?php echo e(route('company.get.testCreate', ':id')); ?>";
+            href = href.replace(':id', id);
+            console.log(href);
+            $.ajax({
+                    type: 'GET',
+                    url: href,
+                    crossDomain: true,
+                }).done(function(data) {
+                    console.log(data);
+                    html = "";
+                    html +=
+                        "<label for='class_id' class='form-label fs-14 text-theme-primary fw-bold'>Attach a test*</label>";
+                    html += "<select name='test_id' onchange='assign_test()'";
+                    html += "id='assign_test' class='select2-multiple form-control fs-14  h-50px'>";
+                    html += "<option selected disabled value=''>Select Test</option>";
+                    $.each(data, function(index, value) {
+                        html += "<option value='" + value['number'] + "'>" + value['name'] + "</option>";
+                    });
+                    html += "</select>";
+                    $('#testBox').html('');
+                    $('#testBox').html(html);
+                })
+                .fail(function(error) {
+                    var errors = error.responseJSON;
+                    console.log(errors);
 
-      }
-      $('#assign_test').select2({
-        placeholder: "Please Select Skills",
-        sorter: data => data.sort((a, b) => a.text.localeCompare(b.text)),
-        // allowClear: true
-      });
-      
-      
-    }
+                });
+        }
 
-    function testFillBox() {
-      var id = $('#class_id').val();
-     var user_id = $('#user_id').val();
-     
-      console.log(user_id);
-    //   console.log("userid",user_id);
-      var href = "{{ route('recruiter.get.testCreate') }}";
-      href = href.replace(':id', id);
-      console.log(href);
-      $.ajax({
-          type: 'GET',
-          url: href,
-          data: {
-            id: id,  // Parameters to send along with the request
-            user_id: user_id
-          },
-          crossDomain: true,
-        }).done(function(data) {
-          console.log("ss",data);
-          html = "";
-          html +=
-            "<label for='class_id' class='form-label fs-14 text-theme-primary fw-bold'>Attach a test*</label>";
-          // html += "<select name='test_id' onchange='assign_test()'";
-          html += "<select name='test_id'";
-          html += "id='assign_test' class='form-select fs-14 h-50px'>";
-          //   html += "required>";
-          html += "<option selected disabled value=''>Select Test</option>";
-          $.each(data, function(index, value) {
-            html += "<option value='" + value['id'] + "'>" + value['exam_title'] + "</option>";
-          });
-          html += "</select>";
-          
-          $('#testBox').html('');
-          $('#testBox').html(html);
-        })
-        .fail(function(error) {
-          var errors = error.responseJSON;
-          console.log(errors);
-
+        $(function() {
+            var date = new Date();
+            $('.datepickerJob').datepicker({
+                startDate: date,
+                autoclose: true,
+                format: 'dd-mm-yyyy'
+            });
         });
-    }
 
-    // function assign_test() {
-    //     let timerInterval
-    //     Swal.fire({
-    //         title: 'Test asigning is inprogress',
-    //         html: '',
-    //         allowOutsideClick: false,
+        var last_valid_selection = null;
 
-    //     })
-    //     Swal.showLoading()
-    //     console.log(id);
-    //     var selectedId = document.getElementById("assign_test" + id).value;
-    //     console.log(selectedId);
-    //     url = "{{ route('company.job.assign') }}";
-    //     $.ajax({
-    //             type: 'GET',
-    //             url: url,
-    //             data: {
-    //                 'id': id,
-    //                 'selectedId': selectedId,
-    //             },
-    //             crossDomain: true,
-    //             // success: function(data) {
-    //             //     console.log(data);
-    //             // }
-    //         }).done(function(data) {
-    //             swal.close();
-    //             console.log(data);
-    //             // if(data == 1)
-    //             // {
-    //             //     $('#blue_shortlist'+id).hide();
-    //             $('#green_shortlist' + id).show();
-    //             $('#td_id' + id).html('');
-    //             $('#td_id' + id).html(data);
-    //             // $('#td_shortlist' + id).html('');
-    //             // $('#td_shortlist' + id).html(
-    //             //     '<p class="btn btn-success btn-sm"><i class="fa fa-check" style = "font-size:18px"></i> Shortlist</p> '
-    //             // );
-    //             successModal("You successfully assigned a test...");
-    //             // }
-    //             // else
-    //             // {
+        $('#skill').change(function(event) {
 
-    //             // }
-    //         })
-    //         .fail(function(error) {
-    //             var errors = error.responseJSON;
-    //             console.log(errors);
+            if ($(this).val().length > 10) {
 
-    //         });
-    // }
+                $(this).val(last_valid_selection);
+            } else {
+                last_valid_selection = $(this).val();
+            }
+        });
+    </script>
 
-    $(function() {
-      var date = new Date();
-      $('.datepickerJob').datepicker({
-        startDate: date,
-        autoclose: true,
-        format: 'dd-mm-yyyy'
-      });
-    });
+        <script>
+        $.fn.select2.amd.require(['select2/selection/search'], function(Search) {
+        var oldRemoveChoice = Search.prototype.searchRemoveChoice;
 
-    function isNumberKey(evt) {
-      var charCode = (evt.which) ? evt.which : evt.keyCode;
-      if (charCode > 31 && (charCode < 48 || charCode > 57))
-        return false;
-      return true;
-    }
-  </script>
+        Search.prototype.searchRemoveChoice = function() {
+            oldRemoveChoice.apply(this, arguments);
+            this.$search.val('');
+        };
 
-  <script>
-    $.fn.select2.amd.require(['select2/selection/search'], function(Search) {
-      var oldRemoveChoice = Search.prototype.searchRemoveChoice;
-
-      Search.prototype.searchRemoveChoice = function() {
-        oldRemoveChoice.apply(this, arguments);
-        this.$search.val('');
-      };
-
-      $('.editSkillsJob').select2({
-        placeholder: "Please Select Skills",
-        sorter: data => data.sort((a, b) => a.text.localeCompare(b.text)),
-        maximumSelectionLength: 6
-        // allowClear: true
-      });
+        $('.editSkillsJob').select2({
+            placeholder: "Please Select Skills",
+            sorter: data => data.sort((a, b) => a.text.localeCompare(b.text)),
+            maximumSelectionLength: 6
+            // allowClear: true
+        });
 
     });
-  </script>
-
-<script>
+    </script>
+    
+    <script>
 $(document).ready(function() {
     $('#mySelect2').select2({
         language: {
@@ -1227,7 +1132,6 @@ $(document).ready(function() {
             return markup;
         }
     });
-    
 
     // Attach event handler to the Select2 open event
     $('#mySelect2').off('select2:open').on('select2:open', function() {
@@ -1255,7 +1159,7 @@ $(document).ready(function() {
 
                     if (!exists) {
                         $.ajax({
-                            url: '{{ route('categories.store') }}',
+                            url: '<?php echo e(route('categories.store')); ?>',
                             method: 'POST',
                             data: {
                                 _token: $('input[name="_token"]').val(),
@@ -1289,6 +1193,6 @@ $(document).ready(function() {
     });
 });
 </script>
+<?php $__env->stopSection(); ?>
 
-
-@endsection
+<?php echo $__env->make('companypanel.layout.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\Rameez Ali\Pictures\new1\erec\resources\views/companypanel/pages/jobs/postAnExisting/create.blade.php ENDPATH**/ ?>

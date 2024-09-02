@@ -1,13 +1,13 @@
-@extends('recruterpanel.layout.app')
 
-@section('page_title', 'E-Rec')
 
-@section('head_style')
+<?php $__env->startSection('page_title', 'E-Rec'); ?>
+
+<?php $__env->startSection('head_style'); ?>
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <style>
     .hidden {
       display: none;
@@ -19,23 +19,24 @@
         </button>
         <div class="dashboard_content bg-white rounded_10 p-4">
             <div class="d-flex aling-items-center mb-3">
-                <h2 class="fw-500 text_primary fs-5 align-self-center">Add New Job</h2>
-                @if (session($key ?? 'error'))
+                <h2 class="fw-500 text_primary fs-5 align-self-center">Edit Job Post</h2>
+                <?php if(session($key ?? 'error')): ?>
                     <div class="alert alert-danger" role="alert">
-                        {!! session($key ?? 'error') !!}
+                        <?php echo session($key ?? 'error'); ?>
+
                     </div>
-                @endif
+                <?php endif; ?>
             </div>
-            <form class="dashboard-form needs-validation" method="post" action="{{ route('recruiter.jobs.store') }}"
+            <form class="dashboard-form needs-validation" method="post" action="<?php echo e(route('recruiter.jobs.update')); ?>"
                 enctype="multipart/form-data" novalidate>
-                @csrf
-                {{-- <input type="hidden" name="post_id" value="{{ $post->id }}"> --}}
+                <?php echo csrf_field(); ?>
+                <input type="hidden" name="post_id" value="<?php echo e($post->id); ?>">
                 <div class="row gy-3">
                     <div class="col-md-6">
                         <div class="form-group position-relative">
                             <label for="name" class="form-label fs-14 text-theme-primary fw-bold">Title*</label>
                             <input type="text" autocomplete="off" id="title__search" class="form-control fs-14 h-50px"
-                                name="post" value="{{ $post->post }}" required>
+                                name="post" value="<?php echo e($post->post); ?>" required>
                             <div class="invalid-feedback">
                                 Please enter title.
                             </div>
@@ -859,55 +860,54 @@
 
 
 
-                                {{-- <p class="title_text_sugg">title 1</p>
-                                    <p class="title_text_sugg">title 2</p>
-                                    <p class="title_text_sugg">title 3</p>
-                                    <p class="title_text_sugg">title 4</p>
-                                    <p class="title_text_sugg">title 5</p> --}}
+                                
                             </div>
                         </div>
                     </div>
+
+                    
                     <div class="col-md-6">
                         <div class="form-group set-cross-icon">
                             <label for="" class="form-label fs-14 text-theme-primary fw-bold">Category*</label>
-                            <select data-placeholder='Please Select Category' name="category" id="class_id"
-                                class="select2-multiple form-select fs-14  h-50px" required onchange="testFillBox()">
+                            <input type="hidden" name="user_id" id="user_id" value="<?php echo e(Auth::user()->id); ?>">
+                            <select name="category" id="class_id" data-placeholder='Please Select Category'
+                                class="select2-multiple form-control fs-14  h-50px" required onchange="testFillBox()">
                                 <option></option>
-                                @if ($data != null)
-                                    @foreach ($data as $row)
-                                        
-                                        <option value="{{ $row['id'] }}" 
-                                            {{ $row['id'] == $selected_job->id ? 'selected' : '' }}>
-                                            {{ $row['title'] }}
-                                        </option>
-                                    @endforeach
-                                @endif
+                                <?php if($data != null): ?>
+                                <?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($row['id']); ?>" <?php if($post->class_id == $row['id']): ?> Selected <?php endif; ?>>
+                                    <?php echo e($row['title']); ?>
+
+                                    </option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php endif; ?>
                             </select>
                             <div class="invalid-feedback">
                                 Please select Category.
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-6">
                         <div class="form-group set-cross-icon">
                             <label for="name" class="form-label fs-14 text-theme-primary fw-bold">Job Type*</label>
-                            <select data-placeholder='Please Select Job Type'
-                                class="select2-multiple form-select fs-14 h-50px" name="job_type" required>
+                            <select data-placeholder="Please Select Job Type"
+                                class="form-select select2-multiple fs-14 h-50px" name="job_type" required>
                                 <option></option>
-                                <option value="Apprenticeship" @if ($post->job_type == 'Apprenticeship') selected @endif>
+                                <option value="Full Time" <?php if($post->job_type == 'Full Time'): ?> selected <?php endif; ?>>Full Time
+                                </option>
+                                <option value="Part Time" <?php if($post->job_type == 'Part Time'): ?> selected <?php endif; ?>>Part Time
+                                </option>
+                                <option value="Contract" <?php if($post->job_type == 'Contract'): ?> selected <?php endif; ?>>Contract
+                                </option>
+                                <option value="Casual" <?php if($post->job_type == 'Casual'): ?> selected <?php endif; ?>>Casual</option>
+                                <option value="Graduate" <?php if($post->job_type == 'Graduate'): ?> selected <?php endif; ?>>Graduate
+                                </option>
+                                <option value="Trainee" <?php if($post->job_type == 'Trainee'): ?> selected <?php endif; ?>>Trainee</option>
+                                
+                                <option value="Apprenticeship" <?php if($post->job_type == 'Apprenticeship'): ?> selected <?php endif; ?>>
                                     Apprenticeship</option>
-                                <option value="Casual" @if ($post->job_type == 'Casual') selected @endif>Casual</option>
-                                <option value="Contract" @if ($post->job_type == 'Contract') selected @endif>Contract
-                                </option>
-                                <option value="Full Time" @if ($post->job_type == 'Full Time') selected @endif>Full Time
-                                </option>
-                                <option value="Internship" @if ($post->job_type == 'Internship') selected @endif>Internship
-                                </option>
-                                <option value="Part Time" @if ($post->job_type == 'Part Time') selected @endif>Part Time
-                                </option>
-                                <option value="Trainee" @if ($post->job_type == 'Trainee') selected @endif>Trainee</option>
-                                {{-- <option value="Vacation">Vacation</option>
-                                <option value="Volunteer">Volunteer</option> --}}
+                                
                             </select>
                             <div class="invalid-feedback">
                                 Please select Job Type.
@@ -918,26 +918,25 @@
                         <div class="form-group set-cross-icon">
                             <label for="experience"
                                 class="form-label fs-14 text-theme-primary fw-bold">Experience*</label>
-                            {{-- <input type="text" class="form-control fs-14 h-50px" name="experience"
-                                value="{{ $post->experience }}" required> --}}
-                            <select data-placeholder='Please Select Experience' class="select2-multiple form-select"
+                            
+                            <select data-placeholder="Please Select Experience" class="form-select select2-multiple"
                                 name="experience" required>
                                 <option></option>
-                                <option value="6 Months" @if ($post->experience == '6 Months') selected @endif>6 Months
+                                <option value="6 Months" <?php if($post->experience == '6 Months'): ?> selected <?php endif; ?>>6 Months
                                 </option>
-                                <option value="1+ Year" @if ($post->experience == '1+ Year') selected @endif>1+ Year
+                                <option value="1+ Year" <?php if($post->experience == '1+ Year'): ?> selected <?php endif; ?>>1+ Year
                                 </option>
-                                <option value="2+ Years" @if ($post->experience == '2+ Years') selected @endif>2+ Years
+                                <option value="2+ Years" <?php if($post->experience == '2+ Years'): ?> selected <?php endif; ?>>2+ Years
                                 </option>
-                                <option value="3+ Years" @if ($post->experience == '3+ Years') selected @endif>3+ Years
+                                <option value="3+ Years" <?php if($post->experience == '3+ Years'): ?> selected <?php endif; ?>>3+ Years
                                 </option>
-                                <option value="4+ Years" @if ($post->experience == '4+ Years') selected @endif>4+ Years
+                                <option value="4+ Years" <?php if($post->experience == '4+ Years'): ?> selected <?php endif; ?>>4+ Years
                                 </option>
-                                <option value="5+ Years" @if ($post->experience == '5+ Years') selected @endif>5+ Years
+                                <option value="5+ Years" <?php if($post->experience == '5+ Years'): ?> selected <?php endif; ?>>5+ Years
                                 </option>
-                                <option value="6+ Years" @if ($post->experience == '6+ Years') selected @endif>6+ Years
+                                <option value="6+ Years" <?php if($post->experience == '6+ Years'): ?> selected <?php endif; ?>>6+ Years
                                 </option>
-                                <option value="More than 10 Years" @if ($post->experience == 'More than 10 Years') selected @endif>More
+                                <option value="More than 10 Years" <?php if($post->experience == 'More than 10 Years'): ?> selected <?php endif; ?>>More
                                     then 10 Years
                                 </option>
                             </select>
@@ -946,22 +945,21 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-6">
                         <div class="form-group gender-labels">
                             <label for="gender" class="form-label fs-14 text-theme-primary fw-bold">Gender*</label>
                             <br>
 
                             <input type="radio" class="btn-check" name="gender" id="others" value="Others"
-                                autocomplete="off" @if ($post->gender == 'Others') checked @endif>
+                                autocomplete="off" <?php if($post->gender == 'Others'): ?> checked <?php endif; ?>>
                             <label class="btn btn-outline-primary fs-14" for="others">Nonbinary</label>
 
                             <input type="radio" class="btn-check" name="gender" id="male" value="Male"
-                                autocomplete="off" @if ($post->gender == 'Male') checked @endif>
+                                autocomplete="off" <?php if($post->gender == 'Male'): ?> checked <?php endif; ?>>
                             <label class="btn btn-outline-primary fs-14" for="male">Male</label>
 
                             <input type="radio" class="btn-check" name="gender" id="female" value="Female"
-                                autocomplete="off" @if ($post->gender == 'Female') checked @endif>
+                                autocomplete="off" <?php if($post->gender == 'Female'): ?> checked <?php endif; ?>>
                             <label class="btn btn-outline-primary fs-14" for="female">Female</label>
                         </div>
                     </div>
@@ -970,35 +968,33 @@
                             <label for="offer_salary" class="form-label fs-14 text-theme-primary fw-bold"> Base
                                 Salary*</label>
                             <input type="number" class="form-control fs-14 h-50px" name="offer_salary"
-                                value="{{ $post->offer_salary }}" required>
+                                value="<?php echo e($post->offer_salary); ?>" required>
                             <div class="invalid-feedback">
                                 Please enter Base Salary.
                             </div>
                         </div>
-
                     </div>
                     <div class="col-md-6">
                         <div class="form-group set-cross-icon">
                             <label for="qualification"
                                 class="form-label fs-14 text-theme-primary fw-bold">Qualification*</label>
-                            {{-- <input type="text" class="form-control fs-14 h-50px" name="qualification"
-                                value="{{ $post->qualification }}" required> --}}
-                            <select data-placeholder='Please Select Qualification' class="select2-multiple form-select"
-                                name="qualification" required>
+                            
+                            <select data-placeholder="Please Select Qualification"
+                                class="form-select select2-multiple fs-14 h-50px" name="qualification" required>
                                 <option></option>
-                                <option value="High School" @if ($post->qualification == 'High School') selected @endif>High School
+                                <option value="High School" <?php if($post->qualification == 'High School'): ?> selected <?php endif; ?>>High School
                                 </option>
-                                <option value="Tertiary" @if ($post->qualification == 'Tertiary') selected @endif>Tertiary
+                                <option value="Tertiary" <?php if($post->qualification == 'Tertiary'): ?> selected <?php endif; ?>>Tertiary
                                 </option>
-                                <option value="Diploma" @if ($post->qualification == 'Diploma') selected @endif>Diploma
+                                <option value="Diploma" <?php if($post->qualification == 'Diploma'): ?> selected <?php endif; ?>>Diploma
                                 </option>
-                                <option value="Under Graduate" @if ($post->qualification == 'Under Graduate') selected @endif>Under
+                                <option value="Under Graduate" <?php if($post->qualification == 'Under Graduate'): ?> selected <?php endif; ?>>Under
                                     Graduate</option>
-                                <option value="Post Graduate" @if ($post->qualification == 'Post Graduate') selected @endif>Post
+                                <option value="Post Graduate" <?php if($post->qualification == 'Post Graduate'): ?> selected <?php endif; ?>>Post
                                     Graduate</option>
-                                <option value="Masters" @if ($post->qualification == 'Masters') selected @endif>Masters
+                                <option value="Masters" <?php if($post->qualification == 'Masters'): ?> selected <?php endif; ?>>Masters
                                 </option>
-                                <option value="Doctorate" @if ($post->qualification == 'Doctorate') selected @endif>Doctorate
+                                <option value="Doctorate" <?php if($post->qualification == 'Doctorate'): ?> selected <?php endif; ?>>Doctorate
                                 </option>
                             </select>
                             <div class="invalid-feedback">
@@ -1009,9 +1005,8 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="location" class="form-label fs-14 text-theme-primary fw-bold">Location*</label>
-                            {{-- <input type="text" class="form-control fs-14 h-50px" name="location"
-                                value="{{ $post->location }}" required> --}}
-                            <input id="searchInput" value="{{ $post->location }}"
+                            
+                            <input id="searchInput" value="<?php echo e($post->location); ?>"
                                 class="controls form-control input-login searchInput" name="address" type="text"
                                 placeholder="" required autocomplete="off">
                             <input type="hidden" id="latitude" value="" name="lat" />
@@ -1023,22 +1018,17 @@
                                 Please enter Location.
                             </div>
                         </div>
-
                     </div>
                     <div class="col-md-6">
-                        {{-- <div class="form-group">
-                            <label for="expiry_date" class="form-label fs-14 text-theme-primary fw-bold">Valid
-                                Till*</label>
-                            <input type="date" class="form-control fs-14 h-50px" name="expiry_date"
-                                value="{{ $post->expiry_date }}" required>
-                </div> --}}
+                        
+                        
                         <div class="form-group">
                             <label for="expiry_date" class="form-label fs-14 text-theme-primary fw-bold">Job Closing
                                 Date*</label>
                             <div class="position-relative">
                                 <input type="text" class="form-control fs-14 h-50px datepickerJob readonly"
                                     name="expiry_date" id="expiry_date"
-                                    value="{{ \Carbon\Carbon::parse($post->expiry_date)->isoFormat('DD-MM-YYYY') }}"
+                                    value="<?php echo e(\Carbon\Carbon::parse($post->expiry_date)->isoFormat('DD-MM-YYYY')); ?>"
                                     required>
                                 <label class="calender-icon d-block" for="expiry_date"> <i class="far fa-calendar-alt"
                                         aria-hidden="true"></i> </label>
@@ -1047,12 +1037,13 @@
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="key_responsibility" class="form-label fs-14 text-theme-primary fw-bold">Key
                                 Responsibility*</label>
-                            <textarea class="form-control fs-14 h-50px summernote" id="key_responsibility" name="key_responsibility" required>{{ strip_tags($post->key_responsibility) }}</textarea>
+                            <textarea class="form-control fs-14 h-50px summernote" id="key_responsibility" name="key_responsibility" required><?php echo e(strip_tags($post->key_responsibility)); ?></textarea>
                             <div class="invalid-feedback">
                                 Please enter Key Responsibility
                             </div>
@@ -1062,7 +1053,7 @@
                         <div class="form-group">
                             <label for="skill_exp" class="form-label fs-14 text-theme-primary fw-bold">Skills &
                                 Experience*</label>
-                            <textarea class="form-control fs-14 h-50px summernote" name="skill_exp" required>{{ strip_tags($post->skill_exp) }}</textarea>
+                            <textarea class="form-control fs-14 h-50px summernote" name="skill_exp" required><?php echo e(strip_tags($post->skill_exp)); ?></textarea>
                             <div class="invalid-feedback">
                                 Please enter Skills & Experience
                             </div>
@@ -1072,57 +1063,36 @@
                         <div class="form-group">
                             <label for="description" class="form-label fs-14 text-theme-primary fw-bold">Job
                                 Description*</label>
-                            <textarea class="form-control fs-14 h-50px summernote" name="description" required>{{ strip_tags($post->description) }}</textarea>
+                            <textarea class="form-control fs-14 h-50px summernote" name="description" required><?php echo e(strip_tags($post->description)); ?></textarea>
                             <div class="invalid-feedback">
                                 Please enter Job Description
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group">
+                        <div class="form-group cross_d-none">
                             <label for="" class="form-label fs-14 text-theme-primary fw-bold">Job
                                 Duties*</label>
                             <select name="skill[]" id="skill" class="editSkillsJob form-select fs-14  h-50px"
                                 required multiple>
-                                {{-- @foreach ($skill as $row)
-                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
-                        @endforeach --}}
-                                @foreach ($skill as $row)
-                                    <option value="{{ $row->id }}"
-                                        @foreach ($post->skills as $col)
-                            @if ($row->id == $col->id)
-                            selected
-                            @endif @endforeach>
-                                        {{ $row->name }}
-                                    </option>
-                                @endforeach
+                                <?php $__currentLoopData = $skill; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($row->id); ?>"
+                                        <?php $__currentLoopData = $post->skills; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <?php if($row->id == $col->id): ?> 
+                                        selected 
+                                        <?php endif; ?> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>>
+                                        <?php echo e($row->name); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                             <div class="invalid-feedback">
                                 Please enter Job Duties
                             </div>
                         </div>
                     </div>
-                    {{-- <div class="col-md-6">
-                        <div class="form-group set-cross-icon">
-                            <label for="increment" class="form-label fs-14 text-theme-primary fw-bold">Salary
-                                Increments*</label>
-                            <select data-placeholder="Please Select Increments"
-                                class="form-select select2-multiple fs-14 h-50px" name="increment" required>
-                                <option></option>
-                                <option value="50k" @if ($post->increment == '50k') selected @endif>50k</option>
-                                <option value="100k" @if ($post->increment == '100k') selected @endif>100k</option>
-                                <option value="200k" @if ($post->increment == '200k') selected @endif>200k</option>
-                                <option value="300k" @if ($post->increment == '300k') selected @endif>300k</option>
-                                <option value="400k" @if ($post->increment == '400k') selected @endif>400k</option>
-                                <option value="500k" @if ($post->increment == '500k') selected @endif>500k</option>
-                            </select>
-                        </div>
-                    </div> --}}
+                    
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="banner" class="form-label fs-14 text-theme-primary fw-bold">Job
-                                Banner*</label>
-                            <input type="hidden" value="{{ $post->banner }}" name="existingBanner">
+                            <label for="banner" class="form-label fs-14 text-theme-primary fw-bold">Banner</label>
                             <input type="file" class="form-control fs-14 h-50px" name="banner"
                                 accept=".png, .jpg, .jpeg">
                             <div style="font-size: 12px;">please upload 840 x 200 size image</div>
@@ -1131,40 +1101,41 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <img src="{{ asset('public/storage/' . $post->banner) }}" alt="plus-circle"
+                            <img src="<?php echo e(asset('storage/' . $post->banner)); ?>" alt="plus-circle"
                                 width="150px" style="" height="70px">
                         </div>
+
                     </div>
                     <div class="col-md-6">
                         <div class="form-group set-cross-icon">
                             <label for="company" class="form-label fs-14 text-theme-primary fw-bold">Company
                                 Name</label>
-                            <select name="comp_id" id="company" data-placeholder="Please Select Company"
+                            <select data-placeholder="Please Select Company" name="comp_id" id="company"
                                 class="form-select select2-multiple fs-14 h-50px">
                                 <option></option>
-                                @foreach ($recruiter as $row)
-                                    <option value="{{ $row->company->id }}"
-                                        @if ($row->company->id == $post->comp_id) selected @endif>
-                                        {{ $row->company->name }}
+                                <?php $__currentLoopData = $recruiter; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($row->company->id); ?>"
+                                        <?php if($row->company->id == $post->comp_id): ?> selected <?php endif; ?>>
+                                        <?php echo e($row->company->name); ?>
+
                                     </option>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                             <div class="invalid-feedback">
                                 Please provide Company Name
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-6">
                         <div class="form-group set-cross-icon">
-                            <label for="test_attached" class="form-label fs-14 text-theme-primary fw-bold">Will this Job
+                            <label for="increment" class="form-label fs-14 text-theme-primary fw-bold">Will this Job
                                 require testing by the candidate?</label>
                             <select class="form-select select2-multiple fs-14 h-50px" onchange="enableField()"
                                 data-placeholder="Please Select Option" name="test_attached" id="test_attached"
                                 required>
                                 <option></option>
-                                <option value="1" @if ($post->test_attached == '1') Selected @endif>Yes</option>
-                                <option value="0" @if ($post->test_attached == '0') Selected @endif>No</option>
+                                <option value="1" <?php if($post->test_attached == '1'): ?> Selected <?php endif; ?>>Yes</option>
+                                <option value="0" <?php if($post->test_attached == '0'): ?> Selected <?php endif; ?>>No</option>
 
                             </select>
                             <div class="invalid-feedback">
@@ -1172,21 +1143,21 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-6">
                         <div class="form-group set-cross-icon" id="testBox">
-                            <label for="test_id" class="form-label fs-14 text-theme-primary fw-bold">Attach a
-                                test*</label>
-                            <select name="test_id" class="select2-multiple form-control fs-14  h-50px">
+                            <label for="test_id" class="form-label fs-14 text-theme-primary fw-bold">Select
+                                Test*</label>
+                                <select name="test_id" class="select2-multiple form-control fs-14  h-50px">
                                 <option selected disabled value="">Select Test</option>
-                                @if ($test_id != null)
-                                    @foreach ($test_id as $row)
-                                        {{-- {{ dd($row) }} --}}
-                                        <option value="{{ $row['number'] }}"
-                                            @if ($post->test_id == $row['number']) Selected @endif>
-                                            {{ $row['name'] }}
+                                <?php if($test_id != null): ?>
+                                    <?php $__currentLoopData = $test_id; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($row['id']); ?>"
+                                            <?php if($post->test_id == $row['id']): ?> Selected <?php endif; ?>><?php echo e($row['exam_title']); ?>
+
                                         </option>
-                                    @endforeach
-                                @endif
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php endif; ?>
                             </select>
                             <div class="invalid-feedback">
                                 Please provide Attach a test
@@ -1202,11 +1173,11 @@
                                 Criteria</label>
                             <select name="criteria" class="select2-multiple form-control fs-14 h-50px">
                                 <option disabled value="">Select Test Passing Criteria</option>
-                                <option value="50+" @if ($post->criteria == '50+') Selected @endif>50+</option>
-                                <option value="60+" @if ($post->criteria == '60+') Selected @endif>60+</option>
-                                <option value="70+" @if ($post->criteria == '70+') Selected @endif>70+</option>
-                                <option value="80+" @if ($post->criteria == '80+') Selected @endif>80+</option>
-                                <option value="90+" @if ($post->criteria == '90+') Selected @endif>90+</option>
+                                <option value="50+" <?php if($post->criteria == '50+'): ?> Selected <?php endif; ?>>50+</option>
+                                <option value="60+" <?php if($post->criteria == '60+'): ?> Selected <?php endif; ?>>60+</option>
+                                <option value="70+" <?php if($post->criteria == '70+'): ?> Selected <?php endif; ?>>70+</option>
+                                <option value="80+" <?php if($post->criteria == '80+'): ?> Selected <?php endif; ?>>80+</option>
+                                <option value="90+" <?php if($post->criteria == '90+'): ?> Selected <?php endif; ?>>90+</option>
                             </select>
                             <div class="invalid-feedback">
                                 Please Select Test Passing Criteria
@@ -1216,18 +1187,22 @@
                     <div class="col-12">
                         <div class="form-group">
                             <button type="submit" class="btn_viewall btn_viewall fw-500 px-4 py-2 d-inline-block ">
-                                Post A Job </button>
+                                Update </button>
                         </div>
                     </div>
                 </div>
 
+
             </form>
         </div>
+
+        </form>
+    </div>
     </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('bottom_script')
+<?php $__env->startSection('bottom_script'); ?>
     <script>
         if ($('#test_attached').val() == '1') {
 
@@ -1251,7 +1226,7 @@
      
         
             $.ajax({
-                url: '{{ route('recruiter.get.testCreate') }}',
+                url: '<?php echo e(route('recruiter.get.testCreate')); ?>',
                 method: 'GET',
                 data: {
                     id: id,  // Parameters to send along with the request
@@ -1261,9 +1236,9 @@
                     console.log("ll",response.length)
                     if(response.length == 0)
                     {
-                        console.log("ssss22");
+                        console.log("ssss");
                         document.getElementById('createtest').classList.remove('hidden');
-                        $('#g').html('<a href="{{route('recruiter.exam.create')}}">Add a new test</a></div>')
+                        $('#g').html('<a href="<?php echo e(route('recruiter.exam.create')); ?>">Add a new test</a></div>')
                     }
                 },
             });
@@ -1280,7 +1255,7 @@
 
         function testFillBox() {
             var id = $('#class_id').val();
-            var href = "{{ route('recruiter.get.testCreate', ':id') }}";
+            var href = "<?php echo e(route('recruiter.get.testCreate', ':id')); ?>";
             href = href.replace(':id', id);
             console.log(href);
             $.ajax({
@@ -1292,7 +1267,7 @@
                     html = "";
                     html +=
                         "<label for='class_id' class='form-label fs-14 text-theme-primary fw-bold'>Attach a test*</label>";
-                    html += "<select name='test_id' onchange='assign_test()'";
+                    html += "<select name='test_id'";
                     html += "id='assign_test' class='select2-multiple form-control fs-14  h-50px'>";
                     html += "<option selected disabled value=''>Select Test</option>";
                     $.each(data, function(index, value) {
@@ -1348,4 +1323,6 @@
     
     });
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('recruterpanel.layout.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\Rameez Ali\Pictures\new1\erec\resources\views/recruterpanel/pages/jobs/edit.blade.php ENDPATH**/ ?>

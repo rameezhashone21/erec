@@ -584,9 +584,9 @@ class RecruiterDashboardController extends Controller
     }
     public function updateJob(Request $request)
     {
-        // dd($request->all());
+        //dd($request->all());
         $post = Posts::where('id', $request->post_id)->first();
-        // dd($post->toArray());
+        //dd($post->toArray());
         $data = $request->all();
         $valid = Validator::make($data, [
             'post' => ['required', 'string', 'max:255'],
@@ -623,14 +623,14 @@ class RecruiterDashboardController extends Controller
             $post->key_responsibility = $data['key_responsibility'];
             $post->skill_exp = $data['skill_exp'];
             $post->offer_salary = $data['offer_salary'];
-            if ($request->has('test_attached') && $request->test_attached == 1) {
+            if ($request->test_attached == 1) {
                 $post->test_attached = $data['test_attached'];
                 if ($request->has('test_id')) {
                     $post->test_id = $data['test_id'];
                 }
-                if ($request->has('criteria')) {
-                    $post->criteria = $data['criteria'];
-                }
+                // if ($request->has('criteria')) {
+                //     $post->criteria = $data['criteria'];
+                // }
                 $jobApp = JobApplications::where('post_id', $post->id)->get();
                 foreach ($jobApp as $row) {
                     $jobApp = JobApplications::find($row->id)->id;
@@ -651,15 +651,8 @@ class RecruiterDashboardController extends Controller
             } else {
                 $post->test_id = null;
                 $post->criteria = null;
+                $post->test_attached = 0;
             }
-            // dd($jobApp);
-            // $post->test_attached = $data['test_attached'];
-            // if ($request->has('test_id')) {
-            //     $post->test_id = $data['test_id'];
-            // }
-            // if ($request->has('criteria')) {
-            //     $post->criteria = $data['criteria'];
-            // }
             $post->location = $data['address'];
             $post->rec_id = auth()->user()->recruiter->id;
             if (isset($request->comp_id)) {
