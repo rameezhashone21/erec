@@ -44,6 +44,8 @@ Route::post('/candidate_notify', [ShowTestController::class, 'candidate_notify']
 
 Route::post('/candidates_filter', [App\Http\Controllers\CompanyDashboardController::class, 'candidates_filter'])->name("candidates.filter");
 
+Route::post('/candidates_filter/all', [App\Http\Controllers\CompanyDashboardController::class, 'candidates_filter_all'])->name("candidates.filter.allgrade");
+
 Route::get('/download-csv', [ExamController::class, 'downloadCSV'])->name("downloadCSV");
 
 

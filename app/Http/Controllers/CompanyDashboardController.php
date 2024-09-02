@@ -621,6 +621,129 @@ class CompanyDashboardController extends Controller
     return response()->json($output);
         
     }
+
+    public function candidates_filter_all(Request $request)
+    {
+        if($request->grade)
+        // Get All Job Applications Against the job 
+        $all_job_applications = JobApplications::where("post_id",$request->job_id)->get();
+        
+        
+        $output = '';
+        foreach ($all_job_applications as $key => $row) {
+
+        // Increment key for display purposes
+        $key++;
+        
+                
+        $jobApplication = JobApplications::where("id",$row->id)->first();
+                
+        $candidate_doc = DB::table('candidates_doc')->where("id",$row->candidate_doc_Id)->first();
+        
+        $candidate = DB::table('candidates_details')->where("id",$row->candidate_id)->first();
+        
+
+        $output .= '<tr>';
+        $output .= '<td>' . $key . '.</td>';
+        $output .= '<td>
+                      <a href="' . route('candidate.detail', $candidate->slug) . '" style="color: #000;">
+                        ' . $candidate->first_name . ' ' . $candidate->last_name . '
+                      </a>
+                    </td>';
+        $output .= '<td>';
+        
+        if ($candidate_doc != null) {
+            $output .= '<a href="' . asset('candidateDoc/doc/' . $candidate_doc->document) . '" target="_blank" class="text-decoration-underline d-flex text-dark">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="27.5" height="27.5" viewBox="0 0 27.5 27.5">
+                            <g id="document-pdf" transform="translate(-2.25 -2.25)">
+                              <path id="Path_3217" data-name="Path 3217" d="M32.893,19.964V18H27v9.821h1.964V23.893h2.946V21.929H28.964V19.964Z" transform="translate(-3.143 -2)" fill="#8b91a7" />
+                              <path id="Path_3218" data-name="Path 3218" d="M20.8,27.821H16.875V18H20.8a2.949,2.949,0,0,1,2.946,2.946v3.929A2.949,2.949,0,0,1,20.8,27.821Zm-1.964-1.964H20.8a.983.983,0,0,0,.982-.982V20.946a.983.983,0,0,0-.982-.982H18.839Z" transform="translate(-1.857 -2)" fill="#8b91a7" />
+                              <path id="Path_3219" data-name="Path 3219" d="M11.661,18H6.75v9.821H8.714V24.875h2.946a1.967,1.967,0,0,0,1.964-1.964V19.964A1.966,1.966,0,0,0,11.661,18ZM8.714,22.911V19.964h2.946v2.946Z" transform="translate(-0.571 -2)" fill="#8b91a7" />
+                              <path id="Path_3220" data-name="Path 3220" d="M21.893,14.036V10.107A.894.894,0,0,0,21.6,9.42L14.724,2.545a.893.893,0,0,0-.688-.3H4.214A1.97,1.97,0,0,0,2.25,4.214V27.786A1.964,1.964,0,0,0,4.214,29.75H19.929V27.786H4.214V4.214h7.857v5.893a1.97,1.97,0,0,0,1.964,1.964h5.893v1.964Zm-7.857-3.929v-5.5l5.5,5.5Z" transform="translate(0)" fill="#8b91a7" />
+                            </g>
+                          </svg>
+                          <span class="align-self-end ms-1">Click to view</span>
+                        </a>';
+        }
+        
+        $output .= '</td>';
+        $output .= '<td>';
+
+        if ($jobApplication->coverLetterFile != null) {
+            $output .= '<a href="' . asset('storage/' . $jobApplication->coverLetterFile) . '" target="_blank" class="text-decoration-underline d-flex text-dark mb-3">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="27.5" height="27.5" viewBox="0 0 27.5 27.5">
+                            <g id="document-pdf" transform="translate(-2.25 -2.25)">
+                              <path id="Path_3217" data-name="Path 3217" d="M32.893,19.964V18H27v9.821h1.964V23.893h2.946V21.929H28.964V19.964Z" transform="translate(-3.143 -2)" fill="#8b91a7" />
+                              <path id="Path_3218" data-name="Path 3218" d="M20.8,27.821H16.875V18H20.8a2.949,2.949,0,0,1,2.946,2.946v3.929A2.949,2.949,0,0,1,20.8,27.821Zm-1.964-1.964H20.8a.983.983,0,0,0,.982-.982V20.946a.983.983,0,0,0-.982-.982H18.839Z" transform="translate(-1.857 -2)" fill="#8b91a7" />
+                              <path id="Path_3219" data-name="Path 3219" d="M11.661,18H6.75v9.821H8.714V24.875h2.946a1.967,1.967,0,0,0,1.964-1.964V19.964A1.966,1.966,0,0,0,11.661,18ZM8.714,22.911V19.964h2.946v2.946Z" transform="translate(-0.571 -2)" fill="#8b91a7" />
+                              <path id="Path_3220" data-name="Path 3220" d="M21.893,14.036V10.107A.894.894,0,0,0,21.6,9.42L14.724,2.545a.893.893,0,0,0-.688-.3H4.214A1.97,1.97,0,0,0,2.25,4.214V27.786A1.964,1.964,0,0,0,4.214,29.75H19.929V27.786H4.214V4.214h7.857v5.893a1.97,1.97,0,0,0,1.964,1.964h5.893v1.964Zm-7.857-3.929v-5.5l5.5,5.5Z" transform="translate(0)" fill="#8b91a7" />
+                            </g>
+                          </svg>
+                          <span class="align-self-end ms-1">Click to view</span>
+                        </a>';
+        }
+
+        if ($jobApplication->coverLetter != null) {
+            $output .= '<button type="button" class="btn btn_viewall" data-bs-toggle="modal" data-bs-target="#staticBackdrop-' . $jobApplication->id . '">Click to view</button>
+                        <div class="modal fade" id="staticBackdrop-' . $jobApplication->id . '" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="staticBackdropLabel">Cover Letter</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ' . $jobApplication->coverLetter . '
+                                    </div>
+                                </div>
+                            </div>
+                        </div>';
+        }
+
+        if ($jobApplication->coverLetter == null && $jobApplication->coverLetterFile == null) {
+            $output .= 'No Record Found...';
+        }
+
+        $output .= '</td>';
+        $output .= '<td id="td_id' . $jobApplication->id . '">';
+        
+        if ($jobApplication->qst_id != '0') {
+            $output .= '<p>' . $jobApplication->qst($jobApplication->qst_id)['exam_title'] . '</p>';
+        }
+        else{
+            $output .= 'N/A';
+        }
+
+        $output .= '</td>';
+        $output .= '<td id="td_id' . $jobApplication->id . '">';
+        
+        $output .= 'N/A';
+        
+
+        $output .= '</td>';
+        $output .= '<td id="gradeTr-' . $row->id . '">';
+        
+        $output .= 'N/A';
+
+        $output .= '</td>';
+        $output .= '<td id="hireTr-' . $row->id . '">';
+        
+        $output .= 'N/A';
+
+        $output .= '</td>';
+        $output .= '<td>';
+        
+        $output .= 'N/A';
+
+        $output .= '</td>';
+        $output .= '</tr>';
+        
+
+    }
+
+    return response()->json($output);
+        
+    }
     
     public function updateJob(Request $request)
     {

@@ -146,4 +146,9 @@ class JobApplications extends Model
     {
         return $this->hasOne(Exam::class, 'qst_id', 'id');
     }
+
+    public function get_exam()
+    {
+        return $this->hasOne(Exam::class, 'id', 'qst_id');
+    }
 }
