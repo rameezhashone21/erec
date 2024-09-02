@@ -717,23 +717,67 @@ class CompanyDashboardController extends Controller
         $output .= '</td>';
         $output .= '<td id="td_id' . $jobApplication->id . '">';
         
-        $output .= 'N/A';
+        if($jobApplication->examResult){
+                $output .= $jobApplication->examResult->perentage."%";
+        }
+        else {
+            $output .= 'N/A';
+        }
         
 
         $output .= '</td>';
         $output .= '<td id="gradeTr-' . $row->id . '">';
         
-        $output .= 'N/A';
+        if($jobApplication->examResult){
+            if($jobApplication->examResult->status == "Average") {
+                $output .= '<p class="orange_badge status_badge">' . $jobApplication->examResult->grade . '</p>';
+            }elseif ($jobApplication->examResult->status == "Pass") {
+                $output .= '<p class="green_badge status_badge">' . $jobApplication->examResult->grade . '</p>';
+            }elseif ($jobApplication->examResult->status == "Fail") {
+                $output .= '<p class="red_badge status_badge">' . $jobApplication->examResult->grade . '</p>';
+            }
+        }
+        else{
+            $output .= 'N/A';
+        }
+
 
         $output .= '</td>';
         $output .= '<td id="hireTr-' . $row->id . '">';
         
-        $output .= 'N/A';
+        if($jobApplication->examResult){
+            if ($jobApplication->status == 2) {
+                $output .= '<p class="btn btn_viewall text-center p-2">Hired</p>';
+            } 
+            elseif ($jobApplication->status == 1) {
+                    $output .= '<p onclick="hideCandidate(' . $jobApplication->id . ')" id="buttonHire(' . $jobApplication->id . ')" class="btn btn_viewall text-center p-2">Hire</p>';
+            } 
+            elseif ($jobApplication->status == 0) {
+                    $output .= '<p onclick="shortCandidate(' . $jobApplication->id . ')" class="btn btn_viewall text-center p-2">Shortlist</p>';
+            }
+        }
+        else{
+            $output .= 'N/A';
+        }
+
 
         $output .= '</td>';
         $output .= '<td>';
         
-        $output .= 'N/A';
+        if($jobApplication->examResult){
+            if ($jobApplication->examResult->notified == 0) {
+                $output .= '<form action="' . route('candidate.notify', ['id' => $jobApplication->examResult->id]) . '" method="post" style="width:100%; display:flex; align-items:center;">';
+                $output .= csrf_field();
+                $output .= '<button type="submit" class="btn_theme border-0 fs-12 py-2 d-inline-block w-100">Notify Candidate</button>';
+                $output .= '</form>';
+            }
+            else{
+                $output .= 'Notified';
+            } 
+        }
+        else {
+            $output .= 'N/A';
+        }
 
         $output .= '</td>';
         $output .= '</tr>';
