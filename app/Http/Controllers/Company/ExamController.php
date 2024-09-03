@@ -58,7 +58,7 @@ public function uploadCSV(Request $request)
 
         //Check for errors if needed
         if ($import->hasError()) {
-            return redirect()->back()->with('error', 'Import completed with errors due to invalid data.');
+            return redirect()->back()->with('error', 'File Format is incorrect.');
         }
 
         return redirect()->route('company.exam.question.listing', ['id' => $exam_id])->with('message', 'File Imported Successfully!');
