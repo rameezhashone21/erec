@@ -591,10 +591,10 @@ class CompanyDashboardController extends Controller
         $output .= '<td id="hireTr-' . $row->id . '">';
         
         if ($jobApplication->status == 2) {
-            $output .= '<p class="btn btn_viewall text-center p-2">Hired</p>';
+            $output .= '<p class="text-center p-2">Hired</p>';
         } else {
             if ($jobApplication->status == 1) {
-                $output .= '<p onclick="hideCandidate(' . $jobApplication->id . ')" id="buttonHire(' . $jobApplication->id . ')" class="btn btn_viewall text-center p-2">Hire</p>';
+                $output .= '<p class="text-center p-2">Shortlisted</p>';
             } elseif ($jobApplication->status == 0) {
                 $output .= '<p onclick="shortCandidate(' . $jobApplication->id . ')" class="btn btn_viewall text-center p-2">Shortlist</p>';
             }
@@ -744,20 +744,32 @@ class CompanyDashboardController extends Controller
 
         $output .= '</td>';
         $output .= '<td id="hireTr-' . $row->id . '">';
-        
-        if($jobApplication->examResult){
+
+        // dd($jobApplication->examResult != null && $jobApplication->status == 0);
+        if ($jobApplication->qst_id != '0'){
+            if ($jobApplication->examResult != null && $jobApplication->status == 2) {
+                $output .= '<p class="text-center p-2">Hired</p>';
+            } 
+            elseif ($jobApplication->examResult != null && $jobApplication->status == 1) {
+                    $output .= '<p class="text-center p-2">Shortlisted</p>';
+            } 
+            elseif ($jobApplication->examResult != null && $jobApplication->status == 0) {
+                    $output .= '<p onclick="shortCandidate(' . $jobApplication->id . ')" class="btn btn_viewall text-center p-2">Shortlist</p>';
+            }
+            else{
+                $output .= 'N/A';
+            }
+        }
+        else {
             if ($jobApplication->status == 2) {
-                $output .= '<p class="btn btn_viewall text-center p-2">Hired</p>';
+                $output .= '<p class="text-center p-2">Hired</p>';
             } 
             elseif ($jobApplication->status == 1) {
-                    $output .= '<p onclick="hideCandidate(' . $jobApplication->id . ')" id="buttonHire(' . $jobApplication->id . ')" class="btn btn_viewall text-center p-2">Hire</p>';
+                $output .= '<p class="text-center p-2">Shortlisted</p>';
             } 
             elseif ($jobApplication->status == 0) {
                     $output .= '<p onclick="shortCandidate(' . $jobApplication->id . ')" class="btn btn_viewall text-center p-2">Shortlist</p>';
             }
-        }
-        else{
-            $output .= 'N/A';
         }
 
 

@@ -1,12 +1,12 @@
-@extends('companypanel.layout.app')
 
-@section('page_title', 'E-Rec')
 
-@section('head_style')
+<?php $__env->startSection('page_title', 'E-Rec'); ?>
+
+<?php $__env->startSection('head_style'); ?>
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
-@endsection
+<?php $__env->stopSection(); ?>
 
 <style>
     /* HTML: <div class="loader"></div> */
@@ -22,7 +22,7 @@
           background-repeat: no-repeat;
           animation: l11 1s infinite linear;
         }
-        @keyframes l11{ 
+        @keyframes  l11{ 
           100%{transform: rotate(1turn)}
         }
         /* .loader_shortlisted_container {
@@ -37,7 +37,7 @@
         }   */
     </style>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
  
   <div class="col-xl-9 col-lg-8">
     <button class="mobile_menu_trigger d-lg-none btn_theme border-0 py-2 px-4 mb-3">
@@ -47,32 +47,33 @@
       <div class="d-flex aling-items-center mb-3">
         <h2 class="fw-500 text_primary fs-5 align-self-center">Job Post Details</h2>
       </div>
-     @if(session('success'))
+     <?php if(session('success')): ?>
     <div class="alert alert-success">
-        {{ session('success') }}
+        <?php echo e(session('success')); ?>
+
     </div>
-    @endif
+    <?php endif; ?>
       <ul class='row row-cols-md-4 row-cols-1 g-0 job_detail_links'>
         <li class='col'>
-          <a href="{{ route('company.job.details', $post->slug) }}"
-            @if (Route::is('company.job.details', $post->slug)) class="active" @endif>Job Detail</a>
+          <a href="<?php echo e(route('company.job.details', $post->slug)); ?>"
+            <?php if(Route::is('company.job.details', $post->slug)): ?> class="active" <?php endif; ?>>Job Detail</a>
         </li>
         <li class='col'>
-          <a href="{{ route('company.job.applicants', $post->slug) }}"
-            @if (Route::is('company.job.applicants', $post->slug) || Route::is('company.job.applicantsById', $post->slug)) class="active" @endif>Applicants</a>
+          <a href="<?php echo e(route('company.job.applicants', $post->slug)); ?>"
+            <?php if(Route::is('company.job.applicants', $post->slug) || Route::is('company.job.applicantsById', $post->slug)): ?> class="active" <?php endif; ?>>Applicants</a>
         </li>
         <li class='col'>
-          <a href="{{ route('company.job.shortlisted', $post->slug) }}"
-            @if (Route::is('company.job.shortlisted', $post->slug)) class="active" @endif>Shortlisted</a>
+          <a href="<?php echo e(route('company.job.shortlisted', $post->slug)); ?>"
+            <?php if(Route::is('company.job.shortlisted', $post->slug)): ?> class="active" <?php endif; ?>>Shortlisted</a>
         </li>
         <li class='col'>
-          <a href="{{ route('company.exam.result', $post->slug) }}"
-            @if (Route::is('company.exam.result', $post->slug)) class="active" @endif>Hired</a>
+          <a href="<?php echo e(route('company.exam.result', $post->slug)); ?>"
+            <?php if(Route::is('company.exam.result', $post->slug)): ?> class="active" <?php endif; ?>>Hired</a>
         </li>
       </ul>
       <!-- Grade Filter Dropdown -->
     <div class="mb-3">
-        <input id="post_id" type="hidden" name="post" value="{{$post->id}}">
+        <input id="post_id" type="hidden" name="post" value="<?php echo e($post->id); ?>">
         <label for="grade-filter">Filter by Grade:</label>
         <select id="grade-filter" class="form-control">
             <option value="All">All Applicants</option>
@@ -101,22 +102,24 @@
             </tr>
           </thead>
           <tbody id="candidate-table-body">
-            @if (count($post->jobAppRecComp) > 0)
-              @foreach ($post->jobAppRecComp as $key => $row)
-                @if ($row->candidate != null)
-                @if($row->result)
-                @if($row->result->grade == "C")
+            <?php if(count($post->jobAppRecComp) > 0): ?>
+              <?php $__currentLoopData = $post->jobAppRecComp; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <?php if($row->candidate != null): ?>
+                <?php if($row->result): ?>
+                <?php if($row->result->grade == "C"): ?>
                   <tr >
-                    <td>{{ ++$key }}. </td>
+                    <td><?php echo e(++$key); ?>. </td>
                     <td>
-                      <a href="{{ route('candidate.detail', $row->candidate->slug) }}" style="color: #000;">
-                        {{ $row->candidate->first_name }}
-                        {{ $row->candidate->last_name }}
+                      <a href="<?php echo e(route('candidate.detail', $row->candidate->slug)); ?>" style="color: #000;">
+                        <?php echo e($row->candidate->first_name); ?>
+
+                        <?php echo e($row->candidate->last_name); ?>
+
                       </a>
                     </td>
                     <td>
-                      @if ($row->candidateDocument != null)
-                        <a href="{{ asset('candidateDoc/doc/' . $row->candidateDocument->document) }}" target="_blank"
+                      <?php if($row->candidateDocument != null): ?>
+                        <a href="<?php echo e(asset('candidateDoc/doc/' . $row->candidateDocument->document)); ?>" target="_blank"
                           class='text-decoration-underline d-flex text-dark'>
                           <svg xmlns="http://www.w3.org/2000/svg" width="27.5" height="27.5" viewBox="0 0 27.5 27.5">
                             <g id="document-pdf" transform="translate(-2.25 -2.25)">
@@ -136,16 +139,14 @@
                           </svg>
                           <span class='align-self-end ms-1'>
                             Click to view
-                            {{-- <a class='px-4 py-2 progress_card d-block rounded-3'
-                                                        href="{{ asset('public/candidateDoc/doc/' . $item->document) }}"
-                                                    target="_blank"> --}}
+                            
                           </span>
                         </a>
-                      @endif
+                      <?php endif; ?>
                     </td>
                     <td>
-                      @if ($row->coverLetterFile != null)
-                        <a href="{{ asset('storage/' . $row->coverLetterFile) }}" target="_blank"
+                      <?php if($row->coverLetterFile != null): ?>
+                        <a href="<?php echo e(asset('storage/' . $row->coverLetterFile)); ?>" target="_blank"
                           class='text-decoration-underline d-flex text-dark mb-3'>
                           <svg xmlns="http://www.w3.org/2000/svg" width="27.5" height="27.5" viewBox="0 0 27.5 27.5">
                             <g id="document-pdf" transform="translate(-2.25 -2.25)">
@@ -165,13 +166,11 @@
                           </svg>
                           <span class='align-self-end ms-1'>
                             Click to view
-                            {{-- <a class='px-4 py-2 progress_card d-block rounded-3'
-                                                        href="{{ asset('public/candidateDoc/doc/' . $item->document) }}"
-                                                    target="_blank"> --}}
+                            
                           </span>
                         </a>
-                      @endif
-                      @if ($row->coverLetter != null)
+                      <?php endif; ?>
+                      <?php if($row->coverLetter != null): ?>
                         <button type="button" class="btn btn_viewall" data-bs-toggle="modal"
                           data-bs-target="#staticBackdrop">
                           Click to view
@@ -187,83 +186,78 @@
                                   aria-label="Close"></button>
                               </div>
                               <div class="modal-body">
-                                {{ $row->coverLetter }}
+                                <?php echo e($row->coverLetter); ?>
+
                               </div>
                             </div>
                           </div>
                         </div>
-                      @endif
-                      @if ($row->coverLetter == null && $row->coverLetterFile == null)
+                      <?php endif; ?>
+                      <?php if($row->coverLetter == null && $row->coverLetterFile == null): ?>
                         No Record Found...
-                      @endif
+                      <?php endif; ?>
                     </td>
-                    <td id="td_id{{ $row->id }}">
-                      <p>{{$row->get_exam->exam_title}}</p>
+                    <td id="td_id<?php echo e($row->id); ?>">
+                      <p><?php echo e($row->get_exam->exam_title); ?></p>
                     </td>
 
-                      <td id="gradeTr-{{ $row->id }}">
-                      @if ($row->result)
-                        <p>{{$row->result->perentage}} %</p>
-                      @endif
+                      <td id="gradeTr-<?php echo e($row->id); ?>">
+                      <?php if($row->result): ?>
+                        <p><?php echo e($row->result->perentage); ?> %</p>
+                      <?php endif; ?>
                       </td>
 
-                      <td id="gradeTr-{{ $row->id }}">
-                      @if ($row->result)
+                      <td id="gradeTr-<?php echo e($row->id); ?>">
+                      <?php if($row->result): ?>
                         <p class="orange_badge status_badge">
-                          {{$row->result->grade}}</p> 
-                      @endif
+                          <?php echo e($row->result->grade); ?></p> 
+                      <?php endif; ?>
                       </td>
 
-                    <td id="hireTr-{{ $row->id }}">
-                      @if ($row->status == 2)
+                    <td id="hireTr-<?php echo e($row->id); ?>">
+                      <?php if($row->status == 2): ?>
                         <p class="text-center p-2">
                           Hired</p>
-                      @elseif ($row->status == 5)
+                      <?php elseif($row->status == 5): ?>
                         <p class="text-center p-2">
                           Rejected</p>
-                      @else
-                        @if ($row->status == 1)
+                      <?php else: ?>
+                        <?php if($row->status == 1): ?>
                           <p class="text-center p-2">ShortListed</p>
-                        @elseif ($row->status == 0)
-                          <p onclick="shortCandidate({{ $row->id }})" class="btn btn_viewall text-center p-2">
+                        <?php elseif($row->status == 0): ?>
+                          <p onclick="shortCandidate(<?php echo e($row->id); ?>)" class="btn btn_viewall text-center p-2">
                             Shortlist</p>
-                        @endif
-                      @endif
-                      {{-- @if ($row->status == 0)
-                                                <a href="javascript:void 0;" id="blue_shortlist{{ $row->id }}"
-                                class="btn-sm mt-2"><i class="fa-solid fa-exclamation"></i> Task Not
-                                Assigned Yet.</a>
-                                @elseif($row->status == 1)
-                                <p class="btn btn-success btn-sm"><i class="fa fa-check" id="green_shortlist{{ $row->id }}"
-                                        style="font-size:18px"></i>
-                                    Shortlist</p>
-                                @endif() --}}
+                        <?php endif; ?>
+                      <?php endif; ?>
+                      
                     </td>
                     <td>
-                    @if($row->result->notified == 0)
-                    <form action="{{ route('candidate.notify', ['id' => $row->result->id]) }}" method="post" style="width:100%; display:flex; align-items:center;">
-                        @csrf
+                    <?php if($row->result->notified == 0): ?>
+                    <form action="<?php echo e(route('candidate.notify', ['id' => $row->result->id])); ?>" method="post" style="width:100%; display:flex; align-items:center;">
+                        <?php echo csrf_field(); ?>
                         <button type="submit" class="btn_theme border-0 fs-12 py-2 d-inline-block w-100"> Notify Candidate </button>
                         </a>
                     </form>
-                    @else
+                    <?php else: ?>
                         Notified
-                    @endif
+                    <?php endif; ?>
                     </td>
                   </tr>
-                @elseif($row->result->grade == "A" || $row->result->grade == "B")
+                <?php elseif($row->result->grade == "A" || $row->result->grade == "B"): ?>
                   <tr>
-                    <td>{{ ++$key }}. </td>
+                    <td><?php echo e(++$key); ?>. </td>
                     <td>
-                      <a href="{{ route('candidate.detail', $row->candidate->slug) }}" style="color: #000;">
-                        {{ $row->candidate->first_name }}
-                        {{ $row->candidate->last_name }}
+                      <a href="<?php echo e(route('candidate.detail', $row->candidate->slug)); ?>" style="color: #000;">
+                        <?php echo e($row->candidate->first_name); ?>
+
+                        <?php echo e($row->candidate->last_name); ?>
+
                       </a>
                     </td>
                     <td>
-                      {{-- {{ dd($row->candidateDocument) }} --}}
-                      @if ($row->candidateDocument != null)
-                        <a href="{{ asset('candidateDoc/doc/' . $row->candidateDocument->document) }}" target="_blank"
+                      
+                      <?php if($row->candidateDocument != null): ?>
+                        <a href="<?php echo e(asset('candidateDoc/doc/' . $row->candidateDocument->document)); ?>" target="_blank"
                           class='text-decoration-underline d-flex text-dark'>
                           <svg xmlns="http://www.w3.org/2000/svg" width="27.5" height="27.5" viewBox="0 0 27.5 27.5">
                             <g id="document-pdf" transform="translate(-2.25 -2.25)">
@@ -283,16 +277,14 @@
                           </svg>
                           <span class='align-self-end ms-1'>
                             Click to view
-                            {{-- <a class='px-4 py-2 progress_card d-block rounded-3'
-                                                        href="{{ asset('public/candidateDoc/doc/' . $item->document) }}"
-                                                    target="_blank"> --}}
+                            
                           </span>
                         </a>
-                      @endif
+                      <?php endif; ?>
                     </td>
                     <td>
-                      @if ($row->coverLetterFile != null)
-                        <a href="{{ asset('storage/' . $row->coverLetterFile) }}" target="_blank"
+                      <?php if($row->coverLetterFile != null): ?>
+                        <a href="<?php echo e(asset('storage/' . $row->coverLetterFile)); ?>" target="_blank"
                           class='text-decoration-underline d-flex text-dark mb-3'>
                           <svg xmlns="http://www.w3.org/2000/svg" width="27.5" height="27.5" viewBox="0 0 27.5 27.5">
                             <g id="document-pdf" transform="translate(-2.25 -2.25)">
@@ -312,13 +304,11 @@
                           </svg>
                           <span class='align-self-end ms-1'>
                             Click to view
-                            {{-- <a class='px-4 py-2 progress_card d-block rounded-3'
-                                                        href="{{ asset('public/candidateDoc/doc/' . $item->document) }}"
-                                                    target="_blank"> --}}
+                            
                           </span>
                         </a>
-                      @endif
-                      @if ($row->coverLetter != null)
+                      <?php endif; ?>
+                      <?php if($row->coverLetter != null): ?>
                         <button type="button" class="btn btn_viewall" data-bs-toggle="modal"
                           data-bs-target="#staticBackdrop">
                           Click to view
@@ -334,89 +324,84 @@
                                   aria-label="Close"></button>
                               </div>
                               <div class="modal-body">
-                                {{ $row->coverLetter }}
+                                <?php echo e($row->coverLetter); ?>
+
                               </div>
                             </div>
                           </div>
                         </div>
-                      @endif
-                      @if ($row->coverLetter == null && $row->coverLetterFile == null)
+                      <?php endif; ?>
+                      <?php if($row->coverLetter == null && $row->coverLetterFile == null): ?>
                         No Record Found...
-                      @endif
+                      <?php endif; ?>
                     </td>
-                    <td id="td_id{{ $row->id }}">
-                      <p>{{$row->get_exam->exam_title}}</p>
+                    <td id="td_id<?php echo e($row->id); ?>">
+                      <p><?php echo e($row->get_exam->exam_title); ?></p>
                     </td>
 
-                    <td id="td_id{{ $row->id }}">
-                      {{-- {{ dd($row->qst_id) }} --}}
-                      @if ($row->qst_id != '0')
-                          @if ($row->result)
-                            {{ $row->result->perentage }}%
-                          @else
+                    <td id="td_id<?php echo e($row->id); ?>">
+                      
+                      <?php if($row->qst_id != '0'): ?>
+                          <?php if($row->result): ?>
+                            <?php echo e($row->result->perentage); ?>%
+                          <?php else: ?>
                             Not Attempted
-                          @endif
-                      @endif
-                      {{-- @endif --}}
+                          <?php endif; ?>
+                      <?php endif; ?>
+                      
                     </td>
 
-                    <td id="gradeTr-{{ $row->id }}">
-                      @if ($row->result)
+                    <td id="gradeTr-<?php echo e($row->id); ?>">
+                      <?php if($row->result): ?>
                         <p class="green_badge status_badge">
-                          {{$row->result->grade}}</p>
-                      @endif
+                          <?php echo e($row->result->grade); ?></p>
+                      <?php endif; ?>
                       </td>
 
-                      <td id="hireTr-{{ $row->id }}">
-                      @if ($row->status == 2)
+                      <td id="hireTr-<?php echo e($row->id); ?>">
+                      <?php if($row->status == 2): ?>
                         <p class="text-center p-2">
                           Hired</p>
-                      @elseif ($row->status == 5)
+                      <?php elseif($row->status == 5): ?>
                         <p class="text-center p-2">
                           Rejected</p>
-                      @else
-                        @if ($row->status == 1)
+                      <?php else: ?>
+                        <?php if($row->status == 1): ?>
                           <p class="text-center p-2">ShortListed</p>
-                        @elseif ($row->status == 0)
-                          <p onclick="shortCandidate({{ $row->id }})" class="btn btn_viewall text-center p-2">
+                        <?php elseif($row->status == 0): ?>
+                          <p onclick="shortCandidate(<?php echo e($row->id); ?>)" class="btn btn_viewall text-center p-2">
                             Shortlist</p>
-                        @endif
-                      @endif
-                      {{-- @if ($row->status == 0)
-                                                <a href="javascript:void 0;" id="blue_shortlist{{ $row->id }}"
-                                class="btn-sm mt-2"><i class="fa-solid fa-exclamation"></i> Task Not
-                                Assigned Yet.</a>
-                                @elseif($row->status == 1)
-                                <p class="btn btn-success btn-sm"><i class="fa fa-check" id="green_shortlist{{ $row->id }}"
-                                        style="font-size:18px"></i>
-                                    Shortlist</p>
-                                @endif() --}}
+                        <?php endif; ?>
+                      <?php endif; ?>
+                      
                     </td>
                     <td>
-                    @if($row->result->notified == 0)
-                    <form action="{{ route('candidate.notify', ['id' => $row->result->id]) }}" method="post" style="width:100%; display:flex; align-items:center;">
-                        @csrf
+                    <?php if($row->result->notified == 0): ?>
+                    <form action="<?php echo e(route('candidate.notify', ['id' => $row->result->id])); ?>" method="post" style="width:100%; display:flex; align-items:center;">
+                        <?php echo csrf_field(); ?>
                         <button type="submit" class="btn_theme border-0 fs-12 py-2 d-inline-block w-100"> Notify Candidate </button>
                         </a>
                     </form>
-                    @else
+                    <?php else: ?>
                         Notified
-                    @endif
+                    <?php endif; ?>
                     </td>
                   </tr>
-                @elseif($row->result->grade == "F")
+                <?php elseif($row->result->grade == "F"): ?>
                   <tr>
-                    <td>{{ ++$key }}. </td>
+                    <td><?php echo e(++$key); ?>. </td>
                     <td>
-                      <a href="{{ route('candidate.detail', $row->candidate->slug) }}" style="color: #000;">
-                        {{ $row->candidate->first_name }}
-                        {{ $row->candidate->last_name }}
+                      <a href="<?php echo e(route('candidate.detail', $row->candidate->slug)); ?>" style="color: #000;">
+                        <?php echo e($row->candidate->first_name); ?>
+
+                        <?php echo e($row->candidate->last_name); ?>
+
                       </a>
                     </td>
                     <td>
-                      {{-- {{ dd($row->candidateDocument) }} --}}
-                      @if ($row->candidateDocument != null)
-                        <a href="{{ asset('candidateDoc/doc/' . $row->candidateDocument->document) }}" target="_blank"
+                      
+                      <?php if($row->candidateDocument != null): ?>
+                        <a href="<?php echo e(asset('candidateDoc/doc/' . $row->candidateDocument->document)); ?>" target="_blank"
                           class='text-decoration-underline d-flex text-dark'>
                           <svg xmlns="http://www.w3.org/2000/svg" width="27.5" height="27.5" viewBox="0 0 27.5 27.5">
                             <g id="document-pdf" transform="translate(-2.25 -2.25)">
@@ -436,16 +421,14 @@
                           </svg>
                           <span class='align-self-end ms-1'>
                             Click to view
-                            {{-- <a class='px-4 py-2 progress_card d-block rounded-3'
-                                                        href="{{ asset('public/candidateDoc/doc/' . $item->document) }}"
-                                                    target="_blank"> --}}
+                            
                           </span>
                         </a>
-                      @endif
+                      <?php endif; ?>
                     </td>
                     <td>
-                      @if ($row->coverLetterFile != null)
-                        <a href="{{ asset('storage/' . $row->coverLetterFile) }}" target="_blank"
+                      <?php if($row->coverLetterFile != null): ?>
+                        <a href="<?php echo e(asset('storage/' . $row->coverLetterFile)); ?>" target="_blank"
                           class='text-decoration-underline d-flex text-dark mb-3'>
                           <svg xmlns="http://www.w3.org/2000/svg" width="27.5" height="27.5" viewBox="0 0 27.5 27.5">
                             <g id="document-pdf" transform="translate(-2.25 -2.25)">
@@ -465,13 +448,11 @@
                           </svg>
                           <span class='align-self-end ms-1'>
                             Click to view
-                            {{-- <a class='px-4 py-2 progress_card d-block rounded-3'
-                                                        href="{{ asset('public/candidateDoc/doc/' . $item->document) }}"
-                                                    target="_blank"> --}}
+                            
                           </span>
                         </a>
-                      @endif
-                      @if ($row->coverLetter != null)
+                      <?php endif; ?>
+                      <?php if($row->coverLetter != null): ?>
                         <button type="button" class="btn btn_viewall" data-bs-toggle="modal"
                           data-bs-target="#staticBackdrop">
                           Click to view
@@ -487,98 +468,79 @@
                                   aria-label="Close"></button>
                               </div>
                               <div class="modal-body">
-                                {{ $row->coverLetter }}
+                                <?php echo e($row->coverLetter); ?>
+
                               </div>
                             </div>
                           </div>
                         </div>
-                      @endif
-                      @if ($row->coverLetter == null && $row->coverLetterFile == null)
+                      <?php endif; ?>
+                      <?php if($row->coverLetter == null && $row->coverLetterFile == null): ?>
                         No Record Found...
-                      @endif
+                      <?php endif; ?>
                     </td>
-                    <td>{{$row->get_exam->exam_title}}</td>
-                    <td id="td_id{{ $row->id }}">
-                      {{-- @if ($row->status == 0)
-                                                <select name="assign_test" onchange="assign_test({{ $row->id }})"
-                                                    id="assign_test{{ $row->id }}"
-                                                    class="select2-multiple form-control fs-14  h-50px" required>
-                                                    <option selected disabled value="">Select Test</option>
-                                                    @foreach ($row->test($row->class_id) as $col)
-                                                        <option value="{{ $col['number'] }}">{{ $col['name'] }}</option>
-                                                    @endforeach
-                                                </select>
-                                            @elseif ($row->status == 2)
-                                                <p>Hired</p>
-                    </td>
-
-                    <td id="td_id{{ $row->id }}">
-                      {{-- {{ dd($row->qst_id) }} --}}
-                      @if ($row->qst_id != '0')
-                          @if ($row->result)
-                            {{ $row->result->perentage }}%
-                          @else
+                    <td><?php echo e($row->get_exam->exam_title); ?></td>
+                    <td id="td_id<?php echo e($row->id); ?>">
+                      
+                      <?php if($row->qst_id != '0'): ?>
+                          <?php if($row->result): ?>
+                            <?php echo e($row->result->perentage); ?>%
+                          <?php else: ?>
                             Not Attempted
-                          @endif
-                      @endif
-                      {{-- @endif --}}
+                          <?php endif; ?>
+                      <?php endif; ?>
+                      
                     </td>
 
-                    <td id="gradeTr-{{ $row->id }}">
-                      @if ($row->result)
+                    <td id="gradeTr-<?php echo e($row->id); ?>">
+                      <?php if($row->result): ?>
                         <p class="red_badge status_badge">
-                          {{$row->result->grade}}</p>
-                      @endif
+                          <?php echo e($row->result->grade); ?></p>
+                      <?php endif; ?>
                       </td>
 
-                    <td id="hireTr-{{ $row->id }}">
-                      @if ($row->status == 2)
+                    <td id="hireTr-<?php echo e($row->id); ?>">
+                      <?php if($row->status == 2): ?>
                         <p class=" text-center p-2">
                           Hired</p>
-                      @else
-                        @if ($row->status == 1)
+                      <?php else: ?>
+                        <?php if($row->status == 1): ?>
                           <p class="text-center p-2">Shortlisted</p>
-                        @elseif ($row->status == 0)
-                          <p onclick="shortCandidate({{ $row->id }})" class="btn btn_viewall text-center p-2">
+                        <?php elseif($row->status == 0): ?>
+                          <p onclick="shortCandidate(<?php echo e($row->id); ?>)" class="btn btn_viewall text-center p-2">
                             Shortlist</p>
-                        @endif
-                      @endif
-                      {{-- @if ($row->status == 0)
-                                                <a href="javascript:void 0;" id="blue_shortlist{{ $row->id }}"
-                                class="btn-sm mt-2"><i class="fa-solid fa-exclamation"></i> Task Not
-                                Assigned Yet.</a>
-                                @elseif($row->status == 1)
-                                <p class="btn btn-success btn-sm"><i class="fa fa-check" id="green_shortlist{{ $row->id }}"
-                                        style="font-size:18px"></i>
-                                    Shortlist</p>
-                                @endif() --}}
+                        <?php endif; ?>
+                      <?php endif; ?>
+                      
                     </td>
                     <td>
-                    @if($row->result->notified == 0)
-                    <form action="{{ route('candidate.notify', ['id' => $row->result->id]) }}" method="post" style="width:100%; display:flex; align-items:center;">
-                        @csrf
+                    <?php if($row->result->notified == 0): ?>
+                    <form action="<?php echo e(route('candidate.notify', ['id' => $row->result->id])); ?>" method="post" style="width:100%; display:flex; align-items:center;">
+                        <?php echo csrf_field(); ?>
                         <button type="submit" class="btn_theme border-0 fs-12 py-2 d-inline-block w-100"> Notify Candidate </button>
                         </a>
                     </form>
-                    @else
+                    <?php else: ?>
                         Notified
-                    @endif
+                    <?php endif; ?>
                     </td>
                   </tr>
-                @endif
-                @else
+                <?php endif; ?>
+                <?php else: ?>
                 <tr>
-                    <td>{{ ++$key }}. </td>
+                    <td><?php echo e(++$key); ?>. </td>
                     <td>
-                      <a href="{{ route('candidate.detail', $row->candidate->slug) }}" style="color: #000;">
-                        {{ $row->candidate->first_name }}
-                        {{ $row->candidate->last_name }}
+                      <a href="<?php echo e(route('candidate.detail', $row->candidate->slug)); ?>" style="color: #000;">
+                        <?php echo e($row->candidate->first_name); ?>
+
+                        <?php echo e($row->candidate->last_name); ?>
+
                       </a>
                     </td>
                     <td>
-                      {{-- {{ dd($row->candidateDocument) }} --}}
-                      @if ($row->candidateDocument != null)
-                        <a href="{{ asset('candidateDoc/doc/' . $row->candidateDocument->document) }}" target="_blank"
+                      
+                      <?php if($row->candidateDocument != null): ?>
+                        <a href="<?php echo e(asset('candidateDoc/doc/' . $row->candidateDocument->document)); ?>" target="_blank"
                           class='text-decoration-underline d-flex text-dark'>
                           <svg xmlns="http://www.w3.org/2000/svg" width="27.5" height="27.5" viewBox="0 0 27.5 27.5">
                             <g id="document-pdf" transform="translate(-2.25 -2.25)">
@@ -598,16 +560,14 @@
                           </svg>
                           <span class='align-self-end ms-1'>
                             Click to view
-                            {{-- <a class='px-4 py-2 progress_card d-block rounded-3'
-                                                        href="{{ asset('public/candidateDoc/doc/' . $item->document) }}"
-                                                    target="_blank"> --}}
+                            
                           </span>
                         </a>
-                      @endif
+                      <?php endif; ?>
                     </td>
                     <td>
-                      @if ($row->coverLetterFile != null)
-                        <a href="{{ asset('storage/' . $row->coverLetterFile) }}" target="_blank"
+                      <?php if($row->coverLetterFile != null): ?>
+                        <a href="<?php echo e(asset('storage/' . $row->coverLetterFile)); ?>" target="_blank"
                           class='text-decoration-underline d-flex text-dark mb-3'>
                           <svg xmlns="http://www.w3.org/2000/svg" width="27.5" height="27.5" viewBox="0 0 27.5 27.5">
                             <g id="document-pdf" transform="translate(-2.25 -2.25)">
@@ -627,13 +587,11 @@
                           </svg>
                           <span class='align-self-end ms-1'>
                             Click to view
-                            {{-- <a class='px-4 py-2 progress_card d-block rounded-3'
-                                                        href="{{ asset('public/candidateDoc/doc/' . $item->document) }}"
-                                                    target="_blank"> --}}
+                            
                           </span>
                         </a>
-                      @endif
-                      @if ($row->coverLetter != null)
+                      <?php endif; ?>
+                      <?php if($row->coverLetter != null): ?>
                         <button type="button" class="btn btn_viewall" data-bs-toggle="modal"
                           data-bs-target="#staticBackdrop">
                           Click to view
@@ -649,25 +607,27 @@
                                   aria-label="Close"></button>
                               </div>
                               <div class="modal-body">
-                                {{ $row->coverLetter }}
+                                <?php echo e($row->coverLetter); ?>
+
                               </div>
                             </div>
                           </div>
                         </div>
-                      @endif
-                      @if ($row->coverLetter == null && $row->coverLetterFile == null)
+                      <?php endif; ?>
+                      <?php if($row->coverLetter == null && $row->coverLetterFile == null): ?>
                         No Records Found...
-                      @endif
+                      <?php endif; ?>
                     </td>
-                    @php
+                    <?php
                       $test_status = \App\Models\Posts::where('id', $row->post_id)->first();
-                    @endphp
-                    <td id="td_id{{ $row->id }}">
-                      @if ($test_status->test_attached == "1")   
-                        {{$row->get_exam->exam_title}}
-                       @else
+                    ?>
+                    <td id="td_id<?php echo e($row->id); ?>">
+                      <?php if($test_status->test_attached == "1"): ?>   
+                        <?php echo e($row->get_exam->exam_title); ?>
+
+                       <?php else: ?>
                          Not Assigned
-                       @endif                       
+                       <?php endif; ?>                       
                                     
                     </td>
 
@@ -680,16 +640,16 @@
                     </td>
 
                     <td>
-                    @if($test_status->test_attached == "0")
-                    @if ($row->status == 1)   
+                    <?php if($test_status->test_attached == "0"): ?>
+                    <?php if($row->status == 1): ?>   
                     <p class="text-center p-2">Shortlisted</p>
-                    @elseif ($row->status == 0)
-                    <p onclick="shortCandidate({{ $row->id }})" class="btn btn_viewall text-center p-2">
+                    <?php elseif($row->status == 0): ?>
+                    <p onclick="shortCandidate(<?php echo e($row->id); ?>)" class="btn btn_viewall text-center p-2">
                         Shortlist</p>
-                    @endif
-                    @else
+                    <?php endif; ?>
+                    <?php else: ?>
                       <p>N/A</p>
-                    @endif  
+                    <?php endif; ?>  
                     </td>
                     
                     <td>
@@ -697,19 +657,19 @@
                     </td>
                     
                   </tr>
-                @endif
-                @endif
-              @endforeach
-            @endif
+                <?php endif; ?>
+                <?php endif; ?>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            <?php endif; ?>
           </tbody>
         </table>
       </div>
     </div>
   </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
 
-@section('bottom_script')
+<?php $__env->startSection('bottom_script'); ?>
   <script>
     function assign_test(id) {
       let timerInterval
@@ -723,7 +683,7 @@
       console.log(id);
       var selectedId = document.getElementById("assign_test" + id).value;
       console.log(selectedId);
-      url = "{{ route('company.job.assign') }}";
+      url = "<?php echo e(route('company.job.assign')); ?>";
       $.ajax({
           type: 'GET',
           url: url,
@@ -763,7 +723,7 @@
     }
 
     function hideCandidate(value) {
-      var url = '{{ route('hire.candidate.comp', ':id') }}';
+      var url = '<?php echo e(route('hire.candidate.comp', ':id')); ?>';
       url = url.replace(':id', value);
       $.ajax({
         type: 'GET',
@@ -789,7 +749,7 @@
       var element = document.getElementById('shortlisted_loader');
       element.classList.remove('d-none');
       element.classList.add('d-flex');
-      var url = '{{ route('shortlist.candidate.comp', ':id') }}';
+      var url = '<?php echo e(route('shortlist.candidate.comp', ':id')); ?>';
       url = url.replace(':id', value);
       $.ajax({
         type: 'GET',
@@ -821,10 +781,10 @@ $(document).ready(function() {
         let post_id = $('#post_id').val();
 
         if(selectedGrade == "All"){
-            var url = "{{route('candidates.filter.allgrade')}}";
+            var url = "<?php echo e(route('candidates.filter.allgrade')); ?>";
         }
         else{
-            var url = "{{route('candidates.filter')}}";
+            var url = "<?php echo e(route('candidates.filter')); ?>";
         }
 
                 
@@ -834,7 +794,7 @@ $(document).ready(function() {
             data: { 
                 grade: selectedGrade,
                 job_id: post_id,
-                _token: '{{ csrf_token() }}' // Include CSRF token
+                _token: '<?php echo e(csrf_token()); ?>' // Include CSRF token
             },
             success: function(data) {
                 console.log(data);
@@ -845,4 +805,6 @@ $(document).ready(function() {
 });
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('companypanel.layout.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\Rameez Ali\Pictures\erec\resources\views/companypanel/pages/jobs/job_applicants.blade.php ENDPATH**/ ?>

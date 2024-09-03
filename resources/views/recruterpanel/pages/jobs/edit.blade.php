@@ -873,9 +873,9 @@
                         <div class="form-group set-cross-icon">
                             <label for="" class="form-label fs-14 text-theme-primary fw-bold">Category*</label>
                             <input type="hidden" name="user_id" id="user_id" value="{{Auth::user()->id}}">
-                            <select name="category" id="class_id" data-placeholder='Please Select Category'
-                                class="select2-multiple form-control fs-14  h-50px" required onchange="testFillBox()">
-                                <option></option>
+                            <select data-placeholder="Please select category" name="category"
+                            id="mySelect2" class="select2 form-control fs-14  h-50px" required>
+                            <option></option>
                                 @if ($data != null)
                                 @foreach ($data as $row)
                                     <option value="{{ $row['id'] }}" @if ($post->class_id == $row['id']) Selected @endif>
@@ -1292,36 +1292,36 @@
       }
     }
 
-        function testFillBox() {
-            var id = $('#class_id').val();
-            var href = "{{ route('recruiter.get.testCreate', ':id') }}";
-            href = href.replace(':id', id);
-            console.log(href);
-            $.ajax({
-                    type: 'GET',
-                    url: href,
-                    crossDomain: true,
-                }).done(function(data) {
-                    console.log(data);
-                    html = "";
-                    html +=
-                        "<label for='class_id' class='form-label fs-14 text-theme-primary fw-bold'>Attach a test*</label>";
-                    html += "<select name='test_id'";
-                    html += "id='assign_test' class='select2-multiple form-control fs-14  h-50px'>";
-                    html += "<option selected disabled value=''>Select Test</option>";
-                    $.each(data, function(index, value) {
-                        html += "<option value='" + value['number'] + "'>" + value['name'] + "</option>";
-                    });
-                    html += "</select>";
-                    $('#testBox').html('');
-                    $('#testBox').html(html);
-                })
-                .fail(function(error) {
-                    var errors = error.responseJSON;
-                    console.log(errors);
+        // function testFillBox() {
+        //     var id = $('#class_id').val();
+        //     var href = "{{ route('recruiter.get.testCreate', ':id') }}";
+        //     href = href.replace(':id', id);
+        //     console.log(href);
+        //     $.ajax({
+        //             type: 'GET',
+        //             url: href,
+        //             crossDomain: true,
+        //         }).done(function(data) {
+        //             console.log(data);
+        //             html = "";
+        //             html +=
+        //                 "<label for='class_id' class='form-label fs-14 text-theme-primary fw-bold'>Attach a test*</label>";
+        //             html += "<select name='test_id'";
+        //             html += "id='assign_test' class='select2-multiple form-control fs-14  h-50px'>";
+        //             html += "<option selected disabled value=''>Select Test</option>";
+        //             $.each(data, function(index, value) {
+        //                 html += "<option value='" + value['number'] + "'>" + value['name'] + "</option>";
+        //             });
+        //             html += "</select>";
+        //             $('#testBox').html('');
+        //             $('#testBox').html(html);
+        //         })
+        //         .fail(function(error) {
+        //             var errors = error.responseJSON;
+        //             console.log(errors);
 
-                });
-        }
+        //         });
+        // }
 
         $(function() {
             var date = new Date();
@@ -1362,4 +1362,79 @@
     
     });
     </script>
+
+<script>
+$(document).ready(function() {
+    $('#mySelect2').select2({
+        language: {
+            noResults: function() {
+                return '<button class="select2-results__option--add-new add-category-button btn btn-outline-primary fs-14">Add new Category</button>';
+            }
+        },
+        escapeMarkup: function(markup) {
+            return markup;
+        }
+    });
+    
+
+    // Attach event handler to the Select2 open event
+    $('#mySelect2').off('select2:open').on('select2:open', function() {
+        // Use a timeout to ensure the search field is available
+        setTimeout(function() {
+            $(document).off('click', '.select2-results__option--add-new').on('click', '.select2-results__option--add-new', function() {
+                // Add Id to select2-search__field
+                $('.select2-search--dropdown').each(function(index) {
+                    $(this).find('.select2-search__field').attr('id', 'mySearchField' + index);
+                });
+
+                // Get the search term from the Select2 search field
+                let newValue = $('#mySearchField0').val().trim();
+
+                console.log('New value:', newValue); // Check if the value is being fetched properly
+                if (newValue) {
+                    // Check if the value already exists in the dropdown
+                    let exists = false;
+                    $('#mySelect2 option').each(function() {
+                        if ($(this).text() === newValue) {
+                            exists = true;
+                            return false; // Exit loop
+                        }
+                    });
+
+                    if (!exists) {
+                        $.ajax({
+                            url: '{{ route('categories.store') }}',
+                            method: 'POST',
+                            data: {
+                                _token: $('input[name="_token"]').val(),
+                                name: newValue
+                            },
+                            success: function(response) {
+                                console.log("New Value:", newValue);
+                                console.log("Response ID:", response['id']);
+
+                                // Add new value to the dropdown
+                                let newOption = new Option(newValue, response['id'], false, true);
+                                $('#mySelect2').append(newOption).trigger('change');
+                                
+                                // Select the new value
+                                $('#mySelect2').val(response['id']).trigger('change');
+
+                                // Close the Select2 dropdown
+                                $('#mySelect2').select2('close');
+                            },
+                            error: function(xhr) {
+                                console.error("Error adding category:", xhr.responseText);
+                            }
+                        });
+                    } else {
+                        alert('Category already exists');
+                        $('#mySelect2').select2('close');
+                    }
+                }
+            });
+        }, 100); // Adjust the timeout if needed
+    });
+});
+</script>    
 @endsection
