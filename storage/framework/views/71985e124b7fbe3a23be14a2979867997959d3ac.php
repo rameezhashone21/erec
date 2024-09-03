@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('page_title', 'E-Rec'); ?>
 
 <?php $__env->startSection('head_style'); ?>
@@ -84,7 +86,7 @@
               </div>
             <?php elseif($question->type == 'multiple'): ?>
               <?php ($a = 'A'); ?>
-              <?php $__currentLoopData = $question->answers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $answer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <!-- <?php $__currentLoopData = $question->answers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $answer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" name="answer<?php echo e($q); ?>[answer][]"
                     value="<?php echo e($answer->answer); ?>" />
@@ -94,12 +96,23 @@
                   </label>
                 </div>
                 <?php ($a++); ?>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> -->
+              <?php $__currentLoopData = $question->answers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $answer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                  <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="answer<?php echo e($q); ?>[answer][]" 
+                          value="<?php echo e($answer->answer); ?>" id="checkbox_<?php echo e($loop->index); ?>" />
+                      <label class="form-check-label text-secondary" for="checkbox_<?php echo e($loop->index); ?>">
+                          <?php echo e($a); ?>) <?php echo e($answer->answer); ?>
+
+                      </label>
+                  </div>
+                  <?php ($a++); ?>
               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
               <input type="hidden" name="answer<?php echo e($q); ?>[]" value="<?php echo e($question->type); ?>">
               <input type="hidden" name="answer<?php echo e($q); ?>[]" value="<?php echo e($question->id); ?>">
             <?php elseif($question->type == 'single'): ?>
               <?php ($a = 'A'); ?>
-              <?php $__currentLoopData = $question->answers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $answer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <!-- <?php $__currentLoopData = $question->answers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $answer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="form-check">
                   <input class="form-check-input" type="radio" name="answer<?php echo e($q); ?>[answer][]"
                     value="<?php echo e($answer->answer); ?>" />
@@ -109,6 +122,17 @@
                   </label>
                 </div>
                 <?php ($a++); ?>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> -->
+              <?php $__currentLoopData = $question->answers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $answer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <div class="form-check">
+                  <input class="form-check-input" type="radio" name="answer<?php echo e($q); ?>[answer]" 
+                      value="<?php echo e($answer->answer); ?>" id="radio_<?php echo e($loop->index); ?>" />
+                  <label class="form-check-label text-secondary" for="radio_<?php echo e($loop->index); ?>">
+                      <?php echo e($a); ?>) <?php echo e($answer->answer); ?>
+
+                  </label>
+              </div>
+              <?php ($a++); ?>
               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
               <input type="hidden" name="answer<?php echo e($q); ?>[]" value="<?php echo e($question->type); ?>">
               <input type="hidden" name="answer<?php echo e($q); ?>[]" value="<?php echo e($question->id); ?>">

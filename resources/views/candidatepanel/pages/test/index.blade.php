@@ -85,7 +85,7 @@
               </div>
             @elseif ($question->type == 'multiple')
               @php($a = 'A')
-              @foreach ($question->answers as $answer)
+              <!-- @foreach ($question->answers as $answer)
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" name="answer{{ $q }}[answer][]"
                     value="{{ $answer->answer }}" />
@@ -94,12 +94,22 @@
                   </label>
                 </div>
                 @php($a++)
+              @endforeach -->
+              @foreach ($question->answers as $answer)
+                  <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="answer{{ $q }}[answer][]" 
+                          value="{{ $answer->answer }}" id="checkbox_{{ $loop->index }}" />
+                      <label class="form-check-label text-secondary" for="checkbox_{{ $loop->index }}">
+                          {{ $a }}) {{ $answer->answer }}
+                      </label>
+                  </div>
+                  @php($a++)
               @endforeach
               <input type="hidden" name="answer{{ $q }}[]" value="{{ $question->type }}">
               <input type="hidden" name="answer{{ $q }}[]" value="{{ $question->id }}">
             @elseif ($question->type == 'single')
               @php($a = 'A')
-              @foreach ($question->answers as $answer)
+              <!-- @foreach ($question->answers as $answer)
                 <div class="form-check">
                   <input class="form-check-input" type="radio" name="answer{{ $q }}[answer][]"
                     value="{{ $answer->answer }}" />
@@ -108,6 +118,16 @@
                   </label>
                 </div>
                 @php($a++)
+              @endforeach -->
+              @foreach ($question->answers as $answer)
+              <div class="form-check">
+                  <input class="form-check-input" type="radio" name="answer{{ $q }}[answer]" 
+                      value="{{ $answer->answer }}" id="radio_{{ $loop->index }}" />
+                  <label class="form-check-label text-secondary" for="radio_{{ $loop->index }}">
+                      {{ $a }}) {{ $answer->answer }}
+                  </label>
+              </div>
+              @php($a++)
               @endforeach
               <input type="hidden" name="answer{{ $q }}[]" value="{{ $question->type }}">
               <input type="hidden" name="answer{{ $q }}[]" value="{{ $question->id }}">

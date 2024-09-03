@@ -42,31 +42,31 @@ class ExamController extends Controller
   /**
    * Store a newly created resource in storage.
    */
-  public function uploadCSV(Request $request)
-  {
-        
+public function uploadCSV(Request $request)
+{
     // Validate data
     $this->validate($request, [
-      'csv_file' => 'required|file|mimes:csv',
+        'csv_file' => 'required|file|mimes:csv',
     ]);
-    
-    if($request->file('csv_file'))
-    {
-        $file = $request->file('csv_file');
 
-        // Getting the Exam Id to pass to UsersImport Class in order to save question with exam id 
+    try {
+        $file = $request->file('csv_file');
         $exam_id = $request->exam_id;
 
-        $excel = Excel::import(new UsersImport($exam_id), $file);
+        $import = new UsersImport($exam_id);
+        Excel::import($import, $file);
+
+        //Check for errors if needed
+        if ($import->hasError()) {
+            return redirect()->back()->with('error', 'Import completed with errors due to invalid data.');
+        }
+
+        return redirect()->route('company.exam.question.listing', ['id' => $exam_id])->with('message', 'File Imported Successfully!');
+    } catch (\Exception $e) {
+        Log::error('File import failed: ' . $e->getMessage());
+        return redirect()->route('company.exam.question.listing', ['id' => $exam_id])->with('error', 'File Format is not correct!');
     }
-        
-        
-    if ($excel) {
-      return redirect()->route('company.exam.question.listing', ['id' => $exam_id])->with('message', 'File Imported Succesfully!');
-    } else {
-      return redirect()->route('company.exam.question.listing', ['id' => $exam_id])->with('error', 'Sorry something went wrong!');
-    }
-  }
+}
 
   /**
    * Store a newly created resource in storage.

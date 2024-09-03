@@ -515,7 +515,7 @@
                         No Re2cord Found...
                       @endif
                     </td>
-                    <td>{{row->get_exam->exam_title}}</td>
+                    <td>{{$row->get_exam->exam_title}}</td>
                     <td id="td_id{{ $row->id }}">
                       {{-- @if ($row->status == 0)
                                                 <select name="assign_test" onchange="assign_test({{ $row->id }})"

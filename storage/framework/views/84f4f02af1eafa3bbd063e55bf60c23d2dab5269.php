@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('page_title', 'E-Rec'); ?>
 
 <?php $__env->startSection('head_style'); ?>

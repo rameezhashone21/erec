@@ -344,7 +344,7 @@
                             </div>
                             <?php if(isset(auth()->user()->package)): ?>
                                 <a href="" class="d-flex btn-subcription <?php echo e(auth()->user()->package->class); ?>"
-                                    style="font-size: 10px !importaant">
+                                    style="font-size: 10px !important">
                                     
                                     <?php echo e(auth()->user()->posts_count); ?> /
                                     

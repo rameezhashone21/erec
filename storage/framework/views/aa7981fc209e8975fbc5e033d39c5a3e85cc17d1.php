@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('page_title', 'E-Rec'); ?>
 
 <head>
@@ -1000,8 +1002,8 @@
                     if(response.length == 0)
                     {
                         console.log("ssss");
-                        //document.getElementById('createtest').classList.remove('hidden');
-                        //$('#g').html('<a href="<?php echo e(route('recruiter.exam.create')); ?>">Add a new test</a></div>')
+                        document.getElementById('createtest').classList.remove('hidden');
+                        $('#g').html('<a href="<?php echo e(route('recruiter.exam.create')); ?>">Add a new test</a></div>')
                     }
                 },
             });
@@ -1049,7 +1051,7 @@
           console.log("ss",data);
           html = "";
           html +=
-            "<label for='class_id' class='form-label fs-14 text-theme-primary fw-bold'>Attach a rrtest*</label>";
+            "<label for='class_id' class='form-label fs-14 text-theme-primary fw-bold'>Attach a test*</label>";
           // html += "<select name='test_id' onchange='assign_test()'";
           html += "<select name='test_id'";
           html += "id='assign_test' class='form-select fs-14 h-50px'>";

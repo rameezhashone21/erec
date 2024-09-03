@@ -58,6 +58,7 @@ class RecruiterExamController extends Controller
         $exam_id = $request->exam_id;
 
         $excel = Excel::import(new UsersImport($exam_id), $file);
+
     }
         
         

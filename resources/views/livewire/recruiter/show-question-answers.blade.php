@@ -354,18 +354,17 @@ $(document).on("click", ".hello", function () {
                 console.log("sda",question_type)
 
                 
-                if(question_type == 'multiple')
-                {
-                  document.getElementById('multiple-section').classList.remove('d-none')
-                  document.getElementById('text-section').classList.add('d-none')
-                  document.getElementById('true-false-section').classList.add('d-none');
-                  document.getElementById('single-section').classList.add('d-none')
+                if (question_type == 'multiple') {
+                    document.getElementById('multiple-section').classList.remove('d-none')
+                    document.getElementById('text-section').classList.add('d-none')
+                    document.getElementById('true-false-section').classList.add('d-none');
+                    document.getElementById('single-section').classList.add('d-none')
 
 
-                  var answer_option = document.getElementById('multiple');
-                  answer_option.checked = true;
+                    var answer_option = document.getElementById('multiple');
+                    answer_option.checked = true;
 
-                  console.log("jj",response['answers'][0]['answer']);
+                    console.log("jj", response['answers'][0]['answer']);
                     $('.is-answer-m-1').val(response['answers'][0]['answer']);
                     $('.is-answer-m-2').val(response['answers'][1]['answer']);
                     $('.is-answer-m-3').val(response['answers'][2]['answer']);
@@ -374,32 +373,49 @@ $(document).on("click", ".hello", function () {
                     $('.question_type').val("multiple");
                     $('.question').val(question);
                     $('.exam_id').val(exam_id);
-                    
+
+                    $('.is-answer-s-1').val(response['answers'][0]['answer']);
+                    $('.is-answer-s-2').val(response['answers'][1]['answer']);
+                    $('.is-answer-s-3').val(response['answers'][2]['answer']);
+                    $('.is-answer-s-4').val(response['answers'][3]['answer']);
+
                     //Check or uncheck checkbox based on data.checkboxValue
-                    if (response['answers'][0]['is_correct']=='yes') {
-                      $('.is-correct-m-1').prop('checked', true);
-                    } 
-                    if(response['answers'][1]['is_correct']=='yes') {
-                      $('.is-correct-m-2').prop('checked', true);
-                    }
-                    if(response['answers'][2]['is_correct']=='yes') {
-                      $('.is-correct-m-3').prop('checked', true);
-                    }
-                    if(response['answers'][3]['is_correct']=='yes') {
-                      $('.is-correct-m-4').prop('checked', true);
-                    }
-                }
-                else if(question_type == 'single'){
+                    var answer_option1 = document.getElementById('is-correct-s-1');
+                    answer_option1.checked = false;
+                        
+                    var answer_option2 = document.getElementById('is-correct-s-2');
+                    answer_option2.checked = false;
 
-                  document.getElementById('single-section').classList.remove('d-none')
-                  document.getElementById('text-section').classList.add('d-none')
-                  document.getElementById('true-false-section').classList.add('d-none');
-                  document.getElementById('multiple-section').classList.add('d-none')
-                  
-                  var answer_option = document.getElementById('single');
-                  answer_option.checked = true;
-
+                    var answer_option3 = document.getElementById('is-correct-s-3');
+                    answer_option3.checked = false;
                     
+                    var answer_option4 = document.getElementById('is-correct-s-4');
+                    answer_option4.checked = false;
+
+                    //Check or uncheck checkbox based on data.checkboxValue
+                    if (response['answers'][0]['is_correct'] == 'yes') {
+                        $('.is-correct-m-1').prop('checked', true);
+                    }
+                    if (response['answers'][1]['is_correct'] == 'yes') {
+                        $('.is-correct-m-2').prop('checked', true);
+                    }
+                    if (response['answers'][2]['is_correct'] == 'yes') {
+                        $('.is-correct-m-3').prop('checked', true);
+                    }
+                    if (response['answers'][3]['is_correct'] == 'yes') {
+                        $('.is-correct-m-4').prop('checked', true);
+                    }
+                } else if (question_type == 'single') {
+
+                    document.getElementById('single-section').classList.remove('d-none')
+                    document.getElementById('text-section').classList.add('d-none')
+                    document.getElementById('true-false-section').classList.add('d-none');
+                    document.getElementById('multiple-section').classList.add('d-none')
+
+                    var answer_option = document.getElementById('single');
+                    answer_option.checked = true;
+
+
                     $('.is-answer-s-1').val(response['answers'][0]['answer']);
                     $('.is-answer-s-2').val(response['answers'][1]['answer']);
                     $('.is-answer-s-3').val(response['answers'][2]['answer']);
@@ -408,23 +424,30 @@ $(document).on("click", ".hello", function () {
                     $('.question_type').val("single");
                     $('.question').val(question);
                     $('.exam_id').val(exam_id);
-                    
-                     //Check or uncheck checkbox based on data.checkboxValue
-                    if (response['answers'][0]['is_correct']=='yes') {
+
+                    $('.is-answer-m-1').val(response['answers'][0]['answer']);
+                    $('.is-answer-m-2').val(response['answers'][1]['answer']);
+                    $('.is-answer-m-3').val(response['answers'][2]['answer']);
+                    $('.is-answer-m-4').val(response['answers'][3]['answer']);
+
+                    $('.is-correct-m-1').prop('checked', false);
+                    $('.is-correct-m-2').prop('checked', false);
+                    $('.is-correct-m-3').prop('checked', false);
+                    $('.is-correct-m-4').prop('checked', false);
+
+                    //Check or uncheck checkbox based on data.checkboxValue
+                    if (response['answers'][0]['is_correct'] == 'yes') {
                         var answer_option = document.getElementById('is-correct-s-1');
                         answer_option.checked = true;
-                    } 
-                    else if(response['answers'][1]['is_correct']=='yes') {
+                    } else if (response['answers'][1]['is_correct'] == 'yes') {
                         console.log("cond 22 executed");
                         var answer_option = document.getElementById('is-correct-s-2');
                         answer_option.checked = true;
-                        
-                    }
-                    else if(response['answers'][2]['is_correct']=='yes') {
+
+                    } else if (response['answers'][2]['is_correct'] == 'yes') {
                         var answer_option = document.getElementById('is-correct-s-3');
                         answer_option.checked = true;
-                    }
-                    else if(response['answers'][3]['is_correct']=='yes') {
+                    } else if (response['answers'][3]['is_correct'] == 'yes') {
                         var answer_option = document.getElementById('is-correct-s-4');
                         answer_option.checked = true;
                     }
