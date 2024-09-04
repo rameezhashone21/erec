@@ -267,7 +267,7 @@
                                         max="50" id="new-range" onchange="rangeSlide(this.value)" />
                                 </div>
                             </div>
-                            {{-- <div class="col ">
+                            <!-- <div class="col">
                                 <div class="map-filter-rangeslider">
                                     <p class="range-slider-text mb-2">Score Range: <span><span
                                                 id="rangeValueScore">60</span>
@@ -276,11 +276,22 @@
                                         min="0" max="100" id="score-range"
                                         onchange="rangeSlideScore(this.value)" />
                                 </div>
-                            </div> --}}
+                            </div> -->
+
+                            <!-- <div class="col">
+                            <div class="map-filter-rangeslider">
+                                <p class="range-slider-text mb-2">Score Range: <span><span id="rangeValueScoreMin">0</span>% - <span id="rangeValueScoreMax">100</span>%</span></p>
+                                <div class="range-slider">
+                                    <input type="range" id="slider-1" min="0" max="100" value="0" step="1" onchange="updateRange('min', this.value)" />
+                                    <input type="range" id="slider-1" min="0" max="100" value="100" step="1" onchange="updateRange('max', this.value)" />
+                                    <div id="slider-track"></div>
+                                </div>
+                            </div>
+                            </div> -->
                             <div class="col">
                                 <div class="double_range_slider_wrapper position-relative">
                                     <p class="range-slider-text mb-2">
-                                        Radius:
+                                        Score:
                                         <span id="range1">
                                             0
                                         </span>
@@ -291,10 +302,8 @@
                                     </p>
                                     <div>
                                         <div class="slider-track"></div>
-                                        <input type="range" min="0" max="100" value="30"
-                                            id="slider-1" oninput="slideOne()">
-                                        <input type="range" min="0" max="100" value="70"
-                                            id="slider-2" oninput="slideTwo()">
+                                        <input name="minScore" type="range" id="slider-1" min="0" max="100" value="5" step="1" onchange="rangeSlideScore('min', this.value)">
+                                        <input name="maxScore" type="range" id="slider-2" min="0" max="100" value="100" step="1" onchange="rangeSlideScore('max', this.value)">
                                     </div>
                                 </div>
                             </div>
@@ -481,43 +490,7 @@
 
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
-    <script>
-        window.onload = function() {
-            slideOne();
-            slideTwo();
-        };
 
-        let sliderOne = document.getElementById("slider-1");
-        let sliderTwo = document.getElementById("slider-2");
-        let displayValOne = document.getElementById("range1");
-        let displayValTwo = document.getElementById("range2");
-        let minGap = 0;
-        let sliderTrack = document.querySelector(".slider-track");
-        let sliderMaxValue = document.getElementById("slider-1").max;
-
-        function slideOne() {
-            if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
-                sliderOne.value = parseInt(sliderTwo.value) - minGap;
-            }
-            displayValOne.textContent = sliderOne.value;
-            fillColor();
-        }
-
-        function slideTwo() {
-            if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
-                sliderTwo.value = parseInt(sliderOne.value) + minGap;
-            }
-            displayValTwo.textContent = sliderTwo.value;
-            fillColor();
-        }
-
-        function fillColor() {
-            percent1 = (sliderOne.value / sliderMaxValue) * 100;
-            percent2 = (sliderTwo.value / sliderMaxValue) * 100;
-            sliderTrack.style.background =
-                `linear-gradient(to right, #007ba7 ${percent1}% , #004d68 ${percent1}% , #004d68 ${percent2}%, #007ba7 ${percent2}%)`;
-        }
-    </script>
     <script>
         const tippyFunction = tippy('.popper-content-header', {
             content(reference) {
@@ -616,13 +589,35 @@
         // });
 
         function rangeSlide(range_value) {
-            $('#rangeValue').html(range_value);
+            t = $('#rangeValue').html(range_value);
             $('#smart-search').trigger('submit');
+
+            console.log("tls",t);
 
         }
 
-        function rangeSlideScore(range_value) {
-            $('#rangeValueScore').html(range_value);
+        let sliderOne = document.getElementById("slider-1");
+        let sliderTwo = document.getElementById("slider-2");
+        let sliderTrack = document.querySelector(".slider-track");
+        let sliderMaxValue = document.getElementById("slider-1").max;
+
+        fillColor();
+
+        function fillColor() {
+            percent1 = (sliderOne.value / sliderMaxValue) * 100;
+            percent2 = (sliderTwo.value / sliderMaxValue) * 100;
+            sliderTrack.style.background =
+                `linear-gradient(to right, #007ba7 ${percent1}% , #004d68 ${percent1}% , #004d68 ${percent2}%, #007ba7 ${percent2}%)`;
+        }
+
+
+        function rangeSlideScore(type,value) {
+
+            const rangeMin = document.getElementById('slider-1').value;
+            const rangeMax = document.getElementById('slider-2').value;
+
+            var a = $('#slider-1').html(rangeMin);
+            var c = $('#slider-2').html(rangeMax);
             $('#smart-search').trigger('submit');
 
         }
@@ -1409,9 +1404,9 @@
                         var infoWindow = new google.maps.InfoWindow(),
                             marker, i;
                         for (i = 0; i < markers.length; i++) {
-                            var position = new google.maps.LatLng(markers[i]['candidate']['latitude'], markers[
-                                i]['candidate']['longitude']);
-                            console.log("pos", position);
+                            console.log("can",markers[i]['candidate']['longitude'])
+                            var position = new google.maps.LatLng(45.23,-74.35);
+                            console.log("pos", position.lat());
                             marker = new google.maps.Marker({
                                 position: position,
                                 map: map,
@@ -1419,7 +1414,7 @@
                                 icon: "{{ asset('/imgs/candidate.png') }}",
 
                             });
-                            console.log("dd", position);
+                            console.log("dd", marker);
 
                             // Each marker to have an info window
                             google.maps.event.addListener(marker, 'click', (function(marker, i) {
@@ -1648,4 +1643,45 @@
         });
         // end datepicker
     </script>
+
+
+<script>
+    
+
+    // const rangeValueScoreMin = document.getElementById('rangeValueScoreMin');
+    // const rangeValueScoreMax = document.getElementById('rangeValueScoreMax');
+    // const sliderTrack = document.getElementById('slider-track');
+
+    function updateRange(type, value) {
+
+        function fillColor() {
+            percent1 = (sliderOne.value / sliderMaxValue) * 100;
+            percent2 = (sliderTwo.value / sliderMaxValue) * 100;
+            sliderTrack.style.background =
+                `linear-gradient(to right, #007ba7 ${percent1}% , #004d68 ${percent1}% , #004d68 ${percent2}%, #007ba7 ${percent2}%)`;
+        }
+
+        if (type === 'min') {
+            console.log(type,value);
+
+        } else if (type === 'max') {
+            console.log(type,value);
+        }
+        // updateSliderTrack();
+        // rangeValueScoreMin.textContent = rangeMin.value;
+        // rangeValueScoreMax.textContent = rangeMax.value;
+    }
+
+    // function updateSliderTrack() {
+    //     const min = parseInt(rangeMin.value);
+    //     const max = parseInt(rangeMax.value);
+    //     const percentageMin = (min / 100) * 100;
+    //     const percentageMax = (max / 100) * 100;
+
+    //     sliderTrack.style.left = `${percentageMin}%`;
+    //     sliderTrack.style.width = `${percentageMax - percentageMin}%`;
+    // }
+
+</script>
+
 @endsection

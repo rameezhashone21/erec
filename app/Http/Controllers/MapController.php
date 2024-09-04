@@ -263,10 +263,11 @@ class MapController extends Controller
                 });
             }
         }
-        if ($request->has('percentage') && $request->percentage != 0) {
-            $percentage = $request->percentage;
+        if ($request->has('minScore') && $request->has('maxScore')) {
+            $minPercentage = $request->minScore;
+            $maxPercentage = $request->maxScore;
             
-            $exam_result = ExamResult::select('job_application_id')->where('perentage',$percentage)->get();
+            $exam_result = ExamResult::select('job_application_id')->whereBetween('perentage', [$minPercentage, $maxPercentage])->get();
             
             $jobApp = JobApplications::with('post', 'candidate', 'candidate.jobApplications', 'candidate.jobApplications.post', 'candidate.user', 'candidate.user.candidatePro', 'candidate.user.candidateEdu', 'candidateDocument', 'postComp')->whereIn('id', $exam_result);
             

@@ -53,110 +53,85 @@
       </div>
     </div>
     {{-- start modal upload questions --}}
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content p-4">
-                    <div class="modal-header d-block border-0">
-                        <h2 class="fw-500 text_primary fs-5 align-self-center mb-3 mb-md-0">Import Question</h2>
-                        <p class="mt-3">
-                            Please Ensure The File You Upload Is Similar To The Sample, And It Should Be In CSV File
-                            Format.
-                        </p>
-                        {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
-                    </div>
-                    <div class="modal-body ">
-                        <form method="post" action="{{ route('recruiter.exam.uploadCSV') }}" enctype="multipart/form-data">
-                        @csrf    
-                        <div class="row align-items-center justify-content-center">
-                                <div class="col-12" id="uploadWrapper">
-                                    <label class="upload__wrapper d-block" for="cvFile">
-                                        <div class="mb-4">
-                                            <img src="http://127.0.0.1:8000/images/Upload-cv-builder.png" alt=""
-                                                class="img-fluid">
-                                        </div>
-                                        <p>
-                                            <span class="text_primary" style="cursor: pointer;">
-                                                Upload
-                                            </span>
-                                            Your CSV File <br> or <span class="text_primary"
-                                                style="cursor: pointer;">Browse</span>
-                                        </p>
-                                        <input type="text" id="cvFile1" accept=".pdf, .doc, .docx" required=""
-                                          name="exam_id" style="display: none;" value="{{$exam->id}}">
-                                        <input type="file" id="cvFile" accept=".csv" required=""
-                                            name="csv_file" style="display: none;">
-                                    </label>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content p-4">
+            <div class="modal-header d-block border-0">
+                <h2 class="fw-500 text_primary fs-5 align-self-center mb-3 mb-md-0">Import Question</h2>
+                <p class="mt-3">
+                    Please Ensure The File You Upload Is Similar To The Sample, And It Should Be In CSV File Format.
+                </p>
+                {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{{ route('recruiter.exam.uploadCSV') }}" enctype="multipart/form-data">
+                    @csrf
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-12" id="uploadWrapper">
+                            <label class="upload__wrapper d-block" for="cvFile">
+                                <div class="mb-4">
+                                    <img src="http://127.0.0.1:8000/images/Upload-cv-builder.png" alt="" class="img-fluid">
                                 </div>
-                                <div class="col-lg-6" id="uploadContainer" style="display: none;">
-                                    <div class="d-flex w-100 gap-3">
-                                        <div>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="41.211" height="54.73"
-                                                viewBox="0 0 41.211 54.73">
-                                                <g id="Group_2654" data-name="Group 2654"
-                                                    transform="translate(1.5 1.5)">
-                                                    <g id="Icon_feather-file" data-name="Icon feather-file">
-                                                        <path id="Path_52" data-name="Path 52"
-                                                            d="M27.493,3H10.776A4.987,4.987,0,0,0,6,8.173V49.557a4.987,4.987,0,0,0,4.776,5.173H39.434a4.987,4.987,0,0,0,4.776-5.173V21.106Z"
-                                                            transform="translate(-6 -3)" fill="none" stroke="#007ba7"
-                                                            stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="3">
-                                                        </path>
-                                                        <path id="Path_53" data-name="Path 53"
-                                                            d="M19.5,3V21.106H37.606" transform="translate(0.605 -3)"
-                                                            fill="none" stroke="#007ba7" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="3">
-                                                        </path>
-                                                    </g>
-                                                    <text id="PDF" transform="translate(8 39.865)" fill="#007ba7"
-                                                        font-size="12" font-family="SegoeUI-Bold, Segoe UI"
-                                                        font-weight="700" letter-spacing="0.05em">
-                                                        <tspan x="0" y="0">PDF</tspan>
-                                                    </text>
-                                                </g>
-                                            </svg>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <p id="file__name"></p>
-                                            <p class="text_sm mb-1" id="file__size"></p>
-                                            <div class="progress" id="file-progress" style="display: none;">
-                                                <div class="progress-bar" role="progressbar" style="width: 0%;"
-                                                    aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                                    0%
-                                                </div>
-                                            </div>
+                                <p>
+                                    <span class="text_primary" style="cursor: pointer;">
+                                        Upload
+                                    </span>
+                                    Your CSV File <br> or <span class="text_primary" style="cursor: pointer;">Browse</span>
+                                </p>
+                                <input type="text" id="cvFile1" accept=".pdf, .doc, .docx" required="" name="exam_id" style="display: none;" value="{{$exam->id}}">
+                                <input type="file" id="cvFile" accept=".csv" name="csv_file" style="display: none;">
+                            </label>
+                        </div>
+                        <div class="col-lg-6" id="uploadContainer" style="display: none;">
+                            <div class="d-flex w-100 gap-3">
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="41.211" height="54.73" viewBox="0 0 41.211 54.73">
+                                        <g id="Group_2654" data-name="Group 2654" transform="translate(1.5 1.5)">
+                                            <g id="Icon_feather-file" data-name="Icon feather-file">
+                                                <path id="Path_52" data-name="Path 52" d="M27.493,3H10.776A4.987,4.987,0,0,0,6,8.173V49.557a4.987,4.987,0,0,0,4.776,5.173H39.434a4.987,4.987,0,0,0,4.776-5.173V21.106Z" transform="translate(-6 -3)" fill="none" stroke="#007ba7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+                                                <path id="Path_53" data-name="Path 53" d="M19.5,3V21.106H37.606" transform="translate(0.605 -3)" fill="none" stroke="#007ba7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+                                            </g>
+                                            <text id="PDF" transform="translate(8 39.865)" fill="#007ba7" font-size="12" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.05em">
+                                                <tspan x="0" y="0">PDF</tspan>
+                                            </text>
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <p id="file__name"></p>
+                                    <p class="text_sm mb-1" id="file__size"></p>
+                                    <div class="progress" id="file-progress" style="display: none;">
+                                        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                            0%
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-center mt-4">
-                                <p class="fw-bold mb-3">Download Sample Question Paper</p>
-                                <a href="{{ route('downloadCSV') }}"
-                                    class="btn_viewall bg-black fw-500 px-4 py-2 d-inline-flex align-items-center">
-                                    <span class="me-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="15.994" height="14.763"
-                                            viewBox="0 0 15.994 14.763">
-                                            <path id="Path_5633" data-name="Path 5633"
-                                                d="M12.3,12.918a.624.624,0,1,0-.183.433A.591.591,0,0,0,12.3,12.918Zm2.461,0a.624.624,0,1,0-.183.433A.591.591,0,0,0,14.763,12.918Zm1.23-2.153v3.076a.919.919,0,0,1-.923.923H.923a.89.89,0,0,1-.654-.269A.89.89,0,0,1,0,13.841V10.765a.89.89,0,0,1,.269-.654.89.89,0,0,1,.654-.269H5.392l1.3,1.307a1.856,1.856,0,0,0,2.614,0l1.307-1.307h4.46a.919.919,0,0,1,.923.923ZM12.87,5.3a.555.555,0,0,1-.135.673L8.429,10.275a.6.6,0,0,1-.865,0L3.258,5.969A.555.555,0,0,1,3.124,5.3a.575.575,0,0,1,.567-.375H6.151V.615A.591.591,0,0,1,6.334.183.591.591,0,0,1,6.767,0H9.227A.591.591,0,0,1,9.66.183a.591.591,0,0,1,.183.433V4.921H12.3A.575.575,0,0,1,12.87,5.3Z"
-                                                fill="#fff" />
-                                        </svg>
-                                    </span>
-                                    <span>
-                                        Download Sample
-                                    </span>
-                                </a>
-                                <button type="submit" class="btn_viewall disabled fw-500 px-4 py-2"
-                                    id="uploadButton" style="display: none;">
-                                    Upload
-                                </button>
-                            </div>
-                        </form>
+                        </div>
                     </div>
-
-                </div>
+                    <div class="text-center mt-4">
+                        <p class="fw-bold mb-3" id="textDownloadSample">Download Sample Question Paper</p>
+                        <a href="{{ route('downloadCSV') }}" class="btn_viewall bg-black fw-500 px-4 py-2 d-inline-flex align-items-center" id="downloadSample">
+                            <span class="me-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="15.994" height="14.763" viewBox="0 0 15.994 14.763">
+                                    <path id="Path_5633" data-name="Path 5633" d="M12.3,12.918a.624.624,0,1,0-.183.433A.591.591,0,0,0,12.3,12.918Zm2.461,0a.624.624,0,1,0-.183.433A.591.591,0,0,0,14.763,12.918Zm1.23-2.153v3.076a.919.919,0,0,1-.923.923H.923a.89.89,0,0,1-.654-.269A.89.89,0,0,1,0,13.841V10.765a.89.89,0,0,1,.269-.654.89.89,0,0,1,.654-.269H5.392l1.3,1.307a1.856,1.856,0,0,0,2.614,0l1.307-1.307h4.46a.919.919,0,0,1,.923.923ZM12.87,5.3a.555.555,0,0,1-.135.673L8.429,10.275a.6.6,0,0,1-.865,0L3.258,5.969A.555.555,0,0,1,3.124,5.3a.575.575,0,0,1,.567-.375H6.151V.615A.591.591,0,0,1,6.334.183.591.591,0,0,1,6.767,0H9.227A.591.591,0,0,1,9.66.183a.591.591,0,0,1,.183.433V4.921H12.3A.575.575,0,0,1,12.87,5.3Z" fill="#fff" />
+                                </svg>
+                            </span>
+                            <span>
+                                Download Sample
+                            </span>
+                        </a>
+                        <button type="submit" class="btn_viewall disabled fw-500 px-4 py-2" id="uploadButton" style="display: none;">
+                            Upload
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-        {{-- end modal upload questions --}}
-    <div>
+    </div>
+</div>
+{{-- end modal upload questions --}}
+<div>
         
             
     @include('modals.example-modal-6')
@@ -585,6 +560,8 @@ $(document).ready(function() {
                     $('#uploadWrapper').addClass('col-lg-6');
                     $('#uploadWrapper').removeClass('col-12');
                     $('#file-progress').show();
+                    $('#downloadSample').addClass('d-none');
+                    $('#textDownloadSample').addClass('d-none');
 
                     // const textContent = await file.text(); // Get text content from CSV file
                     // document.getElementById("extracted_text").value = textContent;
@@ -656,6 +633,66 @@ console.log("va",value);
       }
     });
   });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropZone = document.querySelector('#uploadWrapper');
+        const fileInput = document.querySelector('#cvFile');
+        const uploadButton = document.querySelector('#uploadButton');
+        const fileName = document.querySelector('#file__name');
+        const fileSize = document.querySelector('#file__size');
+        const uploadContainer = document.querySelector('#uploadContainer');
+
+        // Show upload button when file is selected
+        function showUploadButton() {
+            uploadButton.style.display = 'inline-block';
+            uploadContainer.style.display = 'block';
+            dropZone.style.display = 'none';
+        }
+
+        // Handle file selection
+        function handleFile(file) {
+            if (file && file.type === 'text/csv') {
+                fileName.textContent = file.name;
+                fileSize.textContent = `${(file.size / 1024).toFixed(2)} KB`;
+                showUploadButton();
+            }
+        }
+
+        // Handle drag and drop events
+        dropZone.addEventListener('dragenter', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length) {
+                fileInput.files = files; // Assign files to the input element
+                handleFile(files[0]);
+            }
+        });
+
+        // Handle file input change
+        fileInput.addEventListener('change', (e) => {
+            const files = e.target.files;
+            if (files.length) {
+                handleFile(files[0]);
+            }
+        });
+
+    });
 </script>
 @section('bottom_script')
 @endsection

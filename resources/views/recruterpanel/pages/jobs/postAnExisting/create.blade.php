@@ -871,7 +871,7 @@
                         <div class="form-group set-cross-icon">
                             <label for="" class="form-label fs-14 text-theme-primary fw-bold">Category*</label>
                             <select data-placeholder='Please Select Category' name="category" id="class_id"
-                                class="select2-multiple form-select fs-14  h-50px" required onchange="testFillBox()">
+                                class="select2-multiple form-select fs-14  h-50px" required>
                                 <option></option>
                                 @if ($data != null)
                                     @foreach ($data as $row)
@@ -1178,12 +1178,20 @@
                                 test*</label>
                             <select name="test_id" class="select2-multiple form-control fs-14  h-50px">
                                 <option selected disabled value="">Select Test</option>
-                                @if ($test_id != null)
+                                <!-- @if ($test_id != null)
                                     @foreach ($test_id as $row)
                                         {{-- {{ dd($row) }} --}}
                                         <option value="{{ $row['number'] }}"
                                             @if ($post->test_id == $row['number']) Selected @endif>
                                             {{ $row['name'] }}
+                                        </option>
+                                    @endforeach
+                                @endif -->
+                                @if ($test_id != null)
+                                    @foreach ($test_id as $row)
+                                        <option value="{{ $row['id'] }}"
+                                            @if ($post->test_id == $row['id']) Selected @endif>
+                                            {{ $row['exam_title'] }}
                                         </option>
                                     @endforeach
                                 @endif

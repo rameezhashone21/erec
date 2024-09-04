@@ -831,7 +831,10 @@ class RecruiterDashboardController extends Controller
         $test = Http::get('https://api.e-rec.com.au/api/qst/to/classes', [
             'class_id' => $post->class_id,
         ]);
-        $test_id = $test->json();
+
+        $recruiter_id = Recruiter::where('user_id' , auth::user()->id)->value('id');
+        $test_id = Exam::where('recruiter_id',$recruiter_id)->where('status',1)->get();
+
         return view('recruterpanel.pages.jobs.postAnExisting.create', compact('recruiter', 'selected_job','skill', 'post', 'data', 'test_id'));
         // } else {
         // $recruiter = CompanyRecRelation::where('rec_id', auth()->user()->recruiter->id)->where('status', 1)->get();
