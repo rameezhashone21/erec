@@ -289,7 +289,8 @@
                                     </div>
                                     </div> -->
                             <div class="col">
-                                <div class="double_range_slider_wrapper position-relative">
+                                <div class="double_range_slider_wrapper map-filter-rangeslider position-relative">
+                                    
                                     <p class="range-slider-text mb-2">
                                         Score:
                                         <span id="range1">0</span>
