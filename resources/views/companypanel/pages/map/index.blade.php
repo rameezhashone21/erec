@@ -289,24 +289,20 @@
                             </div>
                             </div> -->
                             <div class="col">
-                                <div class="double_range_slider_wrapper position-relative">
-                                    <p class="range-slider-text mb-2">
-                                        Score:
-                                        <span id="range1">
-                                            0
-                                        </span>
-                                        <span> &dash; </span>
-                                        <span id="range2">
-                                            100
-                                        </span>
-                                    </p>
-                                    <div>
-                                        <div class="slider-track"></div>
-                                        <input name="minScore" type="range" id="slider-1" min="0" max="100" value="5" step="1" onchange="rangeSlideScore('min', this.value)">
-                                        <input name="maxScore" type="range" id="slider-2" min="0" max="100" value="100" step="1" onchange="rangeSlideScore('max', this.value)">
-                                    </div>
-                                </div>
-                            </div>
+    <div class="double_range_slider_wrapper position-relative">
+        <p class="range-slider-text mb-2">
+            Score:
+            <span id="range1">0</span>
+            <span> &dash; </span>
+            <span id="range2">100</span>
+        </p>
+        <div>
+            <div class="slider-track"></div>
+            <input name="minScore" type="range" id="slider-1" min="0" max="100" value="0" step="1" onchange="rangeSlideScore('min', this.value)">
+            <input name="maxScore" type="range" id="slider-2" min="0" max="100" value="100" step="1" onchange="rangeSlideScore('max', this.value)">
+        </div>
+    </div>
+</div>
                         </div>
                         <div class="mt-2 text-end">
                             <a href="javascript:void(0)" class="fs-14" id="resetButton">Reset<i
@@ -513,6 +509,50 @@
     <script>
         $(document).ready(function() {
             $('#smart-search').trigger('submit');
+            
+          $(".map-user-list").on("click", function(event) {
+    console.log("Click event triggered on .map-user-list");
+
+    // Prevent the default action
+    event.preventDefault();
+    console.log("Default event prevented");
+
+    console.log(`Tag name clicked: ${event.target.tagName.toLowerCase()}`)
+    // Check if the clicked element is an <a> tag
+    if (event.target.tagName.toLowerCase() === 'a') {
+        console.log("Clicked element is an <a> tag");
+
+        // Check for the data-user-id attribute
+        const userId = event.target.getAttribute('data-userid');
+        console.log("data-user-id attribute value:", userId);
+
+        // If data-user-id is found, proceed
+        if (userId) {
+            console.log("Valid user ID found, proceeding with localStorage operations");
+
+            const id = userId;
+            console.log("ID to be stored:", id);
+
+            const localItem = localStorage.getItem("message_ids");
+            console.log("Existing message_ids in localStorage:", localItem);
+
+            if (localItem) {
+                console.log("Existing message_ids found, updating...");
+                const items = [...JSON.parse(localItem), id];
+                localStorage.setItem("message_ids", JSON.stringify(items));
+                console.log("Updated message_ids:", items);
+            } else {
+                console.log("No existing message_ids, creating new array");
+                localStorage.setItem("message_ids", JSON.stringify([id]));
+                console.log("New message_ids created:", [id]);
+            }
+        } else {
+            console.log("No valid user ID found, skipping localStorage operations");
+        }
+    } else {
+        console.log("Clicked element is not an <a> tag, no action taken");
+    }
+});
 
         });
 
@@ -597,30 +637,63 @@
         }
 
         let sliderOne = document.getElementById("slider-1");
-        let sliderTwo = document.getElementById("slider-2");
-        let sliderTrack = document.querySelector(".slider-track");
-        let sliderMaxValue = document.getElementById("slider-1").max;
+    let sliderTwo = document.getElementById("slider-2");
+    let sliderTrack = document.querySelector(".slider-track");
+    let displayValOne = document.getElementById("range1");
+    let displayValTwo = document.getElementById("range2");
 
+    // Initial setup of the slider track and display values
+    function init() {
+        displayValOne.textContent = sliderOne.value;
+        displayValTwo.textContent = sliderTwo.value;
         fillColor();
+    }
 
-        function fillColor() {
-            percent1 = (sliderOne.value / sliderMaxValue) * 100;
-            percent2 = (sliderTwo.value / sliderMaxValue) * 100;
-            sliderTrack.style.background =
-                `linear-gradient(to right, #007ba7 ${percent1}% , #004d68 ${percent1}% , #004d68 ${percent2}%, #007ba7 ${percent2}%)`;
-        }
+    function fillColor() {
+        let percent1 = (sliderOne.value / sliderOne.max) * 100;
+        let percent2 = (sliderTwo.value / sliderTwo.max) * 100;
+        sliderTrack.style.background = `linear-gradient(to right, #007ba7 ${percent1}% , #004d68 ${percent1}% , #004d68 ${percent2}%, #007ba7 ${percent2}%)`;
+    }
 
-
-        function rangeSlideScore(type,value) {
-
+    function rangeSlideScore(type, value) {
+        
             const rangeMin = document.getElementById('slider-1').value;
             const rangeMax = document.getElementById('slider-2').value;
 
             var a = $('#slider-1').html(rangeMin);
             var c = $('#slider-2').html(rangeMax);
             $('#smart-search').trigger('submit');
-
+            
+        if (type === 'min') {
+            sliderOne.value = value;
+        } else if (type === 'max') {
+            sliderTwo.value = value;
         }
+
+        // Ensure min slider value doesn't exceed max slider value
+        if (parseInt(sliderOne.value) > parseInt(sliderTwo.value)) {
+            sliderOne.value = sliderTwo.value;
+        }
+
+        // Ensure max slider value doesn't go below min slider value
+        if (parseInt(sliderTwo.value) < parseInt(sliderOne.value)) {
+            sliderTwo.value = sliderOne.value;
+        }
+
+        // Update the display values
+        displayValOne.textContent = sliderOne.value;
+        displayValTwo.textContent = sliderTwo.value;
+
+        // Update the slider track color
+        fillColor();
+
+        // Trigger form submission if needed
+        // document.getElementById('smart-search').submit(); // Uncomment if a form submission is needed
+    }
+
+    // Initialize the slider
+    init();
+    
         $('#candidateGender').on('change', function() {
             console.log("check");
             $('#smart-search').trigger('submit');
@@ -650,6 +723,7 @@
                     $("#cand-card").html("No Record Found");
                 } else {
                     $.each(data, function(index, val) {
+                        console.log("vaa",val);
                         html +=
                             "<div class='popper-content map_user_popover_box' id='popper-content-" +
                             val['id'] + "'";
@@ -1032,7 +1106,7 @@
                         html +=
                             "</div>";
                         html += "</div>";
-                        html += "<div class='d-flex pt-2 border-top justify-content-between px-3'>";
+                        html += "<div class='d-flex py-2 border-top justify-content-between px-3'>";
                         html += "<a href='{{ route('candidate.detail', '') }}/" + val['candidate'][
                                 'slug'
                             ] +
@@ -1062,11 +1136,9 @@
                         // html += "<a href='{{ route('candidate.company.chat', '') }}/" + val[
                         //         'candidate']['slug'] +
                         //     "' class='text-grey d-flex align-items-center'";
-                        html += "style='font-size: 12px; gap: 6px;' style='font-weight: 500'>";
+                        html += "style='font-size: 12px; gap: 6px;' style='font-weight: 500' class='message-box' data-userId="+ val['candidate']['user']['id'] +">";
                         html +=
-                            "'<div><open-box':openBoxFunction='openBox':id='1'></open-box></div>"
-                        html +=
-                            "<span>";
+                            "<span style='pointer-events: none;'>";
                         html +=
                             "<svg xmlns='http://www.w3.org/2000/svg' width='11.641' height='11.641'";
                         html +=
@@ -1080,7 +1152,7 @@
                         html +=
                             "</svg>";
                         html += "</span>";
-                        html += "<span>";
+                        html += "<span  style='pointer-events: none;'>";
                         html +=
                             "Messages";
                         html += "</span>";

@@ -179,19 +179,19 @@ class MapController extends Controller
     public function smartSearch(Request $request)
     {
         $jobApp = JobApplications::with([
-    'examResult',
-    'post',
-    'candidate',
-    'candidate.jobApplications',
-    'candidate.jobApplications.post',
-    'candidate.user',
-    'candidate.user.candidatePro',
-    'candidate.user.candidateEdu',
-    'candidateDocument',
-    'postComp'
-])->whereHas('post', function ($query) {
-    $query->where('comp_id', auth()->user()->company->id);
-});
+                    'examResult',
+                    'post',
+                    'candidate',
+                    'candidate.jobApplications',
+                    'candidate.jobApplications.post',
+                    'candidate.user',
+                    'candidate.user.candidatePro',
+                    'candidate.user.candidateEdu',
+                    'candidateDocument',
+                    'postComp'
+                ])->whereHas('post', function ($query) {
+                    $query->where('comp_id', auth()->user()->company->id);
+                });
         
         if ($request->has('post') && $request->post != null) {
             $post = $request->post;
@@ -269,7 +269,7 @@ class MapController extends Controller
             
             $exam_result = ExamResult::select('job_application_id')->whereBetween('perentage', [$minPercentage, $maxPercentage])->get();
             
-            $jobApp = JobApplications::with('post', 'candidate', 'candidate.jobApplications', 'candidate.jobApplications.post', 'candidate.user', 'candidate.user.candidatePro', 'candidate.user.candidateEdu', 'candidateDocument', 'postComp')->whereIn('id', $exam_result);
+            $jobApp = JobApplications::with('post', 'candidate', 'candidate.jobApplications', 'candidate.jobApplications.post', 'candidate.user', 'candidate.user.candidatePro', 'candidate.user.candidateEdu', 'candidateDocument', 'postComp','examResult')->whereIn('id', $exam_result);
             
         }
 

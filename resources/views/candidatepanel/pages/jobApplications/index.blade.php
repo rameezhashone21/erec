@@ -78,7 +78,8 @@
                       $qstest = $row->qst($row->qst_id);
                       $candidate_id = App\Models\User::where('id',Auth::user()->id)->value('new_user_id');
                       $attempt = App\Models\ExamResult::where('job_application_id',$row->id)->where('condidate_id',$candidate_id)->first();
-
+                      $exam_title = App\Models\Exam::where('id',$row->qst_id)->value('exam_title');
+             
                     @endphp
                     
                     @if ($row->status == 0 && $row->qst_id == '0')
@@ -99,7 +100,7 @@
                               <tr>
                                 <td align="center">
                                   <font class="btn btn_viewall" STYLE="cursor: pointer"
-                                    @if ($row->qst_id != '0') onClick="openWindow1('{{ $key }}')" @endif
+                                    @if ($row->qst_id != '0') onClick="openWindow1('{{ $key }}','{{$row->post->post}}')" @endif
                                     size="-1">
                                     Start
                                   </font>
@@ -143,8 +144,9 @@
 
 @section('bottom_script')
   <script type="text/javascript">
-    function openWindow1(display) {
-      if (confirm("You are about to begin'. \n\nClick Submit Test when you are done.")) {
+    function openWindow1(display,name) {
+        console.log("sad",name)
+        if (confirm(`Click "Ok" to start your ${name} Test. You’re about to begin your ${name} Test.\n\nClick Submit Test when you are done.`)) {
         let form = document.getElementById('form' + display);
         form.submit()
       }

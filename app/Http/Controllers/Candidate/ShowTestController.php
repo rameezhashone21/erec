@@ -186,8 +186,10 @@ class ShowTestController extends Controller
                         continue;
                     }
 
+                    $arraySearch = strpos($answer['answer'], trim($nanswer->answer));
+
                     // Check answer was correct than correct count increase for this anaswer
-                    $arraySearch = array_search(trim($nanswer->answer), $answer['answer']);
+                    //$arraySearch = array_search(trim($nanswer->answer), $answer['answer']);
                     // if ($nanswer->is_correct == 'yes' && ($arraySearch != false || $arraySearch == '0')) {
                     //     $correctMultiple++;
                     // }

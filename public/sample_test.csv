@@ -1,6 +1,6 @@
 Question Type,Question,Option1,Option2,Option3,Option4,Answer1,Answer2,Answer3,Answer4
 ,,,,,,,,,
-True/False,php true,,,,,TRUE,,,
-Single,php single ,one,two ,three,four,one ,,,
-Multiple,php multiple ,one ,two ,three,four,one ,four,,
-Text,php text,,,,,php is language,,,
+True/False,Eloquent is better than Query Builder,,,,,TRUE,,,
+Single,PHP stands for,Hypertext Preprocessor,personal home page,process code principal,none of these,none of these,,,
+Multiple,Laravel Follows,MVC,Modular,Singular,Parallel,MVC,Modular,,
+Text,What is Laravel,,,,,laravel is a framework,,,
