@@ -25,7 +25,7 @@
         @keyframes  l11{ 
           100%{transform: rotate(1turn)}
         }
-        .loader_shortlisted_container {
+        /* .loader_shortlisted_container {
             background-color: #00000059;
             width: 100%;
             height: 100%;
@@ -34,7 +34,7 @@
             left: 0;
             z-index: 999999;
       
-        }  
+        }   */
     </style>
 
 <?php $__env->startSection('content'); ?>
@@ -76,7 +76,7 @@
         <input id="post_id" type="hidden" name="post" value="<?php echo e($post->id); ?>">
         <label for="grade-filter">Filter by Grade:</label>
         <select id="grade-filter" class="form-control">
-            <option value="All">All Grades</option>
+            <option value="All">All Applicants</option>
             <option value="Pass">Pass</option>
             <option value="Fail">Fail</option>
             <option value="Average">Average</option>
@@ -198,32 +198,19 @@
                       <?php endif; ?>
                     </td>
                     <td id="td_id<?php echo e($row->id); ?>">
-                      
-                      
-                      <?php if($row->qst_id != '0'): ?>
-                        <p><?php echo e($row->qst($row->qst_id)['exam_title']); ?>
-
-                        </p>
-                      <?php endif; ?>
-                      
+                      <p><?php echo e($row->get_exam->exam_title); ?></p>
                     </td>
 
-                    <td id="td_id<?php echo e($row->id); ?>">
-                      
-                      <?php if($row->qst_id != '0'): ?>
-                          <?php if($row->result): ?>
-                            <?php echo e($row->result->perentage); ?>%
-                          <?php else: ?>
-                            Not Attempted
-                          <?php endif; ?>
+                      <td id="gradeTr-<?php echo e($row->id); ?>">
+                      <?php if($row->result): ?>
+                        <p><?php echo e($row->result->perentage); ?> %</p>
                       <?php endif; ?>
-                      
-                    </td>
+                      </td>
 
-                    <td id="gradeTr-<?php echo e($row->id); ?>">
+                      <td id="gradeTr-<?php echo e($row->id); ?>">
                       <?php if($row->result): ?>
                         <p class="orange_badge status_badge">
-                          <?php echo e($row->result->grade); ?></p>
+                          <?php echo e($row->result->grade); ?></p> 
                       <?php endif; ?>
                       </td>
 
@@ -349,14 +336,7 @@
                       <?php endif; ?>
                     </td>
                     <td id="td_id<?php echo e($row->id); ?>">
-                      
-                      
-                      <?php if($row->qst_id != '0'): ?>
-                        <p><?php echo e($row->qst($row->qst_id)['exam_title']); ?>
-
-                        </p>
-                      <?php endif; ?>
-                      
+                      <p><?php echo e($row->get_exam->exam_title); ?></p>
                     </td>
 
                     <td id="td_id<?php echo e($row->id); ?>">
@@ -499,17 +479,7 @@
                         No Record Found...
                       <?php endif; ?>
                     </td>
-                    <td id="td_id<?php echo e($row->id); ?>">
-                      
-                      
-                      <?php if($row->qst_id != '0'): ?>
-                        <p><?php echo e($row->qst($row->qst_id)['exam_title']); ?>
-
-                        </p>
-                      <?php endif; ?>
-                      
-                    </td>
-
+                    <td><?php echo e($row->get_exam->exam_title); ?></td>
                     <td id="td_id<?php echo e($row->id); ?>">
                       
                       <?php if($row->qst_id != '0'): ?>
@@ -531,13 +501,11 @@
 
                     <td id="hireTr-<?php echo e($row->id); ?>">
                       <?php if($row->status == 2): ?>
-                        <p class="btn btn_viewall text-center p-2">
+                        <p class=" text-center p-2">
                           Hired</p>
                       <?php else: ?>
                         <?php if($row->status == 1): ?>
-                          <p onclick="hideCandidate(<?php echo e($row->id); ?>)" id="buttonHire(<?php echo e($row->id); ?>)"
-                            class="btn btn_viewall text-center p-2">
-                            Hire</p>
+                          <p class="text-center p-2">Shortlisted</p>
                         <?php elseif($row->status == 0): ?>
                           <p onclick="shortCandidate(<?php echo e($row->id); ?>)" class="btn btn_viewall text-center p-2">
                             Shortlist</p>
@@ -647,16 +615,20 @@
                         </div>
                       <?php endif; ?>
                       <?php if($row->coverLetter == null && $row->coverLetterFile == null): ?>
-                        No Recordss Found...
+                        No Records Found...
                       <?php endif; ?>
                     </td>
+                    <?php
+                      $test_status = \App\Models\Posts::where('id', $row->post_id)->first();
+                    ?>
                     <td id="td_id<?php echo e($row->id); ?>">
-                      
-                      <?php if($row->qst_id != '0'): ?>
-                        <p><?php echo e($row->qst($row->qst_id)['exam_title']); ?>
+                      <?php if($test_status->test_attached == "1"): ?>   
+                        <?php echo e($row->get_exam->exam_title); ?>
 
-                        </p>
-                      <?php endif; ?>
+                       <?php else: ?>
+                         Not Assigned
+                       <?php endif; ?>                       
+                                    
                     </td>
 
                     <td>
@@ -668,7 +640,16 @@
                     </td>
 
                     <td>
+                    <?php if($test_status->test_attached == "0"): ?>
+                    <?php if($row->status == 1): ?>   
+                    <p class="text-center p-2">Shortlisted</p>
+                    <?php elseif($row->status == 0): ?>
+                    <p onclick="shortCandidate(<?php echo e($row->id); ?>)" class="btn btn_viewall text-center p-2">
+                        Shortlist</p>
+                    <?php endif; ?>
+                    <?php else: ?>
                       <p>N/A</p>
+                    <?php endif; ?>  
                     </td>
                     
                     <td>
@@ -798,11 +779,17 @@ $(document).ready(function() {
     $('#grade-filter').on('change', function() {
         let selectedGrade = $(this).val();
         let post_id = $('#post_id').val();
-        
-        console.log(selectedGrade);
-        
+
+        if(selectedGrade == "All"){
+            var url = "<?php echo e(route('candidates.filter.allgrade')); ?>";
+        }
+        else{
+            var url = "<?php echo e(route('candidates.filter')); ?>";
+        }
+
+                
         $.ajax({
-            url: "<?php echo e(route('candidates.filter')); ?>", // Define a new route for filtering
+            url: url, // Define a new route for filtering
             type: "post",
             data: { 
                 grade: selectedGrade,
