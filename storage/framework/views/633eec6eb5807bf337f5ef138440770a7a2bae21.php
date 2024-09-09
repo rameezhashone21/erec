@@ -215,29 +215,29 @@
                                 </div>
                             </div>
                             <!-- <div class="col">
-                                        <div class="map-filter-rangeslider">
-                                            <p class="range-slider-text mb-2">Score Range: <span><span
-                                                        id="rangeValueScore">60</span>
-                                                    %</span> </p>
-                                            <input class="range" type="range" name="percentage" value="0"
-                                                min="0" max="100" id="score-range"
-                                                onchange="rangeSlideScore(this.value)" />
-                                        </div>
-                                    </div> -->
+                                            <div class="map-filter-rangeslider">
+                                                <p class="range-slider-text mb-2">Score Range: <span><span
+                                                            id="rangeValueScore">60</span>
+                                                        %</span> </p>
+                                                <input class="range" type="range" name="percentage" value="0"
+                                                    min="0" max="100" id="score-range"
+                                                    onchange="rangeSlideScore(this.value)" />
+                                            </div>
+                                        </div> -->
 
                             <!-- <div class="col">
-                                    <div class="map-filter-rangeslider">
-                                        <p class="range-slider-text mb-2">Score Range: <span><span id="rangeValueScoreMin">0</span>% - <span id="rangeValueScoreMax">100</span>%</span></p>
-                                        <div class="range-slider">
-                                            <input type="range" id="slider-1" min="0" max="100" value="0" step="1" onchange="updateRange('min', this.value)" />
-                                            <input type="range" id="slider-1" min="0" max="100" value="100" step="1" onchange="updateRange('max', this.value)" />
-                                            <div id="slider-track"></div>
+                                        <div class="map-filter-rangeslider">
+                                            <p class="range-slider-text mb-2">Score Range: <span><span id="rangeValueScoreMin">0</span>% - <span id="rangeValueScoreMax">100</span>%</span></p>
+                                            <div class="range-slider">
+                                                <input type="range" id="slider-1" min="0" max="100" value="0" step="1" onchange="updateRange('min', this.value)" />
+                                                <input type="range" id="slider-1" min="0" max="100" value="100" step="1" onchange="updateRange('max', this.value)" />
+                                                <div id="slider-track"></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    </div> -->
+                                        </div> -->
                             <div class="col">
                                 <div class="double_range_slider_wrapper map-filter-rangeslider position-relative">
-                                    
+
                                     <p class="range-slider-text mb-2">
                                         Score:
                                         <span id="range1">0</span>
@@ -495,7 +495,7 @@
             let percent1 = (sliderOne.value / sliderOne.max) * 100;
             let percent2 = (sliderTwo.value / sliderTwo.max) * 100;
             sliderTrack.style.background =
-                `linear-gradient(to right, #007ba7 ${percent1}% , #004d68 ${percent1}% , #004d68 ${percent2}%, #007ba7 ${percent2}%)`;
+                `linear-gradient(to right, #f9f9f9 ${percent1}% , #007ba7 ${percent1}% , #007ba7 ${percent2}%, #f9f9f9 ${percent2}%)`;
         }
 
         function rangeSlideScore(type, value) {
@@ -975,7 +975,8 @@
                         html += "View Profile";
                         html += "</span>";
                         html += "</a>";
-                        html += "<a href='javascript:void(0)' class='text-grey d-flex align-items-center'";
+                        html +=
+                            "<a href='javascript:void(0)' class='text-grey d-flex align-items-center'";
                         // html += "<a href='<?php echo e(route('candidate.company.chat', '')); ?>/" + val[
                         //         'candidate']['slug'] +
                         //     "' class='text-grey d-flex align-items-center'";
@@ -1572,7 +1573,8 @@
                 percent1 = (sliderOne.value / sliderMaxValue) * 100;
                 percent2 = (sliderTwo.value / sliderMaxValue) * 100;
                 sliderTrack.style.background =
-                    `linear-gradient(to right, #007ba7 ${percent1}% , #004d68 ${percent1}% , #004d68 ${percent2}%, #007ba7 ${percent2}%)`;
+                    `#000`;
+                // `linear-gradient(to right, #007ba7 ${percent1}% , #004d68 ${percent1}% , #004d68 ${percent2}%, #007ba7 ${percent2}%)`;
             }
 
             if (type === 'min') {
