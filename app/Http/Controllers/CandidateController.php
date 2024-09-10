@@ -229,7 +229,7 @@ class CandidateController extends Controller
                             $date_diff = date_diff(date_create($proExp->month_exp), date_create($proExp->year_exp))->format('%y years, %m months');
                         }
                     } else {
-                        $date_diff = Carbon::createFromFormat('d/m/Y', $proExp->month_exp)->isoFormat('MMM YY') . ' - ' . 'Currently work here';
+                        $date_diff = Carbon::parse($proExp->month_exp)->isoFormat('MMM YY') . ' - ' . 'Currently work here';
                     }
                     $proExp->date_diff = $date_diff;
                 } else {
