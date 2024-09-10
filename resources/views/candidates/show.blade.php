@@ -699,7 +699,7 @@
                                                             {{ date_diff(date_create($row->month_exp), date_create($row->year_exp))->format('%y years, %m months') }}
                                                         @endif
                                                     @else
-                                                        <p>{{ \Carbon\Carbon::createFromFormat('d/m/Y', $proExp->month_exp)->isoFormat('MMM YY') }}
+                                                        <p>{{ \Carbon\Carbon::createFromFormat('d/m/Y', $row->month_exp)->isoFormat('MMM YY') }}
                                                             - Currently working here.</p>
                                                     @endif
                                                 </span>
