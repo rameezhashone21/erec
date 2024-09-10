@@ -1045,6 +1045,16 @@ class CompanyDashboardController extends Controller
             $query->where('comp_id', auth()->user()->company->id);
         });
 
+        if ($request->has('minScore') && $request->has('maxScore')) {
+            $minPercentage = $request->minScore;
+            $maxPercentage = $request->maxScore;
+            
+            $exam_result = ExamResult::select('job_application_id')->whereBetween('perentage', [$minPercentage, $maxPercentage])->get();
+            
+            $jobApp = JobApplications::with('post', 'candidate', 'candidate.jobApplications', 'candidate.jobApplications.post', 'candidate.user', 'candidate.user.candidatePro', 'candidate.user.candidateEdu', 'candidateDocument', 'postComp')->whereIn('id', $exam_result);
+            
+        }
+
         if ($request->has('post') && $request->post != null) {
             $post = $request->post;
             $jobApp = $jobApp->whereHas('post', function ($query) use ($post) {
@@ -1116,15 +1126,6 @@ class CompanyDashboardController extends Controller
             }
         }
         
-        if ($request->has('minScore') && $request->has('maxScore')) {
-            $minPercentage = $request->minScore;
-            $maxPercentage = $request->maxScore;
-            
-            $exam_result = ExamResult::select('job_application_id')->whereBetween('perentage', [$minPercentage, $maxPercentage])->get();
-            
-            $jobApp = JobApplications::with('post', 'candidate', 'candidate.jobApplications', 'candidate.jobApplications.post', 'candidate.user', 'candidate.user.candidatePro', 'candidate.user.candidateEdu', 'candidateDocument', 'postComp')->whereIn('id', $exam_result);
-            
-        }
 
         if ($request->has('lat') && $request->lat != null && $request->has('lng') && $request->lng != null) {
             $lat = $request->lat;

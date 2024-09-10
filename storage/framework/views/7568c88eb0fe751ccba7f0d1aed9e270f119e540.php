@@ -1,9 +1,9 @@
-@section('page_title', 'E-Rec')
+<?php $__env->startSection('page_title', 'E-Rec'); ?>
 
-@section('head_style')
+<?php $__env->startSection('head_style'); ?>
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-@endsection
+<?php $__env->stopSection(); ?>
 
 <div class="col-xl-9 col-lg-8">
   <button class="mobile_menu_trigger d-lg-none btn_theme border-0 py-2 px-4 mb-3">
@@ -11,31 +11,34 @@
   </button>
   <div class="dashboard_content bg-white rounded_10 p-4">
       
-     @if(session('message'))
-    <div class="alert alert-success">{{ session('message') }}</div>
-    @endif
+     <?php if(session('message')): ?>
+    <div class="alert alert-success"><?php echo e(session('message')); ?></div>
+    <?php endif; ?>
     
-    @if (session('error'))
+    <?php if(session('error')): ?>
       <div class="alert alert-danger" role="alert">
-        {{ session('error') }}
-      </div>
-    @endif
+        <?php echo e(session('error')); ?>
 
-    @if (session('success'))
-      <div class="alert alert-success" role="alert">
-        {{ session('success') }}
       </div>
-    @endif
+    <?php endif; ?>
+
+    <?php if(session('success')): ?>
+      <div class="alert alert-success" role="alert">
+        <?php echo e(session('success')); ?>
+
+      </div>
+    <?php endif; ?>
     
-    @php
+    <?php
     use App\Models\User;
         $package_id = User::where('id', Auth::user()->id)->value('package_id');
-    @endphp
+    ?>
 
     <div class="d-md-flex aling-items-center mb-3">
       <div>
         <h2 class="fw-500 text_primary fs-3 mb-2">
-          {{ $exam->exam_title }}
+          <?php echo e($exam->exam_title); ?>
+
         </h2>
         <h3 class="fw-500 text_primary fs-5 mb-4">
           Question & Answers
@@ -46,14 +49,14 @@
         class="btn_viewall fw-500 px-4 py-2 d-inline-block" data-value=1>
           Import Question
         </button>
-        <a href="{{ route('company.exam.question.create', ['id' => $exam->id]) }}" role="button"
+        <a href="<?php echo e(route('company.exam.question.create', ['id' => $exam->id])); ?>" role="button"
           class="btn_viewall fw-500 px-4 py-2 d-inline-block ">
           Add New
         </a>
       </div>
     </div>
 
-    {{-- start modal upload questions --}}
+    
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content p-4">
@@ -64,8 +67,8 @@
                 </p>
             </div>
             <div class="modal-body">
-                <form method="post" action="{{ route('company.exam.uploadCSV') }}" enctype="multipart/form-data">
-                    @csrf
+                <form method="post" action="<?php echo e(route('company.exam.uploadCSV')); ?>" enctype="multipart/form-data">
+                    <?php echo csrf_field(); ?>
                     <div class="row align-items-center justify-content-center">
                         <div class="col-12" id="uploadWrapper">
                             <label class="upload__wrapper d-block" for="cvFile">
@@ -78,7 +81,7 @@
                                     </span>
                                     Your CSV File <br> or <span class="text_primary" style="cursor: pointer;">Browse</span>
                                 </p>
-                                <input type="text" id="cvFile1" accept=".pdf, .doc, .docx" required="" name="exam_id" style="display: none;" value="{{$exam->id}}">
+                                <input type="text" id="cvFile1" accept=".pdf, .doc, .docx" required="" name="exam_id" style="display: none;" value="<?php echo e($exam->id); ?>">
                                 <input type="file" id="cvFile" accept=".csv" name="csv_file" style="display: none;">
                             </label>
                         </div>
@@ -114,7 +117,7 @@
                     </div>
                     <div class="text-center mt-4">
                         <p class="fw-bold mb-3" id="textDownloadSample">Download Sample Question Paper</p>
-                        <a href="{{ route('downloadCSV') }}" class="btn_viewall bg-black fw-500 px-4 py-2 d-inline-flex align-items-center" id="downloadSample">
+                        <a href="<?php echo e(route('downloadCSV')); ?>" class="btn_viewall bg-black fw-500 px-4 py-2 d-inline-flex align-items-center" id="downloadSample">
                             <span class="me-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="15.994" height="14.763" viewBox="0 0 15.994 14.763">
                                     <path id="Path_5633" data-name="Path 5633" d="M12.3,12.918a.624.624,0,1,0-.183.433A.591.591,0,0,0,12.3,12.918Zm2.461,0a.624.624,0,1,0-.183.433A.591.591,0,0,0,14.763,12.918Zm1.23-2.153v3.076a.919.919,0,0,1-.923.923H.923a.89.89,0,0,1-.654-.269A.89.89,0,0,1,0,13.841V10.765a.89.89,0,0,1,.269-.654.89.89,0,0,1,.654-.269H5.392l1.3,1.307a1.856,1.856,0,0,0,2.614,0l1.307-1.307h4.46a.919.919,0,0,1,.923.923ZM12.87,5.3a.555.555,0,0,1-.135.673L8.429,10.275a.6.6,0,0,1-.865,0L3.258,5.969A.555.555,0,0,1,3.124,5.3a.575.575,0,0,1,.567-.375H6.151V.615A.591.591,0,0,1,6.334.183.591.591,0,0,1,6.767,0H9.227A.591.591,0,0,1,9.66.183a.591.591,0,0,1,.183.433V4.921H12.3A.575.575,0,0,1,12.87,5.3Z" fill="#fff" />
@@ -133,24 +136,25 @@
         </div>
     </div>
 </div>
-{{-- end modal upload questions --}}
+
 <div>
         
             
-    @include('modals.example-modal-6')
+    <?php echo $__env->make('modals.example-modal-6', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         
 
       <div class="accordion" id="accordionExample">
-        @forelse ($qa as $key => $row)
+        <?php $__empty_1 = true; $__currentLoopData = $qa; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
           <div class="accordion-item">
-            <h2 class="accordion-header" id="heading-{{ $key + 1 }}">
+            <h2 class="accordion-header" id="heading-<?php echo e($key + 1); ?>">
               <div class="d-flex ">
                 <button
-                  class="accordion-button question-title  @if ($key + 1 > 1) {{ __('collapsed') }} @endif"
-                  type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ $key + 1 }}"
-                  aria-expanded="true" aria-controls="collapse-{{ $key + 1 }}">
+                  class="accordion-button question-title  <?php if($key + 1 > 1): ?> <?php echo e(__('collapsed')); ?> <?php endif; ?>"
+                  type="button" data-bs-toggle="collapse" data-bs-target="#collapse-<?php echo e($key + 1); ?>"
+                  aria-expanded="true" aria-controls="collapse-<?php echo e($key + 1); ?>">
                   <span class="pe-5">
-                    {{ $loop->iteration }}. {{ $row['question'] }}
+                    <?php echo e($loop->iteration); ?>. <?php echo e($row['question']); ?>
+
                   </span>
                 </button>
                 <div class="dropdown me-3 align-self-center">
@@ -167,33 +171,37 @@
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                     <li class="px-3 pb-2 pt-2">
-                      @if($row['type'] == "multiple")
-                      <a data-bs-placement="top" title="Edit" data-id={{$row['id']}}
+                      <?php if($row['type'] == "multiple"): ?>
+                      <a data-bs-placement="top" title="Edit" data-id=<?php echo e($row['id']); ?>
+
                         class="btn btn_viewall d-block w-100 hello" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal6">
                         Edit
                       </a>
-                      @elseif($row['type'] == "single")
-                      <a data-bs-placement="top" title="Edit" data-id={{$row['id']}}
+                      <?php elseif($row['type'] == "single"): ?>
+                      <a data-bs-placement="top" title="Edit" data-id=<?php echo e($row['id']); ?>
+
                         class="btn btn_viewall d-block w-100 hello" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal6">
                         Edit
                       </a>
-                      @elseif($row['type'] == "text")
-                      <a data-bs-placement="top" title="Edit" data-id={{$row['id']}}
+                      <?php elseif($row['type'] == "text"): ?>
+                      <a data-bs-placement="top" title="Edit" data-id=<?php echo e($row['id']); ?>
+
                         class="btn btn_viewall d-block w-100 hello" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal6">
                         Edit
                       </a>
-                      @elseif($row['type'] == "boolean")
-                      <a data-bs-placement="top" title="Edit" data-id={{$row['id']}}
+                      <?php elseif($row['type'] == "boolean"): ?>
+                      <a data-bs-placement="top" title="Edit" data-id=<?php echo e($row['id']); ?>
+
                         class="btn btn_viewall d-block w-100 hello" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal6">
                         Edit
                       </a>
-                      @endif
+                      <?php endif; ?>
                     </li>
                     <li class="px-3 pb-3">
-                    <form action="{{ route('company.exam.question.remove') }}" method="post">
-                        @csrf
-                        <input type="hidden" name="exam_id" value={{$row['exam_id']}}> 
-                        <input type="hidden" name="id" value={{$row['id']}}>
+                    <form action="<?php echo e(route('company.exam.question.remove')); ?>" method="post">
+                        <?php echo csrf_field(); ?>
+                        <input type="hidden" name="exam_id" value=<?php echo e($row['exam_id']); ?>> 
+                        <input type="hidden" name="id" value=<?php echo e($row['id']); ?>>
                         <a type="button" data-bs-toggle="tooltip"
                             data-bs-placement="top" title="Delete" class="btn btn_viewall delete-exam-btn1 d-block w-100"> 
                         Delete
@@ -205,102 +213,60 @@
                   </ul>
                 </div>
               </div>
-              <p class="text_primary question-type">Question Type: @if ($row['type'] == 'boolean')
-                  {{ 'True/False' }}
-                @else
-                  {{ ucfirst($row['type']) }}
-                @endif
+              <p class="text_primary question-type">Question Type: <?php if($row['type'] == 'boolean'): ?>
+                  <?php echo e('True/False'); ?>
+
+                <?php else: ?>
+                  <?php echo e(ucfirst($row['type'])); ?>
+
+                <?php endif; ?>
               </p>
             </h2>
-            <div id="collapse-{{ $key + 1 }}"
-              class="accordion-collapse collapse @if ($key + 1 == 1) {{ __('show') }} @endif"
-              aria-labelledby="heading-{{ $key + 1 }}" data-bs-parent="#accordionExample">
+            <div id="collapse-<?php echo e($key + 1); ?>"
+              class="accordion-collapse collapse <?php if($key + 1 == 1): ?> <?php echo e(__('show')); ?> <?php endif; ?>"
+              aria-labelledby="heading-<?php echo e($key + 1); ?>" data-bs-parent="#accordionExample">
 
-              @php($a = 'A')
-              @foreach ($row->answers as $answer)
+              <?php ($a = 'A'); ?>
+              <?php $__currentLoopData = $row->answers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $answer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="accordion-body pt-0">
                   <p class="answer_wrap">
-                    @if ($row['type'] == 'boolean')
-                      <span class="fw-bold">Correct Answer : @if ($answer->is_correct == 'yes')
-                          {{ 'True' }}
-                        @else
-                          {{ 'False' }}
-                        @endif
+                    <?php if($row['type'] == 'boolean'): ?>
+                      <span class="fw-bold">Correct Answer : <?php if($answer->is_correct == 'yes'): ?>
+                          <?php echo e('True'); ?>
+
+                        <?php else: ?>
+                          <?php echo e('False'); ?>
+
+                        <?php endif; ?>
                       </span>
-                    @elseif($row['type'] == 'multiple' || $row['type'] == 'single')
-                      <span class="fw-bold">{{ $a }}) </span>
-                      {{ $answer['answer'] }} @if ($answer->is_correct == 'yes')
-                        {{ '(Correct)' }}
-                      @endif
-                    @else
-                      <span class="fw-bold">{{ $a }}) </span>
-                      {{ $answer['answer'] }}
-                    @endif
+                    <?php elseif($row['type'] == 'multiple' || $row['type'] == 'single'): ?>
+                      <span class="fw-bold"><?php echo e($a); ?>) </span>
+                      <?php echo e($answer['answer']); ?> <?php if($answer->is_correct == 'yes'): ?>
+                        <?php echo e('(Correct)'); ?>
+
+                      <?php endif; ?>
+                    <?php else: ?>
+                      <span class="fw-bold"><?php echo e($a); ?>) </span>
+                      <?php echo e($answer['answer']); ?>
+
+                    <?php endif; ?>
                   </p>
                 </div>
-                @php($a++)
-              @endforeach
+                <?php ($a++); ?>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
             </div>
           </div>
-        @empty
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
           <p class="text-center">
             You didn't add any questions & answers yet
           </p>
-        @endforelse
+        <?php endif; ?>
       </div>
     </div>
-    {{-- <div class="table-responsive table_height scrollbar">
-      <table class="table table-striped table-payment display nowrap" style="width:100%">
-        <thead>
-          <tr>
-            <th class="set-width-table-1">#</th>
-            <th class="set-width-table-3">Question</th>
-            <th class="set-width-table-1">Type</th>
-            <th class="set-width-table-4">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          @if (count($qa) > 0)
-            @foreach ($qa as $key => $row)
-              <tr>
-                <td class="set-width-table-1">
-                  {{ $key + 1 }}.
-                </td>
-                <td class="set-width-table-3">{{ $row['question'] }}</td>
+    
+    <?php echo e($qa->links()); ?>
 
-                <td class="set-width-table-1">{{ $row['type'] }}</td>
-                <td class="set-width-table-4">
-                  <div class="d-flex" style="gap: 4px;">
-                    <a href="{{ route('company.exam.question.update', ['id' => $row->id]) }}" data-bs-toggle="tooltip"
-                      data-bs-placement="top" title="Edit" class="btn btn_viewall">
-                      <i class="fas fa-edit"></i>
-                    </a>
-
-                    <a href="{{ route('company.exam.question.delete', ['id' => $row->id]) }}" data-bs-toggle="tooltip"
-                      data-bs-placement="top" title="Delete" class="btn btn_viewall">
-                      <i class="fas fa-trash"></i>
-                    </a>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                @foreach ($row->answers as $answer)
-                  <td>{{ $answer['answer'] }}</td>
-                @endforeach
-              </tr>
-            @endforeach
-          @else
-            <tr>
-              <td colspan="5" align="center" class="text-center">
-                You didn't add any question & answers yet
-              </td>
-            </tr>
-          @endif
-        </tbody>
-      </table>
-    </div> --}}
-    {{ $qa->links() }}
   </div>
 </div>
 
@@ -311,7 +277,7 @@ $(document).on("click", ".hello", function () {
      console.log("question_id",eventId);
      $('#idHolder').html(eventId)
      
-     var url = "{{ route('get-question-data') }}";
+     var url = "<?php echo e(route('get-question-data')); ?>";
         var params = {
             id: eventId
         };
@@ -734,5 +700,6 @@ console.log("va",value);
 
     });
 </script>
-@section('bottom_script')
-@endsection
+<?php $__env->startSection('bottom_script'); ?>
+<?php $__env->stopSection(); ?>
+<?php /**PATH C:\Users\Rameez Ali\Documents\erec\resources\views/livewire/company/show-question-answers.blade.php ENDPATH**/ ?>
