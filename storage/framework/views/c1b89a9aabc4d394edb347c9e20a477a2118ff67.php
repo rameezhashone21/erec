@@ -349,9 +349,9 @@
                                 <a href=""
                                     class="d-flex fs-12 btn-subcription <?php echo e(auth()->user()->package->class); ?>"
                                     style="font-size: 10px !important">
-                                    <?php echo e(auth()->user()->all_posts_count); ?>/
+                                    <?php echo e(auth()->user()->posts_count); ?> /
                                     
-                                    <?php echo e(auth()->user()->posts_count); ?> Jobs posts left
+                                    <?php echo e(auth()->user()->all_posts_count); ?> Jobs posts left
                                     
                                 </a>
                                 

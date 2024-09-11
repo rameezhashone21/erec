@@ -393,12 +393,12 @@
                                 <a href=""
                                     class="d-flex fs-12 btn-subcription {{ auth()->user()->package->class }}"
                                     style="font-size: 10px !important">
-                                    {{ auth()->user()->all_posts_count }}/
+                                    {{ auth()->user()->posts_count }} /
                                     {{-- @if (auth()->user()->posts_count > auth()->user()->package->no_of_posts)
                                         {{ (auth()->user()->package->no_of_posts + auth()->user()->posts_count) - auth()->user()->package->no_of_posts }}
                                         jobs Posts left
                                     @else --}}
-                                    {{ auth()->user()->posts_count }} Jobs posts left
+                                    {{ auth()->user()->all_posts_count }} Jobs posts left
                                     {{-- @endif --}}
                                 </a>
                                 {{-- @if (auth()->user()->package->name == 'Standard')
