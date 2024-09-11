@@ -13,6 +13,14 @@ body.offcanvas-active {
     display: none;
 }
 
+.test-success-message-style{
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
 .screen-darken {
     height: 100%;
     width: 0%;

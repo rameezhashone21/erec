@@ -14,7 +14,7 @@
       <i class="fa-solid fa-right-left me-3"></i><span>Side Menu</span>
     </button>
     <div class="dashboard_content bg-white rounded_10 p-4">
-      <div class="d-flex aling-items-center">
+      <div class="d-flex aling-items-center justify-content-between mb-3">
         <h2 class="fw-500 text_primary fs-5 align-self-center">All Job Applications List</h2>
         {{-- <a class="btn_viewall fw-500 px-4 py-2 d-inline-block ms-auto" href="{{ route('candidates.job.create') }}">
             Add New
@@ -26,8 +26,9 @@
         @endif
 
         @if (session('success'))
-          <div class="alert alert-success" role="alert">
+          <div class="alert alert-success mb-0 fs-14 py-2 px-4" role="alert" id='alert__div'>
             {{ session('success') }}
+            <i id='cross__alert' class="fa-solid fa-xmark test-success-message-style"></i>
           </div>
         @endif
       </div>
@@ -151,5 +152,9 @@
         form.submit()
       }
     }
+
+    $('#cross__alert').click(function(){
+      $('#alert__div').hide();
+    })
   </script>
 @endsection

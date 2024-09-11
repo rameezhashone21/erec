@@ -362,7 +362,7 @@ class CompanyDashboardController extends Controller
                         'company_id' => auth()->user()->company->id
                     ])->first();
                     $post->test_attached = $data['test_attached'];
-                    if ($request->has('test_id')) {
+                    if ($request->has('test_id') && $post->test_attached != 0) {
                         $post->test_id = $exam->id;
                     }
                     // if ($request->has('criteria')) {
@@ -803,7 +803,6 @@ class CompanyDashboardController extends Controller
     
     public function updateJob(Request $request)
     {
-        // dd($request->all());
         $data = $request->all();
         $valid = Validator::make($data, [
             'post' => ['required', 'string', 'max:255'],
@@ -869,6 +868,7 @@ class CompanyDashboardController extends Controller
                 }
             } else {
                 $post->test_id = null;
+                $post->test_attached = 0;
                 //$post->criteria = null;
             }
             // $post->test_attached = $data['test_attached'];
