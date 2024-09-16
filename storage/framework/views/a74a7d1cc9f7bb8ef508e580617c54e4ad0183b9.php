@@ -1,6 +1,4 @@
-@extends('recruterpanel.layout.app')
-
-@section('page_title', 'E-Rec')
+<?php $__env->startSection('page_title', 'E-Rec'); ?>
 
 <head>
   <meta charset="UTF-8">
@@ -13,7 +11,7 @@
   </style>
 </head>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
   <div class="col-xl-9 col-lg-8">
     <button class="mobile_menu_trigger d-lg-none btn_theme border-0 py-2 px-4 mb-3">
       <i class="fa-solid fa-right-left me-3"></i><span>Side Menu</span>
@@ -21,15 +19,16 @@
     <div class="dashboard_content bg-white rounded_10 p-4">
       <div class="heading">
         <h3 class="fw-500 text_primary fs-5 mb-4">Add New Job</h3>
-        @if (session($key ?? 'error'))
+        <?php if(session($key ?? 'error')): ?>
           <div class="alert alert-danger" role="alert">
-            {!! session($key ?? 'error') !!}
+            <?php echo session($key ?? 'error'); ?>
+
           </div>
-        @endif
+        <?php endif; ?>
       </div>
-      <form class="dashboard-form needs-validation" method="post" action="{{ route('recruiter.jobs.store') }}"
+      <form class="dashboard-form needs-validation" method="post" action="<?php echo e(route('recruiter.jobs.store')); ?>"
         enctype="multipart/form-data" novalidate>
-        @csrf
+        <?php echo csrf_field(); ?>
         <div class="row gy-4">
           <div class="col-md-6">
             <div class="form-group position-relative">
@@ -668,11 +667,7 @@
 
 
 
-                {{-- <p class="title_text_sugg">title 1</p>
-                                <p class="title_text_sugg">title 2</p>
-                                <p class="title_text_sugg">title 3</p>
-                                <p class="title_text_sugg">title 4</p>
-                                <p class="title_text_sugg">title 5</p> --}}
+                
               </div>
             </div>
           </div>
@@ -686,66 +681,29 @@
           <div class="col-md-6">
             <div class="form-group set-cross-icon">
               <label for="class_id" class="form-label fs-14 text-theme-primary fw-bold">Category*</label>
-              <input type="hidden" name="user_id" id="user_id" value="{{Auth::user()->id}}">
+              <input type="hidden" name="user_id" id="user_id" value="<?php echo e(Auth::user()->id); ?>">
               <select data-placeholder="Please select category" name="category" onchange="testFillBox()"
                 id="mySelect2" class="select2 form-control fs-14  h-50px" required>
                 <option></option>
-                {{-- {{ dd($data) }} --}}
-                @if ($data != null)
-                  @foreach ($data as $row)
-                    <option value="{{ $row['id'] }}">{{ $row['title'] }}</option>
-                  @endforeach
-                @endif
+                
+                <?php if($data != null): ?>
+                  <?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($row['id']); ?>"><?php echo e($row['title']); ?></option>
+                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                <?php endif; ?>
               </select>
               <div class="invalid-feedback">
                 Please select Category.
               </div>
             </div>
           </div>
-          {{-- <div class="col-md-6">
-                        <div class="form-group set-cross-icon">
-                            <label for="increment" class="form-label fs-14 text-theme-primary fw-bold">If you would like
-                                to attach a
-                                test with it?</label>
-                            <select class="form-select select2-multiple fs-14 h-50px" onchange="enableField()"
-                                data-placeholder="Please Select Option" name="test_attached" id="test_attached" required>
-                                <option></option>
-                                <option value="1">Yes</option>
-                                <option value="0">No</option>
-
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group set-cross-icon d-none" id="testBox">
-                            <label for="test_id" class="form-label fs-14 text-theme-primary fw-bold">Attacsh a test</label>
-                            <select name="test_id" class="select2-multiple form-control fs-14  h-50px">
-                                <option selected disabled value="">Select Test</option>
-                            </select>
-                        </div>
-                    </div>
-                    sdasds
-                    <!--<div class="col-md-6">-->
-                    <!--    <div class="form-group set-cross-icon d-none" id="criteria">-->
-                    <!--        <label for="criteria" class="form-label fs-14 text-theme-primary fw-bold">Test Passing-->
-                    <!--            Criteria</label>-->
-                    <!--        <select name="criteria" class="select2-multiple form-control fs-14 h-50px">-->
-                    <!--            <option selected disabled value="">Select Test Passing Criteria</option>-->
-                    <!--            <option value="50+">50+</option>-->
-                    <!--            <option value="60+">60+</option>-->
-                    <!--            <option value="70+">70+</option>-->
-                    <!--            <option value="80+">80+</option>-->
-                    <!--            <option value="90+">90+</option>-->
-                    <!--        </select>-->
-                    <!--    </div>-->
-                    <!--</div> -->
-                    --}}
+          
           <div class="col-md-6">
             <div class="form-group set-cross-icon">
               <label for="name" class="form-label fs-14 text-theme-primary fw-bold">Job Type*</label>
               <select class="form-select select2-multiple fs-14 h-50px" data-placeholder="Please Select Job Type"
                 name="job_type" required>
-                {{-- <option disabled selected></option> --}}
+                
                 <option></option>
                 <option value="Full Time">Full Time</option>
                 <option value="Part Time">Part Time</option>
@@ -754,9 +712,8 @@
                 <option value="Graduate">Graduate</option>
                 <option value="Trainee">Trainee</option>
                 <option value="Apprenticeship">Apprenticeship</option>
-                {{-- <option value="Internship">Internship</option> --}}
-                {{-- <option value="Vacation">Vacation</option>
-                                <option value="Volunteer">Volunteer</option> --}}
+                
+                
               </select>
               <div class="invalid-feedback">
                 Please select Job Type.
@@ -766,7 +723,7 @@
           <div class="col-md-6">
             <div class="form-group set-cross-icon">
               <label for="experience" class="form-label fs-14 text-theme-primary fw-bold">Experience*</label>
-              {{-- <input type="text" class="form-control fs-14 h-50px" name="experience" required> --}}
+              
               <select class="form-select select2-multiple fs-14 h-50px" data-placeholder="Please Select Experience"
                 name="experience" required>
                 <option></option>
@@ -829,7 +786,7 @@
           <div class="col-md-6">
             <div class="form-group">
               <label for="location" class="form-label fs-14 text-theme-primary fw-bold">Location*</label>
-              {{-- <input type="text" class="form-control fs-14 h-50px" name="location" required> --}}
+              
               <input id="searchInput" value="" class="controls form-control input-login searchInput"
                 name="address" type="text" placeholder="" required autocomplete="off">
               <input type="hidden" id="latitude" value="" name="lat" />
@@ -845,7 +802,7 @@
           <div class="col-md-6">
             <div class="form-group set-cross-icon">
               <label for="qualification" class="form-label fs-14 text-theme-primary fw-bold">Qualification*</label>
-              {{-- <input type="text" class="form-control fs-14 h-50px" name="qualification" required> --}}
+              
               <select class="form-select select2-multiple fs-14 h-50px" data-placeholder="Please Select Qualification"
                 name="qualification" required>
                 <option></option>
@@ -899,31 +856,16 @@
               <select name="skill[]" id="skill" class="editSkillsJob form-select fs-14 h-50px" required
                 multiple>
                 <option disabled>Please Select Skills</option>
-                @foreach ($skill as $row)
-                  <option value="{{ $row->id }}">{{ $row->name }}</option>
-                @endforeach
+                <?php $__currentLoopData = $skill; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                  <option value="<?php echo e($row->id); ?>"><?php echo e($row->name); ?></option>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
               </select>
               <div class="invalid-feedback">
                 Please enter Job Duties
               </div>
             </div>
           </div>
-          {{-- <div class="col-md-6">
-                        <div class="form-group set-cross-icon">
-                            <label for="increment" class="form-label fs-14 text-theme-primary fw-bold">
-                                Increments*</label>
-                            <select class="form-select select2-multiple fs-14 h-50px"
-                                data-placeholder="Please Select Increments" name="increment" required>
-                                <option></option>
-                                <option value="50k">50k</option>
-                                <option value="100k">100k</option>
-                                <option value="200k">200k</option>
-                                <option value="300k">300k</option>
-                                <option value="400k">400k</option>
-                                <option value="500k">500k</option>
-                            </select>
-                        </div>
-                    </div> --}}
+          
           <div class="col-md-6">
             <div class="form-group">
               <label for="banner" class="form-label fs-14 text-theme-primary fw-bold">Job
@@ -942,9 +884,9 @@
                             <select data-placeholder="Please Select Company" name="comp_id" id="company"
                                 class="form-select fs-14 select2-multiple h-50px">
                                 <option></option>
-                                @foreach ($recruiter as $row)
-                                    <option value="{{ $row->company->id }}">{{ $row->company->name }}</option>
-                                @endforeach
+                                <?php $__currentLoopData = $recruiter; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($row->company->id); ?>"><?php echo e($row->company->name); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                             <div class="invalid-feedback">
                                 Please provide Company Name
@@ -1003,9 +945,9 @@
       </form>
     </div>
   </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('bottom_script')
+<?php $__env->startSection('bottom_script'); ?>
 
   
   <script>
@@ -1047,7 +989,7 @@
      
         
             $.ajax({
-                url: '{{ route('recruiter.get.testCreate') }}',
+                url: '<?php echo e(route('recruiter.get.testCreate')); ?>',
                 method: 'GET',
                 data: {
                     id: id,  // Parameters to send along with the request
@@ -1059,7 +1001,7 @@
                     {
                         console.log("ssss");
                         document.getElementById('createtest').classList.remove('hidden');
-                        $('#g').html('<a href="{{route('recruiter.exam.create')}}">Add a new test</a></div>')
+                        $('#g').html('<a href="<?php echo e(route('recruiter.exam.create')); ?>">Add a new test</a></div>')
                     }
                 },
             });
@@ -1092,7 +1034,7 @@
      
       console.log(user_id);
     //   console.log("userid",user_id);
-      var href = "{{ route('recruiter.get.testCreate') }}";
+      var href = "<?php echo e(route('recruiter.get.testCreate')); ?>";
       href = href.replace(':id', id);
       console.log(href);
       $.ajax({
@@ -1140,7 +1082,7 @@
     //     console.log(id);
     //     var selectedId = document.getElementById("assign_test" + id).value;
     //     console.log(selectedId);
-    //     url = "{{ route('company.job.assign') }}";
+    //     url = "<?php echo e(route('company.job.assign')); ?>";
     //     $.ajax({
     //             type: 'GET',
     //             url: url,
@@ -1255,7 +1197,7 @@ $(document).ready(function() {
 
                     if (!exists) {
                         $.ajax({
-                            url: '{{ route('categories.store') }}',
+                            url: '<?php echo e(route('categories.store')); ?>',
                             method: 'POST',
                             data: {
                                 _token: $('input[name="_token"]').val(),
@@ -1348,5 +1290,7 @@ $(document).ready(function() {
     }
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
+
+<?php echo $__env->make('recruterpanel.layout.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\Rameez Ali\Documents\erec1\resources\views/recruterpanel/pages/jobs/create.blade.php ENDPATH**/ ?>

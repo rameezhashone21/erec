@@ -1,12 +1,10 @@
-@extends('recruterpanel.layout.app')
+<?php $__env->startSection('page_title', 'E-Rec'); ?>
 
-@section('page_title', 'E-Rec')
-
-@section('head_style')
+<?php $__env->startSection('head_style'); ?>
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
-@endsection
+<?php $__env->stopSection(); ?>
 
 <style>
     /* HTML: <div class="loader"></div> */
@@ -22,7 +20,7 @@
           background-repeat: no-repeat;
           animation: l11 1s infinite linear;
         }
-        @keyframes l11{ 
+        @keyframes  l11{ 
           100%{transform: rotate(1turn)}
         }
         .loader_hired_container {
@@ -37,7 +35,7 @@
         }  
     </style>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="col-xl-9 col-lg-8">
         <button class="mobile_menu_trigger d-lg-none btn_theme border-0 py-2 px-4 mb-3">
             <i class="fa-solid fa-right-left me-3"></i><span>Side Menu</span>
@@ -48,20 +46,20 @@
             </div>
             <ul class='row row-cols-md-4 row-cols-1 g-0 job_detail_links'>
                 <li class='col'>
-                    <a href="{{ route('recruiter.job.details', $post->slug) }}"
-                        @if (Route::is('recruiter.job.details', $post->slug)) class="active" @endif>Job Detail</a>
+                    <a href="<?php echo e(route('recruiter.job.details', $post->slug)); ?>"
+                        <?php if(Route::is('recruiter.job.details', $post->slug)): ?> class="active" <?php endif; ?>>Job Detail</a>
                 </li>
                 <li class='col'>
-                    <a href="{{ route('recruiter.job.applicants', $post->slug) }}"
-                        @if (Route::is('recruiter.job.applicants', $post->slug)) class="active" @endif>Applicants</a>
+                    <a href="<?php echo e(route('recruiter.job.applicants', $post->slug)); ?>"
+                        <?php if(Route::is('recruiter.job.applicants', $post->slug)): ?> class="active" <?php endif; ?>>Applicants</a>
                 </li>
                 <li class='col'>
-                    <a href="{{ route('recruiter.job.shortlisted', $post->slug) }}"
-                        @if (Route::is('recruiter.job.shortlisted', $post->slug)) class="active" @endif>Shortlisted</a>
+                    <a href="<?php echo e(route('recruiter.job.shortlisted', $post->slug)); ?>"
+                        <?php if(Route::is('recruiter.job.shortlisted', $post->slug)): ?> class="active" <?php endif; ?>>Shortlisted</a>
                 </li>
                 <li class='col'>
-                    <a href="{{ route('recruiter.exam.result', $post->slug) }}"
-                        @if (Route::is('recruiter.exam.result', $post->slug)) class="active" @endif>Hired</a>
+                    <a href="<?php echo e(route('recruiter.exam.result', $post->slug)); ?>"
+                        <?php if(Route::is('recruiter.exam.result', $post->slug)): ?> class="active" <?php endif; ?>>Hired</a>
                 </li>
             </ul>
             <div id="hired_loader" class='loader_hired_container d-none justify-content-center align-items-center'> 
@@ -78,16 +76,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if (isset($job))
-                            @if (count($job->jobAppRecComp) > 0)
-                                @foreach ($job->jobAppRecComp as $key => $row)
+                        <?php if(isset($job)): ?>
+                            <?php if(count($job->jobAppRecComp) > 0): ?>
+                                <?php $__currentLoopData = $job->jobAppRecComp; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr>
-                                        <td>{{ ++$key }}. </td>
-                                        <td>{{ $row->candidate->first_name }} {{ $row->candidate->last_name }}</td>
+                                        <td><?php echo e(++$key); ?>. </td>
+                                        <td><?php echo e($row->candidate->first_name); ?> <?php echo e($row->candidate->last_name); ?></td>
                                         <td>
-                                            @if ($row->candidateDocument != null)
-                                                @if ($row->candidateDocument->document != null)
-                                                    <a href="{{ asset('candidateDoc/doc/' . $row->candidateDocument->document) }}"
+                                            <?php if($row->candidateDocument != null): ?>
+                                                <?php if($row->candidateDocument->document != null): ?>
+                                                    <a href="<?php echo e(asset('candidateDoc/doc/' . $row->candidateDocument->document)); ?>"
                                                         target="_blank" class='text-decoration-underline d-flex text-dark'>
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="27.5"
                                                             height="27.5" viewBox="0 0 27.5 27.5">
@@ -108,43 +106,41 @@
                                                         </svg>
                                                         <span class='align-self-end ms-1'>
                                                             Click to view
-                                                            {{-- <a class='px-4 py-2 progress_card d-block rounded-3'
-                                                    href="{{ asset('candidateDoc/doc/' . $item->document) }}"
-                                                    target="_blank"> --}}
+                                                            
                                                         </span>
                                                     </a>
-                                                @endif
-                                            @else
+                                                <?php endif; ?>
+                                            <?php else: ?>
                                                 Candidate has removed their Resume
-                                            @endif
+                                            <?php endif; ?>
                                         </td>
-                                        <td id="hireTr-{{ $row->id }}">
-                                        @if ($row->status == 2)
+                                        <td id="hireTr-<?php echo e($row->id); ?>">
+                                        <?php if($row->status == 2): ?>
                                         <p>Hired</p>
-                                        @elseif ($row->status == 1)
-                                        <input type="radio" class="btn-check" name="setStatus{{ $row->id }}"
+                                        <?php elseif($row->status == 1): ?>
+                                        <input type="radio" class="btn-check" name="setStatus<?php echo e($row->id); ?>"
                                             value="2" autocomplete="off" id="setStatus1">
-                                            <label class="btn btn-outline-primary fs-14" for="hire{{ $row->id }}"
-                                            onclick="hireStatus('{{ $row->id }}')">Hire</label>
-                                            {{-- @if ($gender == 'male') selected @endif>Male</label> --}}
+                                            <label class="btn btn-outline-primary fs-14" for="hire<?php echo e($row->id); ?>"
+                                            onclick="hireStatus('<?php echo e($row->id); ?>')">Hire</label>
+                                            
 
-                                            <!-- <input type="radio" class="btn-check" name="setStatus{{ $row->id }}"
+                                            <!-- <input type="radio" class="btn-check" name="setStatus<?php echo e($row->id); ?>"
                                             value="5" autocomplete="off" id="setStatus2">
-                                            <label class="btn btn-outline-primary fs-14" for="reject{{ $row->id }}"
-                                            onclick="rejectStatus('{{ $row->id }}')">Reject</label> -->
-                                        @endif
+                                            <label class="btn btn-outline-primary fs-14" for="reject<?php echo e($row->id); ?>"
+                                            onclick="rejectStatus('<?php echo e($row->id); ?>')">Reject</label> -->
+                                        <?php endif; ?>
                                     </tr>
-                                @endforeach
-                            @endif
-                        @endif
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <?php endif; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('bottom_script')
+<?php $__env->startSection('bottom_script'); ?>
 
 <script>
     function hireStatus(value) {
@@ -153,7 +149,7 @@
       element.classList.remove('d-none');
       element.classList.add('d-flex');
       
-      var url = '{{ route('hireReject.candidate.recruiter') }}';
+      var url = '<?php echo e(route('hireReject.candidate.recruiter')); ?>';
       var status = $('#setStatus1').val();
       var statText = "";
 
@@ -170,7 +166,7 @@
         type: 'POST',
         url: url,
         data: {
-          _token: "{{ csrf_token() }}",
+          _token: "<?php echo e(csrf_token()); ?>",
           id: value,
           status: status
         },
@@ -194,7 +190,7 @@
     
     function rejectStatus(value) {
       
-      var url = '{{ route('hireReject.candidate.comp') }}';
+      var url = '<?php echo e(route('hireReject.candidate.comp')); ?>';
       var status = $('#setStatus2').val();
       var statText = "";
       
@@ -210,7 +206,7 @@
         type: 'POST',
         url: url,
         data: {
-          _token: "{{ csrf_token() }}",
+          _token: "<?php echo e(csrf_token()); ?>",
           id: value,
           status: status
         },
@@ -226,4 +222,6 @@
       });
     }
   </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('recruterpanel.layout.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\Rameez Ali\Documents\erec1\resources\views/recruterpanel/pages/jobs/jobs_shortlisted.blade.php ENDPATH**/ ?>

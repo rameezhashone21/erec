@@ -807,6 +807,8 @@ class RecruiterDashboardController extends Controller
     {
         $id = Posts::whereSlug($id)->first()->id;
         $post = Posts::with('jobAppRecComp', 'skills', 'company')->find($id);
+
+        //dd($post);
         return view('recruterpanel.pages.jobs.exam_results', compact('post'));
     }
     public function destroyJobs($id)

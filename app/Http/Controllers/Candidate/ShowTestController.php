@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\ExamNotification;
+use App\Models\Recruiter;
 use App\Models\Company;
 use App\Models\Posts;
 use App\Models\ExamAnswer;
@@ -267,9 +268,18 @@ class ShowTestController extends Controller
 
         
         $job = Posts::where('id',$jobApplication->post_id)->first();
-        
-        $company = Company::where('id',$job->comp_id)->first();
-        $employer = User::where('id',$company->user_id)->first();
+
+        if($job->comp_id != 0){
+            $company = Company::where('id',$job->comp_id)->first();
+            $employer = User::where('id',$company->user_id)->first();
+
+        }
+        elseif($job->rec_id != 0){
+            $recruiter = Recruiter::where('id',$job->rec_id)->first();
+            $employer = User::where('id',$recruiter->user_id)->first();
+
+        }
+
         $data = ['username' => auth()->user()->name, 'status' => $email_status, 'grade' => $grade, 'percentage' => $percentage, 'position' => $job->post, 'employer' => $employer->name, 'postedBy' => $postedBy ];
         Mail::to($employer->email)->send(new Result($data));
         Mail::to(auth()->user()->email)->send(new TestAttempted($data));

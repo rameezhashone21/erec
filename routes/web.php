@@ -148,7 +148,7 @@ Route::get('/search/job-location', [App\Http\Controllers\FrontendController::cla
 Route::get('/search/job-company', [App\Http\Controllers\FrontendController::class, 'searchCompany'])->name('search.company');
 Route::get('get/pdf/file', [App\Http\Controllers\CandidateDashboardController::class, 'get_pdf_file'])->name('get.pdf.file');
 
-Route::post('recruiter/hire-or-reject/candidate', [App\Http\Controllers\CompanyDashboardController::class, 'hireReject'])->name('hireReject.candidate.comp');
+Route::post('recruiter/hire-or-reject/candidate', [App\Http\Controllers\CompanyDashboardController::class, 'hireReject'])->name('hireReject.candidate.recruiter');
 
 Route::post('/category/store-new-category', [App\Http\Controllers\AdminController::class, 'storeJobCategory'])->name('categories.store');
 
@@ -548,6 +548,8 @@ Route::middleware(['auth', 'check_status'])->group(function () {
                 Route::get('/rec/gettest/{id}', [App\Http\Controllers\CompanyDashboardController::class, 'companygettest'])->name('recruiter.get.test');
 
                 Route::get('/hire/candidate/{id}', [App\Http\Controllers\CompanyDashboardController::class, 'hirecandidate'])->name('hire.candidate.rec');
+
+                Route::get('/shortlist/candidate/{id}', [App\Http\Controllers\CompanyDashboardController::class, 'shortListCandidate'])->name('shortlist.candidate.recruiter');
 
                 //Get Test by Categories
                 Route::get('/test', [App\Http\Controllers\RecruiterDashboardController::class, 'getTest'])->name('recruiter.get.testCreate');

@@ -1,13 +1,11 @@
-@extends('recruterpanel.layout.app')
+<?php $__env->startSection('page_title', 'E-Rec'); ?>
 
-@section('page_title', 'E-Rec')
-
-@section('head_style')
+<?php $__env->startSection('head_style'); ?>
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <style>
         .expandable-text {
             overflow: hidden;
@@ -42,112 +40,125 @@
             </div>
             <ul class='row row-cols-lg-4 row-cols-2 g-0 job_detail_links mb-3'>
                 <li class='col'>
-                    <a href="{{ route('recruiter.job.details', $post->slug) }}"
-                        @if (Route::is('recruiter.job.details', $post->slug)) class="active" @endif>Job Detail</a>
+                    <a href="<?php echo e(route('recruiter.job.details', $post->slug)); ?>"
+                        <?php if(Route::is('recruiter.job.details', $post->slug)): ?> class="active" <?php endif; ?>>Job Detail</a>
                 </li>
                 <li class='col'>
-                    <a href="{{ route('recruiter.job.applicants', $post->slug) }}"
-                        @if (Route::is('recruiter.job.applicants', $post->slug)) class="active" @endif>Applicants</a>
+                    <a href="<?php echo e(route('recruiter.job.applicants', $post->slug)); ?>"
+                        <?php if(Route::is('recruiter.job.applicants', $post->slug)): ?> class="active" <?php endif; ?>>Applicants</a>
                 </li>
                 <li class='col'>
-                    <a href="{{ route('recruiter.job.shortlisted', $post->slug) }}"
-                        @if (Route::is('recruiter.job.shortlisted', $post->slug)) class="active" @endif>Shortlisted</a>
+                    <a href="<?php echo e(route('recruiter.job.shortlisted', $post->slug)); ?>"
+                        <?php if(Route::is('recruiter.job.shortlisted', $post->slug)): ?> class="active" <?php endif; ?>>Shortlisted</a>
                 </li>
                 <li class='col'>
-                    <a href="{{ route('recruiter.exam.result', $post->slug) }}"
-                        @if (Route::is('recruiter.exam.result', $post->slug)) class="active" @endif>Hired</a>
+                    <a href="<?php echo e(route('recruiter.exam.result', $post->slug)); ?>"
+                        <?php if(Route::is('recruiter.exam.result', $post->slug)): ?> class="active" <?php endif; ?>>Hired</a>
                 </li>
             </ul>
             <h2 class='job-title'>Job Title</h2>
-            <h3 class='job-name mb-3'>{{ $post->post }}</h3>
-            <img src="{{ asset('storage/' . $post->banner) }}" alt="" class="job-detail-banner">
+            <h3 class='job-name mb-3'><?php echo e($post->post); ?></h3>
+            <img src="<?php echo e(asset('storage/' . $post->banner)); ?>" alt="" class="job-detail-banner">
             <h3 class='fw-500 fs-5 mt-3 mb-1'>Job Description</h3>
             <p class="fs-14 text_grey_999">
-                {!! $post->description !!}
+                <?php echo $post->description; ?>
+
             </p>
             <div class="my-4">
                 <ul class='row row-cols-xl-3 row-cols-sm-2 row-cols-1 gy-4'>
                     <li class='col'>
                         <h3 class='fw-500 fs-5 mb-1'>Job Category</h3>
                         <p class="fs-14 text_grey_999">
-                            @if ($post->getSingleClass($post->class_id) == null)
+                            <?php if($post->getSingleClass($post->class_id) == null): ?>
                                 Class Not Assigned
-                            @else
-                                {{ $post->getSingleClass($post->class_id)['class_name'] }}
-                            @endif
+                            <?php else: ?>
+                                <?php echo e($post->getSingleClass($post->class_id)['class_name']); ?>
+
+                            <?php endif; ?>
                         </p>
                     </li>
                     <li class='col'>
                         <h3 class='fw-500 fs-5 mb-1'>Job Type</h3>
                         <p class="fs-14 text_grey_999">
-                            {{ $post->job_type }}
+                            <?php echo e($post->job_type); ?>
+
                         </p>
                     </li>
                     <li class='col'>
                         <h3 class='fw-500 fs-5 mb-1'>Experience</h3>
                         <p class="fs-14 text_grey_999">
-                            {{ $post->experience }}
+                            <?php echo e($post->experience); ?>
+
                         </p>
                     </li>
                     <li class='col'>
                         <h3 class='fw-500 fs-5 mb-1'>Gender</h3>
                         <p class="fs-14 text_grey_999">
-                            {{ $post->gender }}
+                            <?php echo e($post->gender); ?>
+
                         </p>
                     </li>
                     <li class='col'>
                         <h3 class='fw-500 fs-5 mb-1'> Base Salary</h3>
                         <p class="fs-14 text_grey_999">
-                            {{ $post->offer_salary }}
+                            <?php echo e($post->offer_salary); ?>
+
                         </p>
                     </li>
-                    @if ($post->comp_id != 0)
+                    <?php if($post->comp_id != 0): ?>
                         <li class='col'>
                             <h3 class='fw-500 fs-5 mb-1'>Company Name</h3>
                             <p class="fs-14 text_grey_999">
-                                {{ $post->company->name }}
+                                <?php echo e($post->company->name); ?>
+
                             </p>
                         </li>
-                    @endif
+                    <?php endif; ?>
                     <li class='col'>
                         <h3 class='fw-500 fs-5 mb-1'>Job Posted Date</h3>
                         <p class="fs-14 text_grey_999">
-                            {{ \Carbon\Carbon::parse($post->created_at)->isoFormat('DD MMM YYYY') }}
+                            <?php echo e(\Carbon\Carbon::parse($post->created_at)->isoFormat('DD MMM YYYY')); ?>
+
                         </p>
                     </li>
                     <li class='col'>
                         <h3 class='fw-500 fs-5 mb-1'>Job Closing Date</h3>
                         <p class="fs-14 text_grey_999">
-                            {{ \Carbon\Carbon::parse($post->expiry_date)->isoFormat('DD MMM YYYY') }}
-                            {{-- {{ $post->expiry_date }} --}}
+                            <?php echo e(\Carbon\Carbon::parse($post->expiry_date)->isoFormat('DD MMM YYYY')); ?>
+
+                            
                         </p>
                     </li>
                     <li class='col'>
                         <h3 class='fw-500 fs-5 mb-1'>Location</h3>
                         <p class="fs-14 text_grey_999">
-                            {{ $post->location }}
+                            <?php echo e($post->location); ?>
+
                         </p>
                     </li>
                     <!-- this li should be empty -->
-                    {{-- <li class='col'></li> --}}
+                    
                     <!-- this li should be empty -->
                     <li class='col expandable-container'>
                         <h3 class='fw-500 fs-5 mb-1'>Key Responsibility</h3>
                         <p class="fs-14 text_grey_999 expandable-text">
-                            {!! $post->key_responsibility !!}
+                            <?php echo $post->key_responsibility; ?>
+
                         </p>
                         <button class="show-more-button">Show More</button>
                     </li>
                     <li class='col'>
                         <h3 class='fw-500 fs-5 mb-1'>Qualification</h3>
                         <p class="fs-14 text_grey_999">
-                            {{ $post->qualification }}
+                            <?php echo e($post->qualification); ?>
+
                         </p>
                     </li>
                     <li class='col expandable-container'>
                         <h3 class='fw-500 fs-5 mb-1 '>Skills & Experience</h3>
                         <p class="fs-14 text_grey_999 longText expandable-text">
-                            {!! $post->skill_exp !!}
+                            <?php echo $post->skill_exp; ?>
+
                         </p>
                         <button class="show-more-button">Show More</button>
                     </li>
@@ -155,23 +166,18 @@
             </div>
             <h3 class='fw-500 fs-5 mb-1'>Skills</h3>
             <ul class='tags'>
-                @foreach ($post->skills as $row)
+                <?php $__currentLoopData = $post->skills; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <li class="d-inline-block mb-2">
-                        <a href="javascript:void 0;">{{ $row->name }}</a>
+                        <a href="javascript:void 0;"><?php echo e($row->name); ?></a>
                     </li>
-                @endforeach
-                {{-- <li class="d-inline-block">
-                <a href="">Laravel</a>
-            </li>
-            <li class="d-inline-block">
-                <a href="">Laravel</a>
-            </li> --}}
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                
             </ul>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('bottom_script')
+<?php $__env->startSection('bottom_script'); ?>
     <script>
         $(document).ready(function() {
             $('.expandable-container').each(function() {
@@ -195,4 +201,6 @@
             });
         });
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('recruterpanel.layout.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\Rameez Ali\Documents\erec1\resources\views/recruterpanel/pages/jobs/job_detail.blade.php ENDPATH**/ ?>
