@@ -209,6 +209,12 @@
                     <!-- Modal Post job end -->
                 </div>
             </div>
+            <?php if(session('status')): ?>
+            <div class="alert alert-warning">
+                <?php echo e(session('status')); ?>
+
+            </div>
+        <?php endif; ?>
             <div class="table-responsive table_height scrollbar">
                 <table id="dashboardTable" class="table table-striped table-payment display nowrap" style="width:100%">
                     <thead>

@@ -249,7 +249,6 @@ class CompanyDashboardController extends Controller
     }
     public function createJobs()
     {
-        // dd('ok');
         if (auth()->user()->package->id != 21) {
             $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
 
@@ -265,7 +264,6 @@ class CompanyDashboardController extends Controller
         $post = Posts::where('comp_id', auth()->user()->company->id)
             ->where('created_at', '>=', $validDate)
             ->get();
-
         // dd($validDate, count($post));
         // dd(date("Y-m-d H:i:s", $customerdata->current_period_end));
         if (auth()->user()->posts_count > 0) {
@@ -278,9 +276,10 @@ class CompanyDashboardController extends Controller
                 $skill = Skills::all();
                 return view('companypanel.pages.jobs.create', compact('recruiter', 'skill', 'data'));
             } else {
-                return back();
+                return back()->withStatus("You need to upgrade your package first..");
             }
         } else {
+
             return back()->withStatus("You need to upgrade your package first..");
         }
         // } else {
@@ -1041,7 +1040,7 @@ class CompanyDashboardController extends Controller
     }
     public function mamrkerCandidate(Request $request)
     {
-        $jobApp = JobApplications::with('post', 'candidate', 'candidate.jobApplications', 'candidate.jobApplications.post', 'candidate.user', 'candidate.user.candidatePro', 'candidate.user.candidateEdu', 'candidateDocument', 'postComp')->whereHas('post', function ($query) {
+        $jobApp = JobApplications::with('post', 'candidate', 'candidate.jobApplications', 'examResult', 'candidate.jobApplications.post', 'candidate.user', 'candidate.user.candidatePro', 'candidate.user.candidateEdu', 'candidateDocument', 'postComp')->whereHas('post', function ($query) {
             $query->where('comp_id', auth()->user()->company->id);
         });
 
@@ -1051,7 +1050,11 @@ class CompanyDashboardController extends Controller
             
             $exam_result = ExamResult::select('job_application_id')->whereBetween('perentage', [$minPercentage, $maxPercentage])->get();
             
-            $jobApp = JobApplications::with('post', 'candidate', 'candidate.jobApplications', 'candidate.jobApplications.post', 'candidate.user', 'candidate.user.candidatePro', 'candidate.user.candidateEdu', 'candidateDocument', 'postComp')->whereIn('id', $exam_result);
+            $jobApp = JobApplications::whereIn('id', $exam_result)->with('post', 'examResult', 'candidate', 'candidate.jobApplications', 'candidate.jobApplications.post', 'candidate.user', 'candidate.user.candidatePro', 'candidate.user.candidateEdu', 'candidateDocument', 'postComp')->whereHas('post', function ($query) {
+                $query->where('comp_id', auth()->user()->company->id);
+            });
+
+            // $jobApp = JobApplications::where('comp_id', auth()->user()->company->id)->whereIn('id', $exam_result)->with('post', 'candidate', 'candidate.jobApplications', 'candidate.jobApplications.post', 'candidate.user', 'candidate.user.candidatePro', 'candidate.user.candidateEdu', 'candidateDocument', 'postComp');
             
         }
 

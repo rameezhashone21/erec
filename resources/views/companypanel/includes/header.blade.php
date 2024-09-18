@@ -388,48 +388,52 @@
                                     </li>
                                 </ul>
                             </div>
+                            @php
+                            $post = App\Models\Posts::where('comp_id', auth()->user()->company->id)
+                                    ->get();
+                            @endphp
                             {{-- 40/40 job post left --}}
                             @if (isset(auth()->user()->package))
                                 <a href=""
                                     class="d-flex fs-12 btn-subcription {{ auth()->user()->package->class }}"
                                     style="font-size: 10px !important">
-                                    {{ auth()->user()->posts_count }} /
+                                    {{ count($post) }}  /
                                     {{-- @if (auth()->user()->posts_count > auth()->user()->package->no_of_posts)
                                         {{ (auth()->user()->package->no_of_posts + auth()->user()->posts_count) - auth()->user()->package->no_of_posts }}
                                         jobs Posts left
                                     @else --}}
-                                    {{ auth()->user()->all_posts_count }} Jobs posts left
+                                      {{ auth()->user()->all_posts_count }} Jobs Posted
                                     {{-- @endif --}}
                                 </a>
                                 {{-- @if (auth()->user()->package->name == 'Standard')
                                 @elseif (auth()->user()->package->name == 'Business')
                                     <a href="" class="d-flex fs-12 btn-subcription silver">
-                                        {{ auth()->user()->posts_count }}/
+                                        {{ count($post) }} /
                                         @if (auth()->user()->posts_count > auth()->user()->package->no_of_posts)
                                             {{ auth()->user()->package->no_of_posts . '+' . auth()->user()->posts_count - auth()->user()->package->no_of_posts }}
                                             jobs Posts left
                                         @else
-                                            {{ auth()->user()->package->no_of_posts }} jobs Posts left
+                                        {{ auth()->user()->all_posts_count }} Jobs Posted
                                         @endif
                                     </a>
                                 @elseif (auth()->user()->package->name == 'Enterprise')
                                     <a href="" class="d-flex fs-12 btn-subcription gold">
-                                        {{ auth()->user()->posts_count }}/
+                                        {{ count($post) }} /
                                         @if (auth()->user()->posts_count > auth()->user()->package->no_of_posts)
                                             {{ auth()->user()->package->no_of_posts . '+' . auth()->user()->posts_count - auth()->user()->package->no_of_posts }}
                                             jobs Posts left
                                         @else
-                                            {{ auth()->user()->package->no_of_posts }} jobs Posts left
+                                            {{ auth()->user()->all_posts_count }} Jobs Posted
                                         @endif
                                     </a>
                                 @elseif (auth()->user()->package->id == 21)
                                     <a href="" class="d-flex fs-12 btn-subcription silver">
-                                        {{ auth()->user()->posts_count }}/
+                                        {{ count($post) }} /
                                         @if (auth()->user()->posts_count > auth()->user()->package->no_of_posts)
                                             {{ auth()->user()->package->no_of_posts . '+' . auth()->user()->posts_count - auth()->user()->package->no_of_posts }}
                                             jobs Posts left
                                         @else
-                                            {{ auth()->user()->package->no_of_posts }} jobs Posts left
+                                            {{ auth()->user()->all_posts_count }} Jobs Posted
                                         @endif
                                     </a>
                                 @endif --}}

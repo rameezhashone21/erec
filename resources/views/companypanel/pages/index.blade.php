@@ -336,6 +336,11 @@
                     <!-- Modal Post job end -->
                 </div>
             </div>
+            @if(session('status'))
+            <div class="alert alert-warning">
+                {{ session('status') }}
+            </div>
+        @endif
             <div class="table-responsive table_height scrollbar">
                 <table id="dashboardTable" class="table table-striped table-payment display nowrap" style="width:100%">
                     <thead>

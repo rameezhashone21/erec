@@ -199,8 +199,10 @@ class MapController extends Controller
                     
                     $exam_result = ExamResult::select('job_application_id')->whereBetween('perentage', [$minPercentage, $maxPercentage])->get();
                     
-                    $jobApp = JobApplications::with('post', 'candidate', 'candidate.jobApplications', 'candidate.jobApplications.post', 'candidate.user', 'candidate.user.candidatePro', 'candidate.user.candidateEdu', 'candidateDocument', 'postComp','examResult')->whereIn('id', $exam_result);
-                    
+                    $jobApp = JobApplications::whereIn('id', $exam_result)->with('post', 'examResult', 'candidate', 'candidate.jobApplications', 'candidate.jobApplications.post', 'candidate.user', 'candidate.user.candidatePro', 'candidate.user.candidateEdu', 'candidateDocument', 'postComp')->whereHas('post', function ($query) {
+                        $query->where('comp_id', auth()->user()->company->id);
+                    });
+                            
                 }
 
         if ($request->has('post') && $request->post != null) {

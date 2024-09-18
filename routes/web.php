@@ -340,7 +340,7 @@ Route::middleware(['auth', 'check_status'])->group(function () {
                 Route::get('/profile', [App\Http\Controllers\CompanyDashboardController::class, 'profile'])->name('company.profile');
                 Route::post('/profile/update', [App\Http\Controllers\CompanyDashboardController::class, 'profileUpdate'])->name('company.profile.update');
                 Route::get('/jobs', [App\Http\Controllers\CompanyDashboardController::class, 'jobs'])->name('company.jobs');
-                Route::get('/jobs/create', [App\Http\Controllers\CompanyDashboardController::class, 'createJobs'])->middleware(['packageCheck'])->name('company.jobs.create');
+                Route::get('/jobs/create', [App\Http\Controllers\CompanyDashboardController::class, 'createJobs'])->name('company.jobs.create');
                 Route::post('/jobs/store', [App\Http\Controllers\CompanyDashboardController::class, 'StoreJob'])->middleware(['packageCheck'])->name('company.jobs.store');
                 Route::post('/jobs/update', [App\Http\Controllers\CompanyDashboardController::class, 'updateJob'])->name('company.jobs.update');
                 Route::get('/job/delete/{id}', [App\Http\Controllers\CompanyDashboardController::class, 'deleteCompPost'])->name('companys.jobs.delete');

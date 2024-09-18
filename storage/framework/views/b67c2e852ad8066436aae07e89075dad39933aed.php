@@ -344,14 +344,18 @@
                                     </li>
                                 </ul>
                             </div>
+                            <?php
+                            $post = App\Models\Posts::where('comp_id', auth()->user()->company->id)
+                                    ->get();
+                            ?>
                             
                             <?php if(isset(auth()->user()->package)): ?>
                                 <a href=""
                                     class="d-flex fs-12 btn-subcription <?php echo e(auth()->user()->package->class); ?>"
                                     style="font-size: 10px !important">
-                                    <?php echo e(auth()->user()->posts_count); ?> /
+                                    <?php echo e(count($post)); ?>  /
                                     
-                                    <?php echo e(auth()->user()->all_posts_count); ?> Jobs posts left
+                                      <?php echo e(auth()->user()->all_posts_count); ?> Jobs Posted
                                     
                                 </a>
                                 
